@@ -1,9 +1,9 @@
 var Player = cc.Sprite.extend({
     ctor: function() {
         this._super();
-        this.initWithFile( 'images/dot.png' );
+        this.initWithFile( 'images/Player.png' );
     },
-    update: function( dt ) {
-        var pos = this.getPosition();
+    update: function( dt ) 
+    {
     }
 });
