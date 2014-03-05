@@ -7,11 +7,15 @@ var GameLayer = cc.LayerColor.extend({
         this._super( new cc.Color4B( 127, 127, 127, 255 ) );
         this.setPosition( new cc.Point( 0, 0 ) );
 
+        this.bg = new BG();
+        this.bg.setScale( 1 );
+        this.bg.setPosition( new cc.Point( screenWidth/2, screenHeight/2 ) );
+        this.addChild( this.bg );
+
         this.player = new Player();
         this.player.setScale( 1 );
         this.player.setPosition( new cc.Point( 3*screenWidth/4, screenHeight/2 ) );
         this.addChild( this.player );
-        //this.player.scheduleUpdate();
 
         this.state = GameLayer.STATES.FRONT;
         this.setKeyboardEnabled( true );
