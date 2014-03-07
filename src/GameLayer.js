@@ -44,15 +44,19 @@ var GameLayer = cc.LayerColor.extend({
     randomNumber: function( min,max ) {
         return Math.random()*(max-min)+min;
     },
+    reverseMode: function( bool ){
+        for(var i=0; i<GameLayer.UNIT_NUMBER ;i++) {
+            if(i%2==0)
+                this.units[i].isReverse = bool;
+        }
+    },
     turnLeft: function( bool ) {
-        for(var i=0; i<GameLayer.UNIT_NUMBER ;i++)
-        {
+        for(var i=0; i<GameLayer.UNIT_NUMBER ;i++) {
             this.units[i].keyLeft = bool;
         }
     },
     turnRight: function( bool ) {
-        for(var i=0; i<GameLayer.UNIT_NUMBER ;i++)
-        {
+        for(var i=0; i<GameLayer.UNIT_NUMBER ;i++) {
             this.units[i].keyRight = bool;
         }
     },
@@ -62,6 +66,10 @@ var GameLayer = cc.LayerColor.extend({
             this.turnLeft( true );
         else if( e==39 )
             this.turnRight( true );
+        /*To Test reverseMode*/
+        else if( e==32 ) 
+            this.reverseMode( true );
+        /**/
     },
     onKeyUp: function( e ) {
         //37 = Left , 39 = Right , 32 = Space , 27 = Escape
@@ -69,6 +77,10 @@ var GameLayer = cc.LayerColor.extend({
             this.turnLeft( false );
         else if( e==39 )
             this.turnRight( false );
+        /*To Test reverseMode*/
+        else if( e==32 ) 
+            this.reverseMode( false );
+        /**/
     },
     update: function(dt) {
         
