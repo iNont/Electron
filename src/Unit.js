@@ -1,18 +1,32 @@
 var Unit = cc.Sprite.extend({
     ctor: function( layer ) {
+    	this.isReverse = false;
     	this.layer = layer;
         this._super();
         this.initWithFile( 'images/Unit.png' );
         this.endPos = new cc.Point( 2*screenWidth , screenHeight/2 );
         this.scheduleUpdate();
+        this.keyLeft = false;
+        this.keyRight = false;
     },
     update: function( dt ) {
     	var pos = this.getPosition();
+    	var theta = this.getRotation();
+    	var turnSpeed = 0;
+    	if(this.keyLeft) 
+    		turnSpeed -= GameLayer.UNIT_TURN_SPEED;
+    	if(this.keyRight)
+    		turnSpeed += GameLayer.UNIT_TURN_SPEED;
+    	if(this.isReverse)
+    		turnSpeed *= -1;
+    	this.setRotation(theta+turnSpeed);
     	if(this.distance( pos ) < 1)
     	{
     		var newPos = this.genStartPos();
+    		var newTheta = this.layer.randomNumber( 0,360 );
     		this.endPos = this.genEndPos( newPos );
     		this.setPosition( newPos );
+    		this.setRotation( newTheta );
     		this.stopAllActions();
         	var moveAction = cc.MoveTo.create(  GameLayer.UNIT_VELOCITY, this.endPos );
         	this.runAction( moveAction );
@@ -37,3 +51,4 @@ var Unit = cc.Sprite.extend({
     	return Math.sqrt( Math.pow(point.x-this.endPos.x,2)+Math.pow(point.y-this.endPos.y,2) );
     }
 });
+

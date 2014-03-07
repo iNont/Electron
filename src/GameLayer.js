@@ -44,6 +44,32 @@ var GameLayer = cc.LayerColor.extend({
     randomNumber: function( min,max ) {
         return Math.random()*(max-min)+min;
     },
+    turnLeft: function( bool ) {
+        for(var i=0; i<GameLayer.UNIT_NUMBER ;i++)
+        {
+            this.units[i].keyLeft = bool;
+        }
+    },
+    turnRight: function( bool ) {
+        for(var i=0; i<GameLayer.UNIT_NUMBER ;i++)
+        {
+            this.units[i].keyRight = bool;
+        }
+    },
+    onKeyDown: function( e ) {
+        //37 = Left , 39 = Right , 32 = Space , 27 = Escape
+        if( e==37 )
+            this.turnLeft( true );
+        else if( e==39 )
+            this.turnRight( true );
+    },
+    onKeyUp: function( e ) {
+        //37 = Left , 39 = Right , 32 = Space , 27 = Escape
+        if( e==37 )
+            this.turnLeft( false );
+        else if( e==39 )
+            this.turnRight( false );
+    },
     update: function(dt) {
         
     }
@@ -64,9 +90,15 @@ GameLayer.STATES = {
     STARTED: 2,
     DEAD: 3
 };
+GameLayer.TURN = {
+    STOP: 0,
+    LEFT: 1,
+    RIGHT: 2
+}
 GameLayer.PLAYER_POS = new cc.Point( 3*screenWidth/4, screenHeight/2 );
 GameLayer.UNIT_NUMBER = 5;
 GameLayer.UNIT_GAP = (2*screenWidth)/GameLayer.UNIT_NUMBER;
-GameLayer.UNIT_VELOCITY = 4; //sec in one round
+GameLayer.UNIT_VELOCITY = 7; //sec in one round
+GameLayer.UNIT_TURN_SPEED = 4;
 GameLayer.timePerPixel = (GameLayer.UNIT_VELOCITY/(2*screenWidth));
 
