@@ -25,18 +25,19 @@ var GameLayer = cc.LayerColor.extend({
     },
     startGame: function() {
         this.units = [];
-        var timePerGap = GameLayer.UNIT_GAP/((3*screenWidth/2)/GameLayer.UNIT_VELOCITY);;
-        //var timeForStart = GameLayer.UNIT_GAP-320;
+        var timePerGap = GameLayer.UNIT_GAP*GameLayer.timePerPixel;
+        var gapForStart = GameLayer.UNIT_GAP-320;
+        var timeForStart = gapForStart*GameLayer.timePerPixel;
         for(var i=0; i<GameLayer.UNIT_NUMBER ;i++)
         {
             var unit = new Unit( this );
             this.units.push( unit );
-            this.units[i].setPosition( new cc.Point( -screenWidth/4-i*GameLayer.UNIT_GAP, screenHeight/2));
+            this.units[i].setPosition( new cc.Point( -screenWidth/4-i*GameLayer.UNIT_GAP-gapForStart, screenHeight/2));
             this.addChild( this.units[i] );
             var pos = this.units[i].getPosition();
-            var endPos = new cc.Point( 7*screenWidth/4 , pos.y );
+            var endPos = new cc.Point( 2*screenWidth , pos.y );
             this.units[i].endPos = endPos;
-            var moveAction = cc.MoveTo.create(  GameLayer.UNIT_VELOCITY+timePerGap*i, this.units[i].endPos );
+            var moveAction = cc.MoveTo.create( GameLayer.UNIT_VELOCITY+timePerGap*i+timeForStart, this.units[i].endPos );
             this.units[i].runAction( moveAction );
         }
     },
@@ -66,6 +67,6 @@ GameLayer.STATES = {
 GameLayer.PLAYER_POS = new cc.Point( 3*screenWidth/4, screenHeight/2 );
 GameLayer.UNIT_NUMBER = 5;
 GameLayer.UNIT_GAP = (2*screenWidth)/GameLayer.UNIT_NUMBER;
-GameLayer.timePerPixel = 1/((3*screenWidth/2)/GameLayer.UNIT_VELOCITY);
-GameLayer.UNIT_VELOCITY = 5; //sec in one round
+GameLayer.UNIT_VELOCITY = 4; //sec in one round
+GameLayer.timePerPixel = (GameLayer.UNIT_VELOCITY/(2*screenWidth));
 

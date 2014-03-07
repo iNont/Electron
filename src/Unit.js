@@ -3,12 +3,12 @@ var Unit = cc.Sprite.extend({
     	this.layer = layer;
         this._super();
         this.initWithFile( 'images/Unit.png' );
-        this.endPos = new cc.Point( 7*screenWidth/4 , screenHeight/2 );
+        this.endPos = new cc.Point( 2*screenWidth , screenHeight/2 );
         this.scheduleUpdate();
     },
     update: function( dt ) {
     	var pos = this.getPosition();
-    	if(this.distance( pos ) < Math.pow(1,-10))
+    	if(this.distance( pos ) < 1)
     	{
     		var newPos = this.genStartPos();
     		this.endPos = this.genEndPos( newPos );
@@ -25,7 +25,6 @@ var Unit = cc.Sprite.extend({
     	var playerPos = GameLayer.PLAYER_POS;
     	var posX = playerPos.x-x;
     	var posY = playerPos.y+y;
-    	console.log(Math.sqrt(x*x+y*y) +" "+screenWidth);
     	return new cc.Point( posX,posY );
     },
     genEndPos: function( point ) {
