@@ -14,7 +14,7 @@ var GameLayer = cc.LayerColor.extend({
 
         this.player = new Player();
         this.player.setScale( 1 );
-        this.player.setPosition( new cc.Point( 3*screenWidth/4, screenHeight/2 ) );
+        this.player.setPosition( GameLayer.PLAYER_POS );
         this.addChild( this.player );
 
         this.state = GameLayer.STATES.FRONT;
@@ -34,14 +34,16 @@ var GameLayer = cc.LayerColor.extend({
             this.units[i].setPosition( new cc.Point( -screenWidth/4-i*GameLayer.UNIT_GAP, screenHeight/2));
             this.addChild( this.units[i] );
             var pos = this.units[i].getPosition();
-            var endPos = new cc.Point( 5*screenWidth/4 , pos.y );
+            var endPos = new cc.Point( 7*screenWidth/4 , pos.y );
             this.units[i].endPos = endPos;
             var moveAction = cc.MoveTo.create(  GameLayer.UNIT_VELOCITY+timePerGap*i, this.units[i].endPos );
             this.units[i].runAction( moveAction );
         }
     },
-    update: function(dt)
-    {
+    randomNumber: function( min,max ) {
+        return Math.random()*(max-min)+min;
+    },
+    update: function(dt) {
         
     }
 });
@@ -61,8 +63,9 @@ GameLayer.STATES = {
     STARTED: 2,
     DEAD: 3
 };
+GameLayer.PLAYER_POS = new cc.Point( 3*screenWidth/4, screenHeight/2 );
 GameLayer.UNIT_NUMBER = 5;
-GameLayer.UNIT_GAP = (6*screenWidth/4)/GameLayer.UNIT_NUMBER;
+GameLayer.UNIT_GAP = (2*screenWidth)/GameLayer.UNIT_NUMBER;
 GameLayer.timePerPixel = 1/((3*screenWidth/2)/GameLayer.UNIT_VELOCITY);
-GameLayer.UNIT_VELOCITY = 6; //sec in one round
+GameLayer.UNIT_VELOCITY = 5; //sec in one round
 
