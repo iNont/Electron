@@ -1,6 +1,7 @@
 var Unit = cc.Sprite.extend({
     ctor: function( layer ) {
     	this.isReverse = false;
+    	this.isWink = true;
     	this.layer = layer;
         this._super();
         this.initWithFile( 'images/Unit.png' );
@@ -9,14 +10,12 @@ var Unit = cc.Sprite.extend({
         this.keyLeft = false;
         this.keyRight = false;
         this.enabled = true;
+        this.winkSpeed = 17/4;
     },
     update: function( dt ) {
     	var pos = this.getPosition();
     	var theta = this.getRotation();
     	var turnSpeed = 0;
-    	if(this.distance( pos,this.endPos ) < 1) {
-    			this.startNewUnit();
-    	}
     	if(this.enabled) {
     		if(this.keyLeft) 
     			turnSpeed -= GameLayer.UNIT_TURN_SPEED;
@@ -24,14 +23,19 @@ var Unit = cc.Sprite.extend({
     			turnSpeed += GameLayer.UNIT_TURN_SPEED;
     		if(this.isReverse) 
     			turnSpeed *= -1;
+    		if(this.isWink) 
+    			this.wink();
     		this.setRotation(theta+turnSpeed);
     	}
     	else {
     		this.hideUnit();
     	}
+    	if(this.distance( pos,this.endPos ) < 1) {
+    			this.startNewUnit();
+    	}
     },
     startNewUnit: function() {
-    	this.setScale( gameScale );
+    	this.setOpacity( 255 );
         this.enabled = true;
     	var newPos = this.genStartPos();
     	var newTheta = this.layer.randomNumber( 0,360 );
@@ -43,7 +47,15 @@ var Unit = cc.Sprite.extend({
        	this.runAction( moveAction );
     },
     hideUnit: function() {
-    	this.setScale( this.getScale()*0.5 );
+    	this.setOpacity( this.getOpacity()*0.7 );
+    },
+    wink: function() {
+    	var opacity = this.getOpacity();
+    	this.setOpacity( opacity-this.winkSpeed );
+    	opacity = this.getOpacity();
+    	if( opacity < 0 || opacity > 255) {
+    		this.winkSpeed *= -1;
+    	}
     },
     genStartPos: function() {
     	var distance = Math.sqrt(3/4*Math.pow(screenWidth,2));
@@ -68,7 +80,6 @@ var Unit = cc.Sprite.extend({
     		if(length < lengthCheck/4) {
     			console.log("Perfect");
     			this.enabled = false;
-
     		}
     		else if(length < lengthCheck/2) {
     			console.log("Great");
