@@ -1,5 +1,6 @@
-var screenWidth = 2014;
-var screenHeight = 1536;
+var gameScale = 0.25;
+var screenWidth = 2014*gameScale;
+var screenHeight = 1536*gameScale;
 
 var GameLayer = cc.LayerColor.extend({
     
@@ -8,12 +9,12 @@ var GameLayer = cc.LayerColor.extend({
         this.setPosition( new cc.Point( 0, 0 ) );
 
         this.bg = new BG();
-        this.bg.setScale( 1 );
+        this.bg.setScale( gameScale );
         this.bg.setPosition( new cc.Point( screenWidth/2, screenHeight/2 ) );
         this.addChild( this.bg );
 
         this.player = new Player();
-        this.player.setScale( 1 );
+        this.player.setScale( gameScale );
         this.player.setPosition( GameLayer.PLAYER_POS );
         this.addChild( this.player );
 
@@ -26,12 +27,13 @@ var GameLayer = cc.LayerColor.extend({
     startGame: function() {
         this.units = [];
         var timePerGap = GameLayer.UNIT_GAP*GameLayer.timePerPixel;
-        var gapForStart = GameLayer.UNIT_GAP-320;
+        var gapForStart = GameLayer.UNIT_GAP-GameLayer.PLAYER_DIAMETER*gameScale;
         var timeForStart = gapForStart*GameLayer.timePerPixel;
         for(var i=0; i<GameLayer.UNIT_NUMBER ;i++)
         {
             var unit = new Unit( this );
             this.units.push( unit );
+            this.units[i].setScale( gameScale );
             this.units[i].setPosition( new cc.Point( -screenWidth/4-i*GameLayer.UNIT_GAP-gapForStart, screenHeight/2));
             this.addChild( this.units[i] );
             var pos = this.units[i].getPosition();
@@ -50,6 +52,11 @@ var GameLayer = cc.LayerColor.extend({
                 this.units[i].isReverse = bool;
         }
     },
+    clickEvent: function() {
+        for(var i=0; i<GameLayer.UNIT_NUMBER ;i++) {
+            this.units[i].checkEvent();
+        }
+    },
     turnLeft: function( bool ) {
         for(var i=0; i<GameLayer.UNIT_NUMBER ;i++) {
             this.units[i].keyLeft = bool;
@@ -66,10 +73,8 @@ var GameLayer = cc.LayerColor.extend({
             this.turnLeft( true );
         else if( e==39 )
             this.turnRight( true );
-        /*To Test reverseMode*/
         else if( e==32 ) 
-            this.reverseMode( true );
-        /**/
+            this.clickEvent();
     },
     onKeyUp: function( e ) {
         //37 = Left , 39 = Right , 32 = Space , 27 = Escape
@@ -77,10 +82,6 @@ var GameLayer = cc.LayerColor.extend({
             this.turnLeft( false );
         else if( e==39 )
             this.turnRight( false );
-        /*To Test reverseMode*/
-        else if( e==32 ) 
-            this.reverseMode( false );
-        /**/
     },
     update: function(dt) {
         
@@ -108,9 +109,11 @@ GameLayer.TURN = {
     RIGHT: 2
 }
 GameLayer.PLAYER_POS = new cc.Point( 3*screenWidth/4, screenHeight/2 );
-GameLayer.UNIT_NUMBER = 5;
+GameLayer.UNIT_NUMBER = 6;
 GameLayer.UNIT_GAP = (2*screenWidth)/GameLayer.UNIT_NUMBER;
 GameLayer.UNIT_VELOCITY = 7; //sec in one round
 GameLayer.UNIT_TURN_SPEED = 4;
 GameLayer.timePerPixel = (GameLayer.UNIT_VELOCITY/(2*screenWidth));
+GameLayer.UNIT_DIAMETER = 320*gameScale;
+GameLayer.PLAYER_DIAMETER = 71*gameScale;
 
