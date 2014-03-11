@@ -36,36 +36,29 @@ var Unit = cc.Sprite.extend({
     },
     detection: function() {
         var pos = this.getPosition();
-        var theta = this.getRotation();
-        if(this.distance( pos,GameLayer.PLAYER_POS ) <= GameLayer.UNIT_DIAMETER/2+GameLayer.PLAYER_DIAMETER/2) {
-            if(this.checkDetect( theta-45,theta-90 )
-            || this.checkDetect( theta-90,theta-135 )
-            || this.checkDetect( theta-135,theta-180 )
-            || this.checkDetect( theta-225,theta-270 )
-            || this.checkDetect( theta-270,theta-315 )
-            || this.checkDetect( theta-315,theta-360 ))
-                this.checkDetectBool = true;
-            else
-                this.checkDetectBool = false;
-            if(this.checkDetectBool && !this.checkDetect( theta-0,theta-45 ))
-                this.enabled = false;
-            else if(this.checkDetectBool && !this.checkDetect( theta-180,theta-225 ))
-                this.enabled = false;
-        }
-    },
-    checkDetect: function( theta1,theta2 ) {
-        var rad1 = theta1*Math.PI/180;
-        var rad2 = theta2*Math.PI/180;
+        var theta = (this.getRotation()%180+180)%180;
+        var startTheta = Math.atan((pos.y-GameLayer.PLAYER_POS.y)/(GameLayer.PLAYER_POS.x-pos.x))*180/Math.PI;
+        var playerR = GameLayer.PLAYER_DIAMETER/2;
         var unitR = GameLayer.UNIT_DIAMETER/2;
-        var pos = this.getPosition();
-        var point1 = new cc.Point( pos.x+unitR*Math.cos(rad1),pos.y+unitR*Math.sin(rad1) );
-        var point2 = new cc.Point( unitR*Math.cos(rad2),unitR*Math.sin(rad2) );
-        var A = (point1.y-point2.y)/(point1.x-point2.x);
-        var B = -1;
-        var C = point1.y-A*point1.x;
-        var playerPos = GameLayer.PLAYER_POS;
-        var distance = Math.abs(A*playerPos.x+B*playerPos.y+C)/Math.sqrt(A*A+B*B);
-        return distance < GameLayer.PLAYER_DIAMETER/3;
+        var checkTheta = 22.5-Math.asin(playerR/unitR)*180/Math.PI;
+        var check1 = (startTheta-checkTheta%180+180)%180;
+        var check2 = (startTheta+checkTheta%180+180)%180;
+        var bool1 = false;
+        var bool2 = false;
+        if( check1>check2 ) {
+            bool1 = theta>=check1&&theta<=check1+2*checkTheta;
+            bool2 = theta<=check2&&theta>=check2-2*checkTheta;
+        }
+        else {
+            bool1 = theta>=check1&&theta<=check2;
+            bool2 = false;
+        }
+        var R = unitR+playerR;
+        var r = unitR-GameLayer.UNIT_BORDER_SIZE-playerR;
+        var distance = this.distance( pos,GameLayer.PLAYER_POS );
+        if(distance < R && distance > r ) {
+            if( !(bool1||bool2) ) this.enabled=false;
+        }
     },
     startNewUnit: function() {
     	this.setOpacity( 255 );

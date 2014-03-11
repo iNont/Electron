@@ -118,5 +118,6 @@ GameLayer.UNIT_VELOCITY = 7; //sec in one round
 GameLayer.UNIT_TURN_SPEED = 4;
 GameLayer.timePerPixel = (GameLayer.UNIT_VELOCITY/(2*screenWidth));
 GameLayer.UNIT_DIAMETER = 320*gameScale;
+GameLayer.UNIT_BORDER_SIZE = 15*gameScale;
 GameLayer.PLAYER_DIAMETER = 71*gameScale;
 
