@@ -40,7 +40,8 @@ var Unit = cc.Sprite.extend({
         var startTheta = Math.atan((pos.y-GameLayer.PLAYER_POS.y)/(GameLayer.PLAYER_POS.x-pos.x))*180/Math.PI;
         var playerR = GameLayer.PLAYER_DIAMETER/2;
         var unitR = GameLayer.UNIT_DIAMETER/2;
-        var checkTheta = 22.5-Math.asin(playerR/unitR)*180/Math.PI;
+        var detectionBalance = 4; //To make it harder or easier detect
+        var checkTheta = 22.5-Math.asin(playerR/unitR)*180/Math.PI+detectionBalance;
         var check1 = (startTheta-checkTheta%180+180)%180;
         var check2 = (startTheta+checkTheta%180+180)%180;
         var bool1 = false;
@@ -57,7 +58,10 @@ var Unit = cc.Sprite.extend({
         var r = unitR-GameLayer.UNIT_BORDER_SIZE-playerR;
         var distance = this.distance( pos,GameLayer.PLAYER_POS );
         if(distance < R && distance > r ) {
-            if( !(bool1||bool2) ) this.enabled=false;
+            if( !(bool1||bool2) ) {
+                console.log("Crash");
+                this.enabled=false;
+            }
         }
     },
     startNewUnit: function() {
