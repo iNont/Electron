@@ -7,6 +7,7 @@ var Unit = cc.Sprite.extend({
         this.scheduleUpdate();
         this.keyLeft = false;
         this.keyRight = false;
+        this.crashed = false;
         this.enabled = true;
         this.winkSpeed = 17/4;
         this.checkDetectBool = false;
@@ -29,6 +30,8 @@ var Unit = cc.Sprite.extend({
     	}
     	else {
     		this.hideUnit();
+            if(this.crashed)
+                this.crashUnit();
     	}
     	if(this.distance( pos,this.endPos ) < 1) {
     			this.startNewUnit();
@@ -61,12 +64,15 @@ var Unit = cc.Sprite.extend({
             if( !(bool1||bool2) ) {
                 console.log("Crash");
                 this.enabled=false;
+                this.crashed=true;
             }
         }
     },
     startNewUnit: function() {
     	this.setOpacity( 255 );
+        this.setScale( gameScale );
         this.enabled = true;
+        this.crashed = false;
     	var newPos = this.genStartPos();
     	var newTheta = this.layer.randomNumber( 0,360 );
     	this.endPos = this.genEndPos( newPos );
@@ -78,6 +84,9 @@ var Unit = cc.Sprite.extend({
     },
     hideUnit: function() {
     	this.setOpacity( this.getOpacity()*0.7 );
+    },
+    crashUnit: function() {
+        this.setScale( this.getScale()*1.7 );
     },
     wink: function() {
     	var opacity = this.getOpacity();
