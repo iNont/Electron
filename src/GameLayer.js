@@ -1,10 +1,13 @@
 var gameScale = 0.25;
-var screenWidth = 2014*gameScale;
+var screenWidth = 2048*gameScale;
 var screenHeight = 1536*gameScale;
 
 var GameLayer = cc.LayerColor.extend({
     
     init: function() {
+        this.isReverse = false;
+        this.isWink = false;
+
         this._super( new cc.Color4B( 127, 127, 127, 255 ) );
         this.setPosition( new cc.Point( 0, 0 ) );
 
@@ -38,6 +41,7 @@ var GameLayer = cc.LayerColor.extend({
             this.addChild( this.units[i] );
             var pos = this.units[i].getPosition();
             var endPos = new cc.Point( 2*screenWidth , pos.y );
+            this.units[i].setRotation( 0 );
             this.units[i].endPos = endPos;
             var moveAction = cc.MoveTo.create( GameLayer.UNIT_VELOCITY+timePerGap*i+timeForStart, this.units[i].endPos );
             this.units[i].runAction( moveAction );
