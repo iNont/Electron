@@ -41,7 +41,6 @@ var GameLayer = cc.LayerColor.extend({
             this.addChild( this.units[i] );
             var pos = this.units[i].getPosition();
             var endPos = new cc.Point( 2*screenWidth , pos.y );
-            this.units[i].setRotation( 0 );
             this.units[i].endPos = endPos;
             var moveAction = cc.MoveTo.create( GameLayer.UNIT_VELOCITY+timePerGap*i+timeForStart, this.units[i].endPos );
             this.units[i].runAction( moveAction );
