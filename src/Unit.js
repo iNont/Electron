@@ -64,10 +64,10 @@ var Unit = cc.Sprite.extend({
         var distance = this.distance( pos,GameLayer.PLAYER_POS );
         if(distance < R && distance > r ) {
             if( !(bool1||bool2) ) {
-                console.log("Crash");
+                console.log("Miss");
                 this.enabled=false;
                 this.crashed=true;
-                this.layer.crashEffectPlay();
+                this.layer.crashEffectPlay("crash");
             }
         }
     },
@@ -128,14 +128,17 @@ var Unit = cc.Sprite.extend({
     		if(length < lengthCheck*0.4) {
     			console.log("Perfect");
     			this.enabled = false;
+                this.layer.crashEffectPlay("perfect");
     		}
     		else if(length < lengthCheck*0.8) {
     			console.log("Great");
     			this.enabled = false;
+                this.layer.crashEffectPlay("great");
     		}
     		else if(length < 1.5*lengthCheck) {
     			console.log("Bad");
     			this.enabled = false;
+                this.layer.crashEffectPlay("bad");
     		}
     		/*else if(length < 2*lengthCheck) {
     			console.log("Miss");

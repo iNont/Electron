@@ -1,12 +1,13 @@
 var crashEffect = cc.Sprite.extend({
-    ctor: function( layer ) {
+    ctor: function( layer,type ) {
     	this.layer = layer;
         this._super();
-        this.initWithFile( 'images/crashEffect.png' );
+        var src = "images/"+type+"Effect.png";
+        this.initWithFile( src );
         this.scheduleUpdate();
         this.setScale(gameScale);
         this.effectHeight=491*gameScale;
-        this.setPosition(new cc.Point( screenWidth/2, screenHeight-this.effectHeight/2));
+        this.setPosition(new cc.Point( screenWidth/2, screenHeight/2));
         this.diffOpac = 51;
         this.setOpacity(0);
     },
