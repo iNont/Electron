@@ -67,6 +67,7 @@ var Unit = cc.Sprite.extend({
                 console.log("Crash");
                 this.enabled=false;
                 this.crashed=true;
+                this.layer.crashEffectPlay();
             }
         }
     },

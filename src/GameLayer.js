@@ -46,6 +46,10 @@ var GameLayer = cc.LayerColor.extend({
             this.units[i].runAction( moveAction );
         }
     },
+    crashEffectPlay: function() {
+        var effect = new crashEffect(this);
+        this.addChild(effect);
+    },
     randomNumber: function( min,max ) {
         return Math.random()*(max-min)+min;
     },

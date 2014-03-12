@@ -13,6 +13,7 @@
         //SingleEngineFile:'',
         appFiles:[
             'src/BG.js',
+            'src/crashEffect.js',
             'src/Player.js',
             'src/Unit.js',
             'src/GameLayer.js'     //add your own files in order here
