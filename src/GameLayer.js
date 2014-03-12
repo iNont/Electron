@@ -7,6 +7,13 @@ var GameLayer = cc.LayerColor.extend({
     init: function() {
         this.isReverse = false;
         this.isWink = false;
+        this.score=0;
+        this.maxCombo=0;
+        this.combo=0;
+        this.perfect=0;
+        this.great=0;
+        this.bad=0;
+        this.miss=0;
 
         this._super( new cc.Color4B( 127, 127, 127, 255 ) );
         this.setPosition( new cc.Point( 0, 0 ) );
@@ -47,8 +54,40 @@ var GameLayer = cc.LayerColor.extend({
         }
     },
     crashEffectPlay: function( type ) {
+        var spu = GameLayer.SCORE_PER_UNIT;
+        if(type=="perfect") {
+            this.score+=(spu+GameLayer.SCORE_PER_COMBO*this.combo);
+            this.combo++;
+            this.perfect++;
+        }
+        else if(type=="great") {
+            this.score+=(spu/2+GameLayer.SCORE_PER_COMBO*this.combo);
+            this.combo++;
+            this.great++;
+        }
+        else if(type=="bad") {
+            this.score+=(spu/4+GameLayer.SCORE_PER_COMBO*this.combo);
+            this.combo=0;
+            this.bad++;
+        }
+        else if(type=="crash") {
+            this.combo=0;
+            this.miss++;
+        }
+
+        if(this.isMaxCombo(this.combo))
+            this.maxCombo=this.combo;
+        console.log("--------------");
+        console.log("Score: "+this.score);
+        console.log("Max Combo: "+this.maxCombo);
+        console.log("Combo: "+this.combo);
         var effect = new crashEffect(this,type);
         this.addChild(effect);
+    },
+    isMaxCombo: function( combo ) {
+        if(combo>this.maxCombo)
+            return true;
+        return false;
     },
     randomNumber: function( min,max ) {
         return Math.random()*(max-min)+min;
@@ -124,4 +163,5 @@ GameLayer.timePerPixel = (GameLayer.UNIT_VELOCITY/(2*screenWidth));
 GameLayer.UNIT_DIAMETER = 320*gameScale;
 GameLayer.UNIT_BORDER_SIZE = 15*gameScale;
 GameLayer.PLAYER_DIAMETER = 71*gameScale;
-
+GameLayer.SCORE_PER_UNIT = 300;
+GameLayer.SCORE_PER_COMBO = 5;

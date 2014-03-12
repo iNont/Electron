@@ -125,25 +125,21 @@ var Unit = cc.Sprite.extend({
     	var length = this.distance( pos,GameLayer.PLAYER_POS );
     	var lengthCheck = GameLayer.UNIT_DIAMETER/2-GameLayer.PLAYER_DIAMETER/2;
     	if(this.enabled) {
-    		if(length < lengthCheck*0.35) {
-    			console.log("Perfect");
+    		if(length < lengthCheck*0.25) {
+    			//console.log("Perfect");
     			this.enabled = false;
                 this.layer.crashEffectPlay("perfect");
     		}
-    		else if(length < lengthCheck*0.8) {
-    			console.log("Great");
+    		else if(length < lengthCheck*0.7) {
+    			//console.log("Great");
     			this.enabled = false;
                 this.layer.crashEffectPlay("great");
     		}
     		else if(length < 1.5*lengthCheck) {
-    			console.log("Bad");
+    			//console.log("Bad");
     			this.enabled = false;
                 this.layer.crashEffectPlay("bad");
     		}
-    		/*else if(length < 2*lengthCheck) {
-    			console.log("Miss");
-    			this.enabled = false;
-    		}*/
     	}
     },
     distance: function( point1,point2 ) {
