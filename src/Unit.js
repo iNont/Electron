@@ -125,7 +125,7 @@ var Unit = cc.Sprite.extend({
     	var length = this.distance( pos,GameLayer.PLAYER_POS );
     	var lengthCheck = GameLayer.UNIT_DIAMETER/2-GameLayer.PLAYER_DIAMETER/2;
     	if(this.enabled) {
-    		if(length < lengthCheck*0.4) {
+    		if(length < lengthCheck*0.35) {
     			console.log("Perfect");
     			this.enabled = false;
                 this.layer.crashEffectPlay("perfect");
