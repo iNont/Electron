@@ -10,7 +10,7 @@ var Unit = cc.Sprite.extend({
         this.crashed = false;
         this.enabled = true;
         this.winkSpeed = 17/4;
-        this.checkDetectBool = false;
+        this.doneSpeed=1.3;
     },
     update: function( dt ) {
     	var pos = this.getPosition();
@@ -23,8 +23,8 @@ var Unit = cc.Sprite.extend({
     			turnSpeed += GameLayer.UNIT_TURN_SPEED;
     		if(this.layer.isReverse) 
     			turnSpeed *= -1;
-    		if(this.layer.isWink) 
-    			this.wink();
+            if(this.layer.isWink) 
+                this.wink();
     		this.setRotation(theta+turnSpeed);
             this.detection();
     	}
@@ -32,6 +32,8 @@ var Unit = cc.Sprite.extend({
     		this.hideUnit();
             if(this.crashed)
                 this.crashUnit();
+            else
+                this.doneUnit();
     	}
     	if(this.distance( pos,this.endPos ) < 1) {
     			this.startNewUnit();
@@ -73,6 +75,7 @@ var Unit = cc.Sprite.extend({
         this.setScale( gameScale );
         this.enabled = true;
         this.crashed = false;
+        this.doneSpeed = 1.3;
     	var newPos = this.genStartPos();
     	var newTheta = this.layer.randomNumber( 0,360 );
     	this.endPos = this.genEndPos( newPos );
@@ -84,6 +87,11 @@ var Unit = cc.Sprite.extend({
     },
     hideUnit: function() {
     	this.setOpacity( this.getOpacity()*0.7 );
+    },
+    doneUnit: function() {
+        if(this.getScale()/gameScale == Math.pow(1.3,2))
+            this.doneSpeed=0.5;
+        this.setScale( this.getScale()*this.doneSpeed );
     },
     crashUnit: function() {
         this.setScale( this.getScale()*1.7 );
@@ -116,22 +124,22 @@ var Unit = cc.Sprite.extend({
     	var length = this.distance( pos,GameLayer.PLAYER_POS );
     	var lengthCheck = GameLayer.UNIT_DIAMETER/2-GameLayer.PLAYER_DIAMETER/2;
     	if(this.enabled) {
-    		if(length < lengthCheck/4) {
+    		if(length < lengthCheck*0.4) {
     			console.log("Perfect");
     			this.enabled = false;
     		}
-    		else if(length < lengthCheck/2) {
+    		else if(length < lengthCheck*0.8) {
     			console.log("Great");
     			this.enabled = false;
     		}
-    		else if(length < lengthCheck) {
+    		else if(length < 1.5*lengthCheck) {
     			console.log("Bad");
     			this.enabled = false;
     		}
-    		else if(length < 1.5*lengthCheck) {
+    		/*else if(length < 2*lengthCheck) {
     			console.log("Miss");
     			this.enabled = false;
-    		}
+    		}*/
     	}
     },
     distance: function( point1,point2 ) {
