@@ -65,12 +65,12 @@ var GameLayer = cc.LayerColor.extend({
             this.combo++;
             this.great++;
         }
-        else if(type=="bad") {
+        else if(type=="cool") {
             this.score+=(spu/4+GameLayer.SCORE_PER_COMBO*this.combo);
             this.combo=0;
             this.bad++;
         }
-        else if(type=="crash") {
+        else if(type=="miss") {
             this.combo=0;
             this.miss++;
         }

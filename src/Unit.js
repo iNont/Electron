@@ -67,7 +67,7 @@ var Unit = cc.Sprite.extend({
                 console.log("Miss");
                 this.enabled=false;
                 this.crashed=true;
-                this.layer.crashEffectPlay("crash");
+                this.layer.crashEffectPlay("miss");
             }
         }
     },
@@ -136,9 +136,9 @@ var Unit = cc.Sprite.extend({
                 this.layer.crashEffectPlay("great");
     		}
     		else if(length < 1.5*lengthCheck) {
-    			//console.log("Bad");
+    			//console.log("Cool");
     			this.enabled = false;
-                this.layer.crashEffectPlay("bad");
+                this.layer.crashEffectPlay("cool");
     		}
     	}
     },
