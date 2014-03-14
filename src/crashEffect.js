@@ -4,7 +4,6 @@ var CrashEffect = cc.Sprite.extend({
         this._super();
         this.scheduleUpdate();
         this.setScale(gameScale);
-        this.effectHeight=491*gameScale;
         this.setPosition(new cc.Point( screenWidth/2, screenHeight/2));
     },
     update: function( dt ) {
@@ -17,7 +16,7 @@ var CrashEffect = cc.Sprite.extend({
     },
 
     reset: function(type){
-        var src = "images/"+type+"Text.png";
+        var src = "images/"+type+"Effect.png";
         this.initWithFile( src );
         this.diffOpac = 51;
         this.setOpacity(0);

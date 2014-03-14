@@ -30,6 +30,8 @@ var GameLayer = cc.LayerColor.extend({
 
         this.crashEffect = new CrashEffect(this);
         this.addChild(this.crashEffect);
+        this.crashText = new CrashText(this);
+        this.addChild(this.crashText);
 
         this.state = GameLayer.STATES.FRONT;
         this.setKeyboardEnabled( true );
@@ -92,6 +94,7 @@ var GameLayer = cc.LayerColor.extend({
         console.log("Max Combo: "+this.maxCombo);
         console.log("Combo: "+this.combo);
         this.crashEffect.reset(type);
+        this.crashText.reset(type);
     },
     isMaxCombo: function( combo ) {
         if(combo>this.maxCombo)

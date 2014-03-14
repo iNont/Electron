@@ -14,6 +14,7 @@
         appFiles:[
             'src/BG.js',
             'src/CrashEffect.js',
+            'src/CrashText.js',
             'src/Player.js',
             'src/Unit.js',
             'src/GameLayer.js'     //add your own files in order here
