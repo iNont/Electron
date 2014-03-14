@@ -1,4 +1,4 @@
-var gameScale = 0.25;
+var gameScale = 0.5;
 var screenWidth = 2048*gameScale;
 var screenHeight = 1536*gameScale;
 
@@ -12,7 +12,7 @@ var GameLayer = cc.LayerColor.extend({
         this.combo=0;
         this.perfect=0;
         this.great=0;
-        this.bad=0;
+        this.cool=0;
         this.miss=0;
 
         this._super( new cc.Color4B( 127, 127, 127, 255 ) );
@@ -28,10 +28,14 @@ var GameLayer = cc.LayerColor.extend({
         this.player.setPosition( GameLayer.PLAYER_POS );
         this.addChild( this.player );
 
+        this.crashEffect = new crashEffect(this);
+        this.addChild(this.crashEffect);
+
         this.state = GameLayer.STATES.FRONT;
         this.setKeyboardEnabled( true );
         this.scheduleUpdate();
         this.startGame();
+        this.startSong("sound");
         return true;
     },
     startGame: function() {
@@ -49,11 +53,17 @@ var GameLayer = cc.LayerColor.extend({
             var pos = this.units[i].getPosition();
             var endPos = new cc.Point( 2*screenWidth , pos.y );
             this.units[i].endPos = endPos;
+            if(i%2==0)
+                this.units[i].setRotation(90);
             var moveAction = cc.MoveTo.create( GameLayer.UNIT_VELOCITY+timePerGap*i+timeForStart, this.units[i].endPos );
             this.units[i].runAction( moveAction );
         }
     },
+    startSong: function( songKey){
+         this.sound = createjs.Sound.play(songKey);
+    },
     crashEffectPlay: function( type ) {
+        console.trace();
         var spu = GameLayer.SCORE_PER_UNIT;
         if(type=="perfect") {
             this.score+=(spu+GameLayer.SCORE_PER_COMBO*this.combo);
@@ -67,8 +77,8 @@ var GameLayer = cc.LayerColor.extend({
         }
         else if(type=="cool") {
             this.score+=(spu/4+GameLayer.SCORE_PER_COMBO*this.combo);
-            this.combo=0;
-            this.bad++;
+            this.combo++;
+            this.cool++;
         }
         else if(type=="miss") {
             this.combo=0;
@@ -81,8 +91,7 @@ var GameLayer = cc.LayerColor.extend({
         console.log("Score: "+this.score);
         console.log("Max Combo: "+this.maxCombo);
         console.log("Combo: "+this.combo);
-        var effect = new crashEffect(this,type);
-        this.addChild(effect);
+        this.crashEffect.reset(type);
     },
     isMaxCombo: function( combo ) {
         if(combo>this.maxCombo)
@@ -155,7 +164,7 @@ GameLayer.TURN = {
     RIGHT: 2
 }
 GameLayer.PLAYER_POS = new cc.Point( 3*screenWidth/4, screenHeight/2 );
-GameLayer.UNIT_NUMBER = 6;
+GameLayer.UNIT_NUMBER = 7;
 GameLayer.UNIT_GAP = (2*screenWidth)/GameLayer.UNIT_NUMBER;
 GameLayer.UNIT_VELOCITY = 7; //sec in one round
 GameLayer.UNIT_TURN_SPEED = 4;

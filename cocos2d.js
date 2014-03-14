@@ -17,6 +17,18 @@
             'src/Player.js',
             'src/Unit.js',
             'src/GameLayer.js'     //add your own files in order here
+        ],
+        resourceFiles: [
+            {src: 'images/coolEffect.png'},
+            {src: 'images/greatEffect.png'},
+            {src: 'images/ingameBG.png'},
+            {src: 'images/missEffect.png'},
+            {src: 'images/mute.png'},
+            {src: 'images/mys.png'},
+            {src: 'images/pause.png'},
+            {src: 'images/perfectEffect.png'},
+            {src: 'images/Player.png'},
+            {src: 'images/unit.png'},
         ]
     };
 

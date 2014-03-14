@@ -8,6 +8,8 @@ var cocos2dApp = cc.Application.extend({
         cc.initDebugSetting();
         cc.setup( this.config[ 'tag' ] );
         cc.AppController.shareAppController().didFinishLaunchingWithOptions();
+
+        createjs.Sound.registerSound("musics/roar-katyperry.mp3", "sound");
     },
 
     applicationDidFinishLaunching: function() {
@@ -22,10 +24,39 @@ var cocos2dApp = cc.Application.extend({
         // set FPS. the default value is 1.0/60 if you don't call this
         director.setAnimationInterval( 1.0 / this.config[ 'frameRate' ] );
 
-        director.runWithScene( new this.startScene() );
+        cc.LoaderScene.preload( this.config.resourceFiles , function(){
+            director.replaceScene( new this.startScene() );
+        } , this );
 
         return true;
     }
 });
+
+// monkey patching cocos audio engine to pause soundjs
+(function(){
+
+    var origPlay = createjs.Sound.play;
+    var soundList = [];
+    createjs.Sound.play = function(){
+        var sound = origPlay.apply(null, arguments);
+        soundList.push(sound);
+        return sound;
+    };
+    var origPauseMusic = cc.AudioEngine.getInstance().pauseMusic;
+    cc.AudioEngine.getInstance().pauseMusic = function(){
+        origPauseMusic.apply(cc.AudioEngine.getInstance());
+        soundList.forEach(function(sound){
+            sound.pause();
+        });
+    };
+    var origResumeMusic = cc.AudioEngine.getInstance().resumeMusic;
+    cc.AudioEngine.getInstance().resumeMusic = function(){
+        origResumeMusic.apply(cc.AudioEngine.getInstance());
+        soundList.forEach(function(sound){
+            sound.resume();
+        });
+    };
+
+})();
 
 var myApp = new cocos2dApp( StartScene );

@@ -11,6 +11,7 @@ var Unit = cc.Sprite.extend({
         this.enabled = true;
         this.winkSpeed = 17/4;
         this.doneSpeed=1.3;
+        this.crashSpeed = Math.pow(1.7,3);
     },
     update: function( dt ) {
     	var pos = this.getPosition();
@@ -87,7 +88,9 @@ var Unit = cc.Sprite.extend({
        	this.runAction( moveAction );
     },
     hideUnit: function() {
-    	this.setOpacity( this.getOpacity()*0.7 );
+        if(this.getOpacity()/255 > Math.pow(0.7,10))
+    	   this.setOpacity( this.getOpacity()*0.7 );
+        else this.setOpacity(0);
     },
     doneUnit: function() {
         if(this.getScale()/gameScale == Math.pow(1.3,2))
@@ -95,7 +98,9 @@ var Unit = cc.Sprite.extend({
         this.setScale( this.getScale()*this.doneSpeed );
     },
     crashUnit: function() {
-        this.setScale( this.getScale()*1.7 );
+        if(this.getScale()/gameScale < this.crashSpeed)
+            this.setScale( this.getScale()*1.7 );
+        else this.setScale(0);
     },
     wink: function() {
     	var opacity = this.getOpacity();
