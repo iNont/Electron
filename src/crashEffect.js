@@ -1,4 +1,4 @@
-var crashEffect = cc.Sprite.extend({
+var CrashEffect = cc.Sprite.extend({
     ctor: function( layer ) {
     	this.layer = layer;
         this._super();
@@ -17,7 +17,7 @@ var crashEffect = cc.Sprite.extend({
     },
 
     reset: function(type){
-        var src = "images/"+type+"Effect.png";
+        var src = "images/"+type+"Text.png";
         this.initWithFile( src );
         this.diffOpac = 51;
         this.setOpacity(0);

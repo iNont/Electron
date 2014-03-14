@@ -28,7 +28,7 @@ var GameLayer = cc.LayerColor.extend({
         this.player.setPosition( GameLayer.PLAYER_POS );
         this.addChild( this.player );
 
-        this.crashEffect = new crashEffect(this);
+        this.crashEffect = new CrashEffect(this);
         this.addChild(this.crashEffect);
 
         this.state = GameLayer.STATES.FRONT;

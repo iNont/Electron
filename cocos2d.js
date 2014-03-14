@@ -13,7 +13,7 @@
         //SingleEngineFile:'',
         appFiles:[
             'src/BG.js',
-            'src/crashEffect.js',
+            'src/CrashEffect.js',
             'src/Player.js',
             'src/Unit.js',
             'src/GameLayer.js'     //add your own files in order here
@@ -29,6 +29,10 @@
             {src: 'images/perfectEffect.png'},
             {src: 'images/Player.png'},
             {src: 'images/unit.png'},
+            {src: 'images/perfectText.png'},
+            {src: 'images/greatText.png'},
+            {src: 'images/coolText.png'},
+            {src: 'images/missText.png'},
         ]
     };
 

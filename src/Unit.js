@@ -130,12 +130,12 @@ var Unit = cc.Sprite.extend({
     	var length = this.distance( pos,GameLayer.PLAYER_POS );
     	var lengthCheck = GameLayer.UNIT_DIAMETER/2-GameLayer.PLAYER_DIAMETER/2;
     	if(this.enabled) {
-    		if(length < lengthCheck*0.25) {
+    		if(length < lengthCheck/5) {
     			//console.log("Perfect");
     			this.enabled = false;
                 this.layer.crashEffectPlay("perfect");
     		}
-    		else if(length < lengthCheck*0.7) {
+    		else if(length < lengthCheck*3/5) {
     			//console.log("Great");
     			this.enabled = false;
                 this.layer.crashEffectPlay("great");
