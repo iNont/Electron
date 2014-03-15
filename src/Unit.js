@@ -65,7 +65,7 @@ var Unit = cc.Sprite.extend({
         var distance = this.distance( pos,GameLayer.PLAYER_POS );
         if(distance < R && distance > r ) {
             if( !(bool1||bool2) ) {
-                console.log("Miss");
+                //console.log("Miss");
                 this.enabled=false;
                 this.crashed=true;
                 this.layer.crashEffectPlay("miss");

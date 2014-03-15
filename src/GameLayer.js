@@ -8,6 +8,7 @@ var GameLayer = cc.LayerColor.extend({
         this.isReverse = false;
         this.isWink = false;
         this.score=0;
+        this.scoreBak=0;
         this.maxCombo=0;
         this.combo=0;
         this.perfect=0;
@@ -33,6 +34,8 @@ var GameLayer = cc.LayerColor.extend({
         this.crashText = new CrashText(this);
         this.addChild(this.crashText);
 
+        this.createScore();
+        this.createMaxCombo();
         this.state = GameLayer.STATES.FRONT;
         this.setKeyboardEnabled( true );
         this.scheduleUpdate();
@@ -65,7 +68,6 @@ var GameLayer = cc.LayerColor.extend({
          this.sound = createjs.Sound.play(songKey);
     },
     crashEffectPlay: function( type ) {
-        console.trace();
         var spu = GameLayer.SCORE_PER_UNIT;
         if(type=="perfect") {
             this.score+=(spu+GameLayer.SCORE_PER_COMBO*this.combo);
@@ -141,8 +143,41 @@ var GameLayer = cc.LayerColor.extend({
         else if( e==39 )
             this.turnRight( false );
     },
+    createScore: function() {
+        var scoreSize=90;
+        this.scoreLabel = cc.LabelTTF.create("000000","Lucida Grande",scoreSize*gameScale);
+        this.scoreLabel.setAnchorPoint(0,1);
+        this.scoreLabel.setPosition(50*gameScale, screenHeight-50*gameScale);
+        this.scoreLabel.setFontFillColor(new cc.Color3B(255,255,255));
+        this.scoreLabel.enableStroke(new cc.Color3B(0,0,0),2);
+        this.addChild(this.scoreLabel,10);
+    },
+    createMaxCombo: function() {
+        var fontSize=30;
+        this.maxComboLabel = cc.LabelTTF.create("Max Combo: 0","Lucida Grande",fontSize*gameScale);
+        this.maxComboLabel.setAnchorPoint(0,1);
+        this.maxComboLabel.setPosition(50*gameScale, screenHeight-150*gameScale);
+        this.maxComboLabel.setFontFillColor(new cc.Color3B(255,255,255));
+        this.maxComboLabel.enableStroke(new cc.Color3B(0,0,0),2);
+        this.addChild(this.maxComboLabel,10);
+    },
     update: function(dt) {
-        
+        if(this.scoreBak<this.score)
+        {
+            this.scoreBak+=10;
+            if(this.scoreBak>this.score)
+                this.scoreBak=this.score;
+            this.scoreLabel.setString(this.to06d(this.scoreBak));
+        }
+        this.maxComboLabel.setString("Max Combo: "+this.maxCombo);
+    },
+    to06d: function( int ) {
+        var string = int.toString();
+        while(string.length<6)
+        {
+            string = "0"+string;
+        }
+        return string;
     }
 });
 
@@ -167,7 +202,7 @@ GameLayer.TURN = {
     RIGHT: 2
 }
 GameLayer.PLAYER_POS = new cc.Point( 3*screenWidth/4, screenHeight/2 );
-GameLayer.UNIT_NUMBER = 7;
+GameLayer.UNIT_NUMBER = 6;
 GameLayer.UNIT_GAP = (2*screenWidth)/GameLayer.UNIT_NUMBER;
 GameLayer.UNIT_VELOCITY = 7; //sec in one round
 GameLayer.UNIT_TURN_SPEED = 4;
