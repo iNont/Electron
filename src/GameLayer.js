@@ -11,6 +11,7 @@ var GameLayer = cc.LayerColor.extend({
         this.scoreBak=0;
         this.maxCombo=0;
         this.combo=0;
+        this.comboBak=0;
         this.perfect=0;
         this.great=0;
         this.cool=0;
@@ -33,9 +34,9 @@ var GameLayer = cc.LayerColor.extend({
         this.addChild(this.crashEffect);
         this.crashText = new CrashText(this);
         this.addChild(this.crashText);
-
         this.createScore();
         this.createMaxCombo();
+        this.createCurrentCombo();
         this.state = GameLayer.STATES.FRONT;
         this.setKeyboardEnabled( true );
         this.scheduleUpdate();
@@ -65,7 +66,7 @@ var GameLayer = cc.LayerColor.extend({
         }
     },
     startSong: function( songKey){
-         this.sound = createjs.Sound.play(songKey);
+         this.music = createjs.Sound.play(songKey);
     },
     crashEffectPlay: function( type ) {
         var spu = GameLayer.SCORE_PER_UNIT;
@@ -75,12 +76,12 @@ var GameLayer = cc.LayerColor.extend({
             this.perfect++;
         }
         else if(type=="great") {
-            this.score+=(spu/2+GameLayer.SCORE_PER_COMBO*this.combo);
+            this.score+=(2*spu/3+GameLayer.SCORE_PER_COMBO*this.combo);
             this.combo++;
             this.great++;
         }
         else if(type=="cool") {
-            this.score+=(spu/4+GameLayer.SCORE_PER_COMBO*this.combo);
+            this.score+=(spu/3+GameLayer.SCORE_PER_COMBO*this.combo);
             this.combo++;
             this.cool++;
         }
@@ -88,13 +89,15 @@ var GameLayer = cc.LayerColor.extend({
             this.combo=0;
             this.miss++;
         }
-
+        this.comboBak=this.combo;
         if(this.isMaxCombo(this.combo))
             this.maxCombo=this.combo;
+        /*/
         console.log("--------------");
         console.log("Score: "+this.score);
         console.log("Max Combo: "+this.maxCombo);
         console.log("Combo: "+this.combo);
+        /**/
         this.crashEffect.reset(type);
         this.crashText.reset(type);
     },
@@ -149,7 +152,7 @@ var GameLayer = cc.LayerColor.extend({
         this.scoreLabel.setAnchorPoint(0,1);
         this.scoreLabel.setPosition(50*gameScale, screenHeight-50*gameScale);
         this.scoreLabel.setFontFillColor(new cc.Color3B(255,255,255));
-        this.scoreLabel.enableStroke(new cc.Color3B(0,0,0),2);
+        //this.scoreLabel.enableStroke(new cc.Color3B(0,0,0),2);
         this.addChild(this.scoreLabel,10);
     },
     createMaxCombo: function() {
@@ -158,8 +161,17 @@ var GameLayer = cc.LayerColor.extend({
         this.maxComboLabel.setAnchorPoint(0,1);
         this.maxComboLabel.setPosition(50*gameScale, screenHeight-150*gameScale);
         this.maxComboLabel.setFontFillColor(new cc.Color3B(255,255,255));
-        this.maxComboLabel.enableStroke(new cc.Color3B(0,0,0),2);
+        //this.maxComboLabel.enableStroke(new cc.Color3B(0,0,0),2);
         this.addChild(this.maxComboLabel,10);
+    },
+    createCurrentCombo: function() {
+        var fontSize=100;
+        this.comboLabel = cc.LabelTTF.create("","Lucida Grande",fontSize*gameScale);
+        this.comboLabel.setAnchorPoint(0,1);
+        this.comboLabel.setPosition(screenWidth/2, screenHeight/2+2.5*fontSize*gameScale);
+        this.comboLabel.setFontFillColor(new cc.Color3B(255,255,255));
+        //this.comboLabel.enableStroke(new cc.Color3B(0,0,0),2);
+        this.addChild(this.comboLabel,10);
     },
     update: function(dt) {
         if(this.scoreBak<this.score)
@@ -170,6 +182,18 @@ var GameLayer = cc.LayerColor.extend({
             this.scoreLabel.setString(this.to06d(this.scoreBak));
         }
         this.maxComboLabel.setString("Max Combo: "+this.maxCombo);
+        if(this.combo!=0) 
+        {
+            this.comboLabel.setString(this.combo);
+        }
+        else 
+            this.comboLabel.setString("");
+        if(this.comboBak-this.combo<=1)
+        {
+            this.comboLabel.setOpacity(255);
+            this.comboBak+=0.02;
+        }
+        else this.comboLabel.setOpacity(this.comboLabel.getOpacity()*0.95);
     },
     to06d: function( int ) {
         var string = int.toString();

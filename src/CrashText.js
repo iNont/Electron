@@ -7,6 +7,7 @@ var CrashText = cc.Sprite.extend({
         this.setPosition(new cc.Point( screenWidth/2, screenHeight/2-this.textHeight/2));
         this.updateTime=5;
         this.vy=this.textHeight/5;
+        this.timer=0;
         this.toTop=false;
     },
     update: function( dt ) {
@@ -14,11 +15,16 @@ var CrashText = cc.Sprite.extend({
     	this.setPosition(new cc.Point( pos.x, pos.y+this.vy));
     	if(Math.floor(this.getPosition().y)>=screenHeight/2+this.textHeight/2 && !this.toTop)
         {
-    		this.vy=-this.textHeight/(100);
+    		this.vy=0;
             this.toTop=true;
         }
+        else if(this.timer<=1)
+            this.timer+=0.05;
         else
+        {
+            this.vy=-this.textHeight/(100);
             this.setOpacity(this.getOpacity()-5);
+        }
         if(this.getOpacity() <5){
             this.unscheduleUpdate();
         }
@@ -30,6 +36,7 @@ var CrashText = cc.Sprite.extend({
         this.setPosition(new cc.Point( screenWidth/2, screenHeight/2-this.textHeight));
         this.vy=this.textHeight/5;
         this.setOpacity(255);
+        this.timer=0;
         this.toTop=false;
         this.scheduleUpdate();
     }

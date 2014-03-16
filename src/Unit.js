@@ -11,6 +11,7 @@ var Unit = cc.Sprite.extend({
         this.enabled = true;
         this.winkSpeed = 17/4;
         this.doneSpeed=1.3;
+        this.crashOpacity=255;
         this.crashSpeed = Math.pow(1.7,3);
     },
     update: function( dt ) {
@@ -37,7 +38,7 @@ var Unit = cc.Sprite.extend({
                 this.doneUnit();
     	}
     	if(this.distance( pos,this.endPos ) < 1) {
-    			this.startNewUnit();
+    			this.startNewRandomUnit();
     	}
     },
     detection: function() {
@@ -68,11 +69,28 @@ var Unit = cc.Sprite.extend({
                 //console.log("Miss");
                 this.enabled=false;
                 this.crashed=true;
+                this.crashOpacity=this.getOpacity();
                 this.layer.crashEffectPlay("miss");
             }
         }
     },
-    startNewUnit: function() {
+    startNewUnit: function( startTheta ) {
+        this.setOpacity( 255 );
+        this.setScale( gameScale );
+        this.enabled = true;
+        this.crashed = false;
+        this.doneSpeed = 1.3;
+        var newPos = this.genStartPos();
+        var theta = Math.atan((newPos.y-GameLayer.PLAYER_POS.y)/(GameLayer.PLAYER_POS.x-newPos.x))*180/Math.PI;
+        var newTheta = theta+startTheta;
+        this.endPos = this.genEndPos( newPos );
+        this.setPosition( newPos );
+        this.setRotation( newTheta );
+        this.stopAllActions();
+        var moveAction = cc.MoveTo.create(  GameLayer.UNIT_VELOCITY, this.endPos );
+        this.runAction( moveAction );
+    },
+    startNewRandomUnit: function() {
     	this.setOpacity( 255 );
         this.setScale( gameScale );
         this.enabled = true;
@@ -88,7 +106,7 @@ var Unit = cc.Sprite.extend({
        	this.runAction( moveAction );
     },
     hideUnit: function() {
-        if(this.getOpacity()/255 > Math.pow(0.7,10))
+        if(this.getOpacity()/this.crashOpacity > Math.pow(0.7,10))
     	   this.setOpacity( this.getOpacity()*0.7 );
         else this.setOpacity(0);
     },
