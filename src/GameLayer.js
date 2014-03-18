@@ -19,23 +19,40 @@ var GameLayer = cc.LayerColor.extend({
         this.cool=0;
         this.miss=0;
 
-        this._super( new cc.Color4B( 127, 127, 127, 255 ) );
+        this.bg = new BG();
+        this.bg.setScale( gameScale );
+        this.bg.setPosition( new cc.Point( screenWidth/2, screenHeight/2 ) );
+        this.addChild( this.bg );
+
+        this.introLogoO=new IntroLogo(this,"o",1150,256);
+        this.addChild(this.introLogoO);
+        this.introLogoO.runAnimationO();
+
+        this.introLogoSTop=new IntroLogo(this,"spikeTop",1269,121);
+        this.addChild(this.introLogoSTop);
+        this.introLogoSTop.runAnimationSTop();
+
+        this.introLogoBTop=new IntroLogo(this,"spikeBot",1060,359);
+        this.addChild(this.introLogoBTop);
+        this.introLogoBTop.runAnimationBTop();
+
+        this.introLogoFull=new IntroLogo(this,"logo",778.5,227);
+        this.addChild(this.introLogoFull);
+        this.introLogoFull.runAnimationFull();
+        //this.introLogo.setPosition(screenWidth/2,screenHeight/2);
+
+        this._super( new cc.Color4B( 0, 0, 0, 255 ) );
         this.setPosition( new cc.Point( 0, 0 ) );
 
         this.state = GameLayer.STATES.FRONT;
         this.setKeyboardEnabled( true );
         this.scheduleUpdate();
-        this.startGame();
+        //this.startGame();
         return true;
     },
     startGame: function() {
         this.units = [];
         this.state=GameLayer.STATES.STARTED;
-
-        this.bg = new BG();
-        this.bg.setScale( gameScale );
-        this.bg.setPosition( new cc.Point( screenWidth/2, screenHeight/2 ) );
-        this.addChild( this.bg );
 
         this.player = new Player();
         this.player.setScale( gameScale );
@@ -69,6 +86,7 @@ var GameLayer = cc.LayerColor.extend({
         this.addChild(this.crashEffect);
         this.crashText = new CrashText(this);
         this.addChild(this.crashText);
+
         this.createScore();
         this.createMaxCombo();
         this.createCurrentCombo();
@@ -187,6 +205,7 @@ var GameLayer = cc.LayerColor.extend({
         this.addChild(this.comboLabel,10);
     },
     update: function(dt) {
+
         if(this.state==GameLayer.STATES.STARTED) {
             if(this.scoreBak<this.score)
             {
@@ -235,7 +254,7 @@ GameLayer.STATES = {
     STARTED: 2
 };
 GameLayer.PLAYER_POS = new cc.Point( 3*screenWidth/4, screenHeight/2 );
-GameLayer.UNIT_NUMBER = 20;
+GameLayer.UNIT_NUMBER = 6;
 GameLayer.UNIT_GAP = (2*screenWidth)/GameLayer.UNIT_NUMBER;
 GameLayer.UNIT_VELOCITY = 7; //sec in one round
 GameLayer.UNIT_TURN_SPEED = 4;

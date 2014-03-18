@@ -13,6 +13,7 @@
         //SingleEngineFile:'',
         appFiles:[
             'src/BG.js',
+            'src/IntroLogo.js',
             'src/CrashEffect.js',
             'src/CrashText.js',
             'src/Player.js',
@@ -36,6 +37,16 @@
             {src: 'images/greatText.png'},
             {src: 'images/coolText.png'},
             {src: 'images/missText.png'},
+            {src: 'images/intro/e.png'},
+            {src: 'images/intro/l.png'},
+            {src: 'images/intro/c.png'},
+            {src: 'images/intro/t.png'},
+            {src: 'images/intro/r.png'},
+            {src: 'images/intro/o.png'},
+            {src: 'images/intro/n.png'},
+            {src: 'images/intro/spikeTop.png'},
+            {src: 'images/intro/spikeBot.png'},
+            {src: 'images/intro/mg.png'},
         ]
     };
 
