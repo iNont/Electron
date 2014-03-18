@@ -1,8 +1,8 @@
-var Unit = cc.Sprite.extend({
+var LongUnit = cc.Sprite.extend({
     ctor: function( layer ) {
-    	this.layer = layer;
+        this.layer = layer;
         this._super();
-        this.initWithFile( 'images/Unit.png' );
+        this.initWithFile( 'images/longUnit.png' );
         this.endPos = new cc.Point( 2*screenWidth , screenHeight/2 );
         this.scheduleUpdate();
         this.keyLeft = false;
@@ -15,9 +15,9 @@ var Unit = cc.Sprite.extend({
         this.crashSpeed = Math.pow(1.7,3);
     },
     update: function( dt ) {
-    	var pos = this.getPosition();
-    	var theta = this.getRotation();
-    	var turnSpeed = 0;
+        var pos = this.getPosition();
+        var theta = this.getRotation();
+        var turnSpeed = 0;
         if(this.layer.state==GameLayer.STATES.STARTED) {
             if(this.enabled) {
                 if(this.keyLeft) 
@@ -40,7 +40,7 @@ var Unit = cc.Sprite.extend({
             }
             if(this.distance( pos,this.endPos ) < 1) {
                 this.startNewRandomUnit();
-    	    }
+            }
         }
     },
     detection: function() {
@@ -93,23 +93,23 @@ var Unit = cc.Sprite.extend({
         this.runAction( moveAction );
     },
     startNewRandomUnit: function() {
-    	this.setOpacity( 255 );
+        this.setOpacity( 255 );
         this.setScale( gameScale );
         this.enabled = true;
         this.crashed = false;
         this.doneSpeed = 1.3;
-    	var newPos = this.genStartPos();
-    	var newTheta = this.layer.randomNumber( 0,360 );
-    	this.endPos = this.genEndPos( newPos );
-   		this.setPosition( newPos );
-   		this.setRotation( newTheta );
-    	this.stopAllActions();
-       	var moveAction = cc.MoveTo.create(  GameLayer.UNIT_VELOCITY, this.endPos );
-       	this.runAction( moveAction );
+        var newPos = this.genStartPos();
+        var newTheta = this.layer.randomNumber( 0,360 );
+        this.endPos = this.genEndPos( newPos );
+        this.setPosition( newPos );
+        this.setRotation( newTheta );
+        this.stopAllActions();
+        var moveAction = cc.MoveTo.create(  GameLayer.UNIT_VELOCITY, this.endPos );
+        this.runAction( moveAction );
     },
     hideUnit: function() {
         if(this.getOpacity()/this.crashOpacity > Math.pow(0.7,10))
-    	   this.setOpacity( this.getOpacity()*0.7 );
+           this.setOpacity( this.getOpacity()*0.7 );
         else this.setOpacity(0);
     },
     doneUnit: function() {
@@ -123,52 +123,59 @@ var Unit = cc.Sprite.extend({
         else this.setScale(0);
     },
     wink: function() {
-    	var opacity = this.getOpacity();
-    	this.setOpacity( opacity-this.winkSpeed );
-    	opacity = this.getOpacity();
-    	if( opacity < 0 || opacity > 255) {
-    		this.winkSpeed *= -1;
-    	}
+        var opacity = this.getOpacity();
+        this.setOpacity( opacity-this.winkSpeed );
+        opacity = this.getOpacity();
+        if( opacity < 0 || opacity > 255) {
+            this.winkSpeed *= -1;
+        }
     },
     genStartPos: function() {
-    	var distance = Math.sqrt(3/4*Math.pow(screenWidth,2));
-    	var y = this.layer.randomNumber( -distance , distance );
-    	var x = Math.sqrt(Math.pow(screenWidth,2)-Math.pow(y,2));
-    	var playerPos = GameLayer.PLAYER_POS;
-    	var posX = playerPos.x-x;
-    	var posY = playerPos.y+y;
-    	return new cc.Point( posX,posY );
+        var distance = Math.sqrt(3/4*Math.pow(screenWidth,2));
+        var y = this.layer.randomNumber( -distance , distance );
+        var x = Math.sqrt(Math.pow(screenWidth,2)-Math.pow(y,2));
+        var playerPos = GameLayer.PLAYER_POS;
+        var posX = playerPos.x-x;
+        var posY = playerPos.y+y;
+        return new cc.Point( posX,posY );
     },
     genEndPos: function( point ) {
-    	var playerPos = GameLayer.PLAYER_POS;
-    	var x = playerPos.x+Math.abs(playerPos.x-point.x);
-    	var y = 2*playerPos.y-point.y;
-    	return new cc.Point( x,y );
+        var playerPos = GameLayer.PLAYER_POS;
+        var x = playerPos.x+Math.abs(playerPos.x-point.x);
+        var y = 2*playerPos.y-point.y;
+        return new cc.Point( x,y );
     },
     checkEvent: function() {
-    	var pos = this.getPosition();
-    	var length = this.distance( pos,GameLayer.PLAYER_POS );
-    	var lengthCheck = GameLayer.UNIT_DIAMETER/2-GameLayer.PLAYER_DIAMETER/2;
-    	if(this.enabled && !this.layer.spaceClick) {
-    		if(length < lengthCheck/5) {
-    			//console.log("Perfect");
-    			this.enabled = false;
+        var pos = this.getPosition();
+        var length = this.distance( pos,GameLayer.PLAYER_POS );
+        var lengthCheck = GameLayer.UNIT_DIAMETER/2-GameLayer.PLAYER_DIAMETER/2;
+        if(this.enabled) {
+            if(this.layer.stat!=="miss" && length<1.5*lengthCheck) {
+                this.enabled = false;
+                this.layer.crashEffectPlay(this.layer.stat);
+            }
+            else if(length < lengthCheck/5) {
+                //console.log("Perfect");
+                this.enabled = false;
                 this.layer.crashEffectPlay("perfect");
-    		}
-    		else if(length < lengthCheck*3/5) {
-    			//console.log("Great");
-    			this.enabled = false;
+                this.layer.stat="perfect";
+            }
+            else if(length < lengthCheck*3/5) {
+                //console.log("Great");
+                this.enabled = false;
                 this.layer.crashEffectPlay("great");
-    		}
-    		else if(length < 1.5*lengthCheck) {
-    			//console.log("Cool");
-    			this.enabled = false;
+                this.layer.stat="great";
+            }
+            else if(length < 1.5*lengthCheck) {
+                //console.log("Cool");
+                this.enabled = false;
                 this.layer.crashEffectPlay("cool");
-    		}
-    	}
+                this.layer.stat="cool";
+            }
+        }
     },
     distance: function( point1,point2 ) {
-    	return Math.sqrt( Math.pow(point1.x-point2.x,2)+Math.pow(point1.y-point2.y,2) );
+        return Math.sqrt( Math.pow(point1.x-point2.x,2)+Math.pow(point1.y-point2.y,2) );
     }
 });
 

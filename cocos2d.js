@@ -17,6 +17,7 @@
             'src/CrashText.js',
             'src/Player.js',
             'src/Unit.js',
+            'src/LongUnit.js',
             'src/GameLayer.js'     //add your own files in order here
         ],
         resourceFiles: [
@@ -30,6 +31,7 @@
             {src: 'images/perfectEffect.png'},
             {src: 'images/Player.png'},
             {src: 'images/unit.png'},
+            {src: 'images/longUnit.png'},
             {src: 'images/perfectText.png'},
             {src: 'images/greatText.png'},
             {src: 'images/coolText.png'},

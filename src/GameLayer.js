@@ -5,8 +5,10 @@ var screenHeight = 1536*gameScale;
 var GameLayer = cc.LayerColor.extend({
     
     init: function() {
+        this.stat="miss";
         this.isReverse = false;
         this.isWink = false;
+        this.spaceClick=false;
         this.score=0;
         this.scoreBak=0;
         this.maxCombo=0;
@@ -20,6 +22,16 @@ var GameLayer = cc.LayerColor.extend({
         this._super( new cc.Color4B( 127, 127, 127, 255 ) );
         this.setPosition( new cc.Point( 0, 0 ) );
 
+        this.state = GameLayer.STATES.FRONT;
+        this.setKeyboardEnabled( true );
+        this.scheduleUpdate();
+        this.startGame();
+        return true;
+    },
+    startGame: function() {
+        this.units = [];
+        this.state=GameLayer.STATES.STARTED;
+
         this.bg = new BG();
         this.bg.setScale( gameScale );
         this.bg.setPosition( new cc.Point( screenWidth/2, screenHeight/2 ) );
@@ -30,22 +42,6 @@ var GameLayer = cc.LayerColor.extend({
         this.player.setPosition( GameLayer.PLAYER_POS );
         this.addChild( this.player );
 
-        this.crashEffect = new CrashEffect(this);
-        this.addChild(this.crashEffect);
-        this.crashText = new CrashText(this);
-        this.addChild(this.crashText);
-        this.createScore();
-        this.createMaxCombo();
-        this.createCurrentCombo();
-        this.state = GameLayer.STATES.FRONT;
-        this.setKeyboardEnabled( true );
-        this.scheduleUpdate();
-        this.startGame();
-        this.startSong("sound");
-        return true;
-    },
-    startGame: function() {
-        this.units = [];
         var timePerGap = GameLayer.UNIT_GAP*GameLayer.timePerPixel;
         var gapForStart = GameLayer.UNIT_GAP-GameLayer.PLAYER_DIAMETER*gameScale;
         var timeForStart = gapForStart*GameLayer.timePerPixel;
@@ -61,9 +57,23 @@ var GameLayer = cc.LayerColor.extend({
             this.units[i].endPos = endPos;
             if(i%2==0)
                 this.units[i].setRotation(90);
+            /*LongUnit Test/
+            if(i>0)
+                this.units[i].setOpacity(100);
+            /**/
             var moveAction = cc.MoveTo.create( GameLayer.UNIT_VELOCITY+timePerGap*i+timeForStart, this.units[i].endPos );
             this.units[i].runAction( moveAction );
         }
+
+        this.crashEffect = new CrashEffect(this);
+        this.addChild(this.crashEffect);
+        this.crashText = new CrashText(this);
+        this.addChild(this.crashText);
+        this.createScore();
+        this.createMaxCombo();
+        this.createCurrentCombo();
+        this.startSong("sound");
+
     },
     startSong: function( songKey){
          this.music = createjs.Sound.play(songKey);
@@ -117,8 +127,9 @@ var GameLayer = cc.LayerColor.extend({
     },
     clickEvent: function() {
         for(var i=0; i<GameLayer.UNIT_NUMBER ;i++) {
-            this.units[i].checkEvent();
+                this.units[i].checkEvent();
         }
+        this.spaceClick=true;
     },
     turnLeft: function( bool ) {
         for(var i=0; i<GameLayer.UNIT_NUMBER ;i++) {
@@ -136,7 +147,7 @@ var GameLayer = cc.LayerColor.extend({
             this.turnLeft( true );
         else if( e==39 )
             this.turnRight( true );
-        else if( e==32 ) 
+        else if( e==32 )
             this.clickEvent();
     },
     onKeyUp: function( e ) {
@@ -145,6 +156,8 @@ var GameLayer = cc.LayerColor.extend({
             this.turnLeft( false );
         else if( e==39 )
             this.turnRight( false );
+        else if( e==32 ) 
+            this.spaceClick=false;
     },
     createScore: function() {
         var scoreSize=90;
@@ -167,33 +180,35 @@ var GameLayer = cc.LayerColor.extend({
     createCurrentCombo: function() {
         var fontSize=100;
         this.comboLabel = cc.LabelTTF.create("","Lucida Grande",fontSize*gameScale);
-        this.comboLabel.setAnchorPoint(0,1);
+        //this.comboLabel.setAnchorPoint(0,0);
         this.comboLabel.setPosition(screenWidth/2, screenHeight/2+2.5*fontSize*gameScale);
         this.comboLabel.setFontFillColor(new cc.Color3B(255,255,255));
         //this.comboLabel.enableStroke(new cc.Color3B(0,0,0),2);
         this.addChild(this.comboLabel,10);
     },
     update: function(dt) {
-        if(this.scoreBak<this.score)
-        {
-            this.scoreBak+=10;
-            if(this.scoreBak>this.score)
-                this.scoreBak=this.score;
-            this.scoreLabel.setString(this.to06d(this.scoreBak));
+        if(this.state==GameLayer.STATES.STARTED) {
+            if(this.scoreBak<this.score)
+            {
+                this.scoreBak+=10;
+                if(this.scoreBak>this.score)
+                    this.scoreBak=this.score;
+                this.scoreLabel.setString(this.to06d(this.scoreBak));
+            }
+            this.maxComboLabel.setString("Max Combo: "+this.maxCombo);
+            if(this.combo!=0) 
+            {
+               this.comboLabel.setString(this.combo);
+            }
+            else 
+                this.comboLabel.setString("");
+            if(this.comboBak-this.combo<=1)
+            {
+                this.comboLabel.setOpacity(255);
+                this.comboBak+=0.02;
+            }
+            else this.comboLabel.setOpacity(this.comboLabel.getOpacity()*0.95);
         }
-        this.maxComboLabel.setString("Max Combo: "+this.maxCombo);
-        if(this.combo!=0) 
-        {
-            this.comboLabel.setString(this.combo);
-        }
-        else 
-            this.comboLabel.setString("");
-        if(this.comboBak-this.combo<=1)
-        {
-            this.comboLabel.setOpacity(255);
-            this.comboBak+=0.02;
-        }
-        else this.comboLabel.setOpacity(this.comboLabel.getOpacity()*0.95);
     },
     to06d: function( int ) {
         var string = int.toString();
@@ -217,16 +232,10 @@ var StartScene = cc.Scene.extend({
 
 GameLayer.STATES = {
     FRONT: 1,
-    STARTED: 2,
-    DEAD: 3
+    STARTED: 2
 };
-GameLayer.TURN = {
-    STOP: 0,
-    LEFT: 1,
-    RIGHT: 2
-}
 GameLayer.PLAYER_POS = new cc.Point( 3*screenWidth/4, screenHeight/2 );
-GameLayer.UNIT_NUMBER = 6;
+GameLayer.UNIT_NUMBER = 20;
 GameLayer.UNIT_GAP = (2*screenWidth)/GameLayer.UNIT_NUMBER;
 GameLayer.UNIT_VELOCITY = 7; //sec in one round
 GameLayer.UNIT_TURN_SPEED = 4;
