@@ -50,10 +50,16 @@ var GameLayer = cc.LayerColor.extend({
         //this.startGame();
         return true;
     },
+    hideIntro: function() {
+        this.removeChild(this.introLogoO);
+        this.removeChild(this.introLogoSTop);
+        this.removeChild(this.introLogoBTop);
+        this.removeChild(this.introLogoFull);
+    },
     startGame: function() {
         this.units = [];
+        this.hideIntro();
         this.state=GameLayer.STATES.STARTED;
-
         this.player = new Player();
         this.player.setScale( gameScale );
         this.player.setPosition( GameLayer.PLAYER_POS );
@@ -166,7 +172,11 @@ var GameLayer = cc.LayerColor.extend({
         else if( e==39 )
             this.turnRight( true );
         else if( e==32 )
+        {
+            if(this.state==GameLayer.STATES.FRONT)
+                this.startGame();
             this.clickEvent();
+        }
     },
     onKeyUp: function( e ) {
         //37 = Left , 39 = Right , 32 = Space , 27 = Escape
