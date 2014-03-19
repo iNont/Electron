@@ -73,7 +73,7 @@ var GameLayer = cc.LayerColor.extend({
         this.player.setPosition( GameLayer.PLAYER_POS );
         this.addChild( this.player );
 
-        this.startGameRandom();
+        this.startGameBeat(3500,700);
 
         this.crashEffect = new CrashEffect(this);
         this.addChild(this.crashEffect);
@@ -106,7 +106,11 @@ var GameLayer = cc.LayerColor.extend({
             var moveAction = cc.MoveTo.create( GameLayer.UNIT_VELOCITY+timePerGap*i+timeForStart, this.units[i].endPos );
             this.units[i].runAction( moveAction );
         }
-
+    },
+    startGameBeat: function(startTime,beat) {
+        this.startTime=startTime;
+        this.beatTime=beat;
+        this.schedule(this.updateBeat,0,Infinity,0);
     },
     startSong: function( songKey){
          this.music = createjs.Sound.play(songKey);
@@ -247,6 +251,17 @@ var GameLayer = cc.LayerColor.extend({
                 this.comboBak+=0.02;
             }
             else this.comboLabel.setOpacity(this.comboLabel.getOpacity()*0.95);
+        }
+    },
+    updateBeat: function() {
+        var pos=this.music.getPosition()-GameLayer.UNIT_VELOCITY*500;
+        var time=this.startTime-GameLayer.UNIT_VELOCITY*500;
+        if(pos>=time) {
+            this.startTime+=this.beatTime;
+            var unit = new Unit(this);
+            this.units.push(unit);
+            this.units[this.units.length-1].startNewUnit(0);
+            this.addChild(this.units[this.units.length-1]);
         }
     },
     to06d: function( int ) {

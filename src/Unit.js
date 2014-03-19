@@ -40,7 +40,8 @@ var Unit = cc.Sprite.extend({
                     this.doneUnit();
             }
             if(this.distance( pos,this.endPos ) < 1) {
-                //this.layer.removeChild(this);
+                this.layer.units.shift();
+                this.layer.removeChild(this);
                 this.startNewRandomUnit();
     	    }
         }
@@ -91,7 +92,7 @@ var Unit = cc.Sprite.extend({
         this.setPosition( newPos );
         this.setRotation( newTheta );
         this.stopAllActions();
-        var moveAction = cc.MoveTo.create(  GameLayer.UNIT_VELOCITY, this.endPos );
+        var moveAction = cc.MoveTo.create( GameLayer.UNIT_VELOCITY, this.endPos );
         this.runAction( moveAction );
     },
     startNewRandomUnit: function() {
