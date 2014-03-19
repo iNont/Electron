@@ -24,21 +24,8 @@ var GameLayer = cc.LayerColor.extend({
         this.bg.setPosition( new cc.Point( screenWidth/2, screenHeight/2 ) );
         this.addChild( this.bg );
 
-        this.introLogoO=new IntroLogo(this,"o",1150,256);
-        this.addChild(this.introLogoO);
-        this.introLogoO.runAnimationO();
+        this.startIntro();
 
-        this.introLogoSTop=new IntroLogo(this,"spikeTop",1269,121);
-        this.addChild(this.introLogoSTop);
-        this.introLogoSTop.runAnimationSTop();
-
-        this.introLogoBTop=new IntroLogo(this,"spikeBot",1060,359);
-        this.addChild(this.introLogoBTop);
-        this.introLogoBTop.runAnimationBTop();
-
-        this.introLogoFull=new IntroLogo(this,"logo",778.5,227);
-        this.addChild(this.introLogoFull);
-        this.introLogoFull.runAnimationFull();
         //this.introLogo.setPosition(screenWidth/2,screenHeight/2);
 
         this._super( new cc.Color4B( 0, 0, 0, 255 ) );
@@ -50,18 +37,38 @@ var GameLayer = cc.LayerColor.extend({
         //this.startGame();
         return true;
     },
+    startIntro:function() {
+        this.introArr=[];
+        this.introLogoO=new IntroLogo(this,"o",1150,256);
+        this.addChild(this.introLogoO);
+        this.introLogoO.runAnimationO();
+        this.introArr.push(this.introLogoO);
+
+        this.introLogoSTop=new IntroLogo(this,"spikeTop",1269,121);
+        this.addChild(this.introLogoSTop);
+        this.introLogoSTop.runAnimationSTop();
+        this.introArr.push(this.introLogoSTop);
+
+        this.introLogoBTop=new IntroLogo(this,"spikeBot",1060,359);
+        this.addChild(this.introLogoBTop);
+        this.introLogoBTop.runAnimationBTop();
+        this.introArr.push(this.introLogoBTop);
+
+        this.introLogoFull=new IntroLogo(this,"logo",778.5,227);
+        this.addChild(this.introLogoFull);
+        this.introLogoFull.runAnimationFull();
+        this.introArr.push(this.introLogoFull);
+    },
     hideIntro: function() {
-        this.removeChild(this.introLogoO);
-        this.removeChild(this.introLogoSTop);
-        this.removeChild(this.introLogoBTop);
-        this.removeChild(this.introLogoFull);
+        for(var i=0;i<this.introArr.length;i++)
+            this.introArr[i].hideThis();
     },
     startGame: function() {
         this.units = [];
         this.hideIntro();
         this.state=GameLayer.STATES.STARTED;
         this.player = new Player();
-        this.player.setScale( gameScale );
+        this.player.setScale( gameScale*0.75 );
         this.player.setPosition( GameLayer.PLAYER_POS );
         this.addChild( this.player );
 
@@ -271,6 +278,6 @@ GameLayer.UNIT_TURN_SPEED = 4;
 GameLayer.timePerPixel = (GameLayer.UNIT_VELOCITY/(2*screenWidth));
 GameLayer.UNIT_DIAMETER = 320*gameScale;
 GameLayer.UNIT_BORDER_SIZE = 15*gameScale;
-GameLayer.PLAYER_DIAMETER = 71*gameScale;
+GameLayer.PLAYER_DIAMETER = 71*gameScale*0.75;
 GameLayer.SCORE_PER_UNIT = 300;
 GameLayer.SCORE_PER_COMBO = 5;

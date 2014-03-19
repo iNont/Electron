@@ -12,6 +12,42 @@ var IntroLogo = cc.Sprite.extend({
         this.setScale(gameScale);
         this.setOpacity(0);
         this.animating=false;
+        this.v=0.5;
+    },
+    unscheduleAll: function() {
+        this.unschedule(this.updateFull);
+        this.unschedule(this.updateO);
+        this.unschedule(this.updateSTop);
+        this.unschedule(this.updateBTop);
+        this.unschedule(this.updateWink);
+    },
+    hideThis: function() {
+        this.unscheduleAll();
+        this.schedule(this.updateHide,0,Infinity,0);
+    },
+    winkThis: function( speed,min ) {
+        this.winkSpeed=speed;
+        this.winkMin=min;
+        this.unschedule(this.updateFull);
+        this.unscheduleAll();
+        this.schedule(this.updateWink,0,Infinity,0);
+    },
+    updateHide: function() {
+        if(this.getScaleX()>Math.pow(10,-3)) {
+            this.setOpacity(this.getOpacity()*0.7);
+            this.setScaleX(this.getScaleX()*0.9);
+            this.setScaleY(this.getScaleY()*0.9);
+        }
+        else 
+            this.layer.removeChild(this);
+    },
+    updateWink: function() {
+        var opacity = this.getOpacity();
+        this.setOpacity( opacity-this.winkSpeed );
+        opacity = this.getOpacity();
+        if( opacity < this.winkMin || opacity > 255) {
+            this.winkSpeed *= -1;
+        }
     },
     updateO: function() {
         if(this.getOpacity()<255)
@@ -31,7 +67,8 @@ var IntroLogo = cc.Sprite.extend({
         }
         else {
             this.setScale(gameScale);
-            this.unscheduleUpdate();
+            this.winkThis(17/6,0);
+            this.unschedule(this.updateO);
         }
     },
     updateSTop: function() {
@@ -45,7 +82,8 @@ var IntroLogo = cc.Sprite.extend({
         else {
             this.setOpacity(255);
             this.setScale(gameScale);
-            this.unscheduleUpdate();
+            this.winkThis(17/4,0);
+            this.unschedule(this.updateSTop);
         }
     },
     updateBTop: function() {
@@ -59,19 +97,29 @@ var IntroLogo = cc.Sprite.extend({
         else {
             this.setOpacity(255);
             this.setScale(gameScale);
-            this.unscheduleUpdate();
+            this.winkThis(17/4,0);
+            this.unschedule(this.updateBTop);
         }
     },
     updateFull: function() {
         if(this.getOpacity()<40)
         {
-            this.setOpacity(this.getOpacity()+0.5);
+            this.setOpacity(this.getOpacity()+this.v);
         }
         else if(this.getOpacity()<255){
-            this.setOpacity(this.getOpacity()+17);
+            this.v+=17/8;
+            this.setOpacity(this.getOpacity()+this.v);
+        }
+        else
+        {
+            this.setOpacity(255);
+            this.winkThis(1,155);
         }
     },
+    updateLight: function() {
+    },
     runAnimationO: function() {
+        this.v=180;
         this.setScale(gameScale*Math.pow(1.05,51));
         this.schedule(this.updateO,0,Infinity,0);
     },
@@ -88,7 +136,11 @@ var IntroLogo = cc.Sprite.extend({
         this.schedule(this.updateBTop,0,Infinity,0);
     },
     runAnimationFull: function() {
+        this.v=0.5;
         this.schedule(this.updateFull,0,Infinity,0);
+    },
+    runAnimationLight: function() {
+        this.schedule(this.updateLight,0,Infinity,0);
     }
 
 });
