@@ -67,11 +67,24 @@ var GameLayer = cc.LayerColor.extend({
         this.units = [];
         this.hideIntro();
         this.state=GameLayer.STATES.STARTED;
+        this.startSong("sound");
         this.player = new Player();
         this.player.setScale( gameScale*0.75 );
         this.player.setPosition( GameLayer.PLAYER_POS );
         this.addChild( this.player );
 
+        this.startGameRandom();
+
+        this.crashEffect = new CrashEffect(this);
+        this.addChild(this.crashEffect);
+        this.crashText = new CrashText(this);
+        this.addChild(this.crashText);
+
+        this.createScore();
+        this.createMaxCombo();
+        this.createCurrentCombo();
+    },
+    startGameRandom: function() {
         var timePerGap = GameLayer.UNIT_GAP*GameLayer.timePerPixel;
         var gapForStart = GameLayer.UNIT_GAP-GameLayer.PLAYER_DIAMETER*gameScale;
         var timeForStart = gapForStart*GameLayer.timePerPixel;
@@ -79,7 +92,6 @@ var GameLayer = cc.LayerColor.extend({
         {
             var unit = new Unit( this );
             this.units.push( unit );
-            this.units[i].setScale( gameScale );
             this.units[i].setPosition( new cc.Point( -screenWidth/4-i*GameLayer.UNIT_GAP-gapForStart, screenHeight/2));
             this.addChild( this.units[i] );
             var pos = this.units[i].getPosition();
@@ -94,16 +106,6 @@ var GameLayer = cc.LayerColor.extend({
             var moveAction = cc.MoveTo.create( GameLayer.UNIT_VELOCITY+timePerGap*i+timeForStart, this.units[i].endPos );
             this.units[i].runAction( moveAction );
         }
-
-        this.crashEffect = new CrashEffect(this);
-        this.addChild(this.crashEffect);
-        this.crashText = new CrashText(this);
-        this.addChild(this.crashText);
-
-        this.createScore();
-        this.createMaxCombo();
-        this.createCurrentCombo();
-        this.startSong("sound");
 
     },
     startSong: function( songKey){
@@ -180,6 +182,7 @@ var GameLayer = cc.LayerColor.extend({
             this.turnRight( true );
         else if( e==32 )
         {
+            //if(this.state==GameLayer.STATES.STARTED) console.log(this.music.getPosition());
             if(this.state==GameLayer.STATES.FRONT)
                 this.startGame();
             this.clickEvent();
@@ -273,8 +276,8 @@ GameLayer.STATES = {
 GameLayer.PLAYER_POS = new cc.Point( 3*screenWidth/4, screenHeight/2 );
 GameLayer.UNIT_NUMBER = 6;
 GameLayer.UNIT_GAP = (2*screenWidth)/GameLayer.UNIT_NUMBER;
-GameLayer.UNIT_VELOCITY = 7; //sec in one round
-GameLayer.UNIT_TURN_SPEED = 4;
+GameLayer.UNIT_VELOCITY = 6.30; //sec in one round
+GameLayer.UNIT_TURN_SPEED = 4; //normal 4
 GameLayer.timePerPixel = (GameLayer.UNIT_VELOCITY/(2*screenWidth));
 GameLayer.UNIT_DIAMETER = 320*gameScale;
 GameLayer.UNIT_BORDER_SIZE = 15*gameScale;

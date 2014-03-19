@@ -4,6 +4,7 @@ var Unit = cc.Sprite.extend({
         this._super();
         this.initWithFile( 'images/Unit.png' );
         this.endPos = new cc.Point( 2*screenWidth , screenHeight/2 );
+        this.setScale( gameScale );
         this.scheduleUpdate();
         this.keyLeft = false;
         this.keyRight = false;
@@ -39,6 +40,7 @@ var Unit = cc.Sprite.extend({
                     this.doneUnit();
             }
             if(this.distance( pos,this.endPos ) < 1) {
+                //this.layer.removeChild(this);
                 this.startNewRandomUnit();
     	    }
         }
