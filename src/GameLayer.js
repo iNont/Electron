@@ -261,7 +261,7 @@ var GameLayer = cc.LayerColor.extend({
             this.startTime+=this.beatTime;
             var unit = new Unit(this);
             this.units.push(unit);
-            this.units[this.units.length-1].startNewUnit(0);
+            this.units[this.units.length-1].startNewRandomUnit();
             this.addChild(this.units[this.units.length-1]);
         }
     },

@@ -1,6 +1,7 @@
 var IntroLogo = cc.Sprite.extend({
     ctor: function(layer, text ,x,y) {
         this.layer=layer;
+        this.type=text;
         this._super();
         var src = "images/intro/"+text+".png";
         this.initWithFile( src );
@@ -33,6 +34,11 @@ var IntroLogo = cc.Sprite.extend({
         this.schedule(this.updateWink,0,Infinity,0);
     },
     updateHide: function() {
+        var pos=this.getPosition();
+        if(this.type=="spikeTop")
+            this.setPosition(new cc.Point(pos.x-50,pos.y-50));
+        else if(this.type=="spikeBot")
+            this.setPosition(new cc.Point(pos.x+50,pos.y+50));
         if(this.getScaleX()>Math.pow(10,-3)) {
             this.setOpacity(this.getOpacity()*0.7);
             this.setScaleX(this.getScaleX()*0.9);

@@ -10,6 +10,7 @@ var Unit = cc.Sprite.extend({
         this.keyRight = false;
         this.crashed = false;
         this.enabled = true;
+        this.passPlayer=false;
         this.winkSpeed = 17/4;
         this.doneSpeed=1.3;
         this.crashOpacity=255;
@@ -31,12 +32,18 @@ var Unit = cc.Sprite.extend({
                     this.wink();
                 this.setRotation(theta+turnSpeed);
                 this.detection();
+                if(pos.x > screenWidth-GameLayer.UNIT_DIAMETER) {
+                    this.enabled=false;
+                    this.passPlayer=true;
+                    this.crashOpacity=this.getOpacity();
+                    this.layer.crashEffectPlay("miss");
+                }
             }
             else {
                 this.hideUnit();
                 if(this.crashed)
                     this.crashUnit();
-                else
+                else if(!this.passPlayer)
                     this.doneUnit();
             }
             if(this.distance( pos,this.endPos ) < 1) {
@@ -83,6 +90,7 @@ var Unit = cc.Sprite.extend({
         this.setOpacity( 255 );
         this.setScale( gameScale );
         this.enabled = true;
+        this.passPlayer=false;
         this.crashed = false;
         this.doneSpeed = 1.3;
         var newPos = this.genStartPos();
