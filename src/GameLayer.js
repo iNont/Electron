@@ -73,7 +73,8 @@ var GameLayer = cc.LayerColor.extend({
         this.player.setPosition( GameLayer.PLAYER_POS );
         this.addChild( this.player );
 
-        this.startGameBeat(3500,700);
+        //this.startGameRandom();
+        this.startGameBeat(3500,1300);
 
         this.crashEffect = new CrashEffect(this);
         this.addChild(this.crashEffect);
@@ -233,7 +234,7 @@ var GameLayer = cc.LayerColor.extend({
         if(this.state==GameLayer.STATES.STARTED) {
             if(this.scoreBak<this.score)
             {
-                this.scoreBak+=10;
+                this.scoreBak+=20;
                 if(this.scoreBak>this.score)
                     this.scoreBak=this.score;
                 this.scoreLabel.setString(this.to06d(this.scoreBak));
