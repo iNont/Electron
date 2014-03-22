@@ -20,13 +20,10 @@ var GameLayer = cc.LayerColor.extend({
         this.miss=0;
 
         this.bg = new BG();
-        this.bg.setScale( gameScale );
-        this.bg.setPosition( new cc.Point( screenWidth/2, screenHeight/2 ) );
+        this.bg.setPosition( new cc.Point( screenWidth, screenHeight/2 ) );
         this.addChild( this.bg );
 
         this.startIntro();
-
-        //this.introLogo.setPosition(screenWidth/2,screenHeight/2);
 
         this._super( new cc.Color4B( 0, 0, 0, 255 ) );
         this.setPosition( new cc.Point( 0, 0 ) );
@@ -34,7 +31,6 @@ var GameLayer = cc.LayerColor.extend({
         this.state = GameLayer.STATES.FRONT;
         this.setKeyboardEnabled( true );
         this.scheduleUpdate();
-        //this.startGame();
         return true;
     },
     startIntro:function() {
@@ -72,9 +68,10 @@ var GameLayer = cc.LayerColor.extend({
         this.player.setScale( gameScale*0.75 );
         this.player.setPosition( GameLayer.PLAYER_POS );
         this.addChild( this.player );
+        this.bg.startGameAnimation();
 
         //this.startGameRandom();
-        this.startGameBeat(3500,1300);
+        this.startGameBeat(2850,1300);
 
         this.crashEffect = new CrashEffect(this);
         this.addChild(this.crashEffect);
@@ -264,6 +261,8 @@ var GameLayer = cc.LayerColor.extend({
             this.units[this.units.length-1].startNewRandomUnit();
             this.addChild(this.units[this.units.length-1]);
         }
+        if(this.music.getPosition()==this.music.getDuration()) {
+        }
     },
     to06d: function( int ) {
         var string = int.toString();
@@ -292,7 +291,7 @@ GameLayer.STATES = {
 GameLayer.PLAYER_POS = new cc.Point( 3*screenWidth/4, screenHeight/2 );
 GameLayer.UNIT_NUMBER = 6;
 GameLayer.UNIT_GAP = (2*screenWidth)/GameLayer.UNIT_NUMBER;
-GameLayer.UNIT_VELOCITY = 6.30; //sec in one round
+GameLayer.UNIT_VELOCITY = 5.2; //sec in one round
 GameLayer.UNIT_TURN_SPEED = 4; //normal 4
 GameLayer.timePerPixel = (GameLayer.UNIT_VELOCITY/(2*screenWidth));
 GameLayer.UNIT_DIAMETER = 320*gameScale;

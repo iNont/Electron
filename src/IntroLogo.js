@@ -29,7 +29,6 @@ var IntroLogo = cc.Sprite.extend({
     winkThis: function( speed,min ) {
         this.winkSpeed=speed;
         this.winkMin=min;
-        this.unschedule(this.updateFull);
         this.unscheduleAll();
         this.schedule(this.updateWink,0,Infinity,0);
     },
@@ -121,8 +120,6 @@ var IntroLogo = cc.Sprite.extend({
             this.setOpacity(255);
             this.winkThis(1,155);
         }
-    },
-    updateLight: function() {
     },
     runAnimationO: function() {
         this.v=180;

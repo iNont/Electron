@@ -32,7 +32,7 @@ var Unit = cc.Sprite.extend({
                     this.wink();
                 this.setRotation(theta+turnSpeed);
                 this.detection();
-                if(pos.x > screenWidth-GameLayer.UNIT_DIAMETER) {
+                if(pos.x > screenWidth-GameLayer.UNIT_DIAMETER/2) {
                     this.enabled=false;
                     this.passPlayer=true;
                     this.crashOpacity=this.getOpacity();
