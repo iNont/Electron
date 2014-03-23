@@ -18,6 +18,7 @@ var GameLayer = cc.LayerColor.extend({
         this.great=0;
         this.cool=0;
         this.miss=0;
+        this.selectButton=0;
 
         this.bg = new BG();
         this.bg.setPosition( new cc.Point( screenWidth, screenHeight/2 ) );
@@ -54,10 +55,20 @@ var GameLayer = cc.LayerColor.extend({
         this.addChild(this.introLogoFull);
         this.introLogoFull.runAnimationFull();
         this.introArr.push(this.introLogoFull);
+
+        this.buttonArr=[];
+        for(var i=1;i<5;i++) {
+            this.introButton = new MainMenuButton(this,i);
+            this.addChild(this.introButton);
+            this.buttonArr.push(this.introButton);
+        }
+        this.buttonArr[this.selectButton].select();
     },
     hideIntro: function() {
         for(var i=0;i<this.introArr.length;i++)
             this.introArr[i].hideThis();
+        for(var i=0;i<this.buttonArr.length;i++)
+            this.buttonArr[i].hideThis();
     },
     startGame: function() {
         this.units = [];
@@ -71,7 +82,7 @@ var GameLayer = cc.LayerColor.extend({
         this.bg.startGameAnimation();
 
         //this.startGameRandom();
-        this.startGameBeat(2850,1300);
+        this.startGameBeat(2600,1300);
 
         this.crashEffect = new CrashEffect(this);
         this.addChild(this.crashEffect);
@@ -178,26 +189,46 @@ var GameLayer = cc.LayerColor.extend({
     },
     onKeyDown: function( e ) {
         //37 = Left , 39 = Right , 32 = Space , 27 = Escape
-        if( e==37 )
-            this.turnLeft( true );
-        else if( e==39 )
-            this.turnRight( true );
-        else if( e==32 )
-        {
-            //if(this.state==GameLayer.STATES.STARTED) console.log(this.music.getPosition());
-            if(this.state==GameLayer.STATES.FRONT)
-                this.startGame();
-            this.clickEvent();
+        if(this.state==GameLayer.STATES.STARTED) {
+            if( e==37 )
+                this.turnLeft( true );
+            else if( e==39 )
+                this.turnRight( true );
+            else if( e==32 ) {
+                this.clickEvent();
+            }
+        }
+        else if(this.state==GameLayer.STATES.FRONT) {
+            if( e==32 )
+                if(this.selectButton==0)
+                    this.startGame();
+            if( e==38 )
+                if(this.selectButton>0) {
+                    this.buttonArr[this.selectButton].unselect();
+                    this.selectButton--;
+                    this.buttonArr[this.selectButton].select();
+                    console.log(e);
+                }
+            if( e==40 )
+                if(this.selectButton<3) {
+                    this.buttonArr[this.selectButton].unselect();
+                    this.selectButton++;
+                    this.buttonArr[this.selectButton].select();
+                    console.log(e);
+                }
+
         }
     },
     onKeyUp: function( e ) {
         //37 = Left , 39 = Right , 32 = Space , 27 = Escape
-        if( e==37 )
-            this.turnLeft( false );
-        else if( e==39 )
-            this.turnRight( false );
-        else if( e==32 ) 
-            this.spaceClick=false;
+        if(this.state==GameLayer.STATES.STARTED) {
+            if( e==37 )
+                this.turnLeft( false );
+            else if( e==39 )
+                this.turnRight( false );
+            else if( e==32 ) 
+                this.spaceClick=false;
+        }
     },
     createScore: function() {
         var scoreSize=90;

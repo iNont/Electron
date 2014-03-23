@@ -13,6 +13,7 @@
         //SingleEngineFile:'',
         appFiles:[
             'src/BG.js',
+            'src/MainMenuButton.js',
             'src/IntroLogo.js',
             'src/CrashEffect.js',
             'src/CrashText.js',
@@ -47,6 +48,10 @@
             {src: 'images/intro/spikeTop.png'},
             {src: 'images/intro/spikeBot.png'},
             {src: 'images/intro/mg.png'},
+            {src: 'images/intro/button1.png'},
+            {src: 'images/intro/button2.png'},
+            {src: 'images/intro/button3.png'},
+            {src: 'images/intro/button4.png'},
         ]
     };
 
