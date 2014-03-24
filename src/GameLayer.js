@@ -46,10 +46,10 @@ var GameLayer = cc.LayerColor.extend({
         this.introLogoSTop.runAnimationSTop();
         this.introArr.push(this.introLogoSTop);
 
-        this.introLogoBTop=new IntroLogo(this,"spikeBot",1060,359);
-        this.addChild(this.introLogoBTop);
-        this.introLogoBTop.runAnimationBTop();
-        this.introArr.push(this.introLogoBTop);
+        this.introLogoSBot=new IntroLogo(this,"spikeBot",1060,359);
+        this.addChild(this.introLogoSBot);
+        this.introLogoSBot.runAnimationSBot();
+        this.introArr.push(this.introLogoSBot);
 
         this.introLogoFull=new IntroLogo(this,"logo",778.5,227);
         this.addChild(this.introLogoFull);
@@ -192,10 +192,12 @@ var GameLayer = cc.LayerColor.extend({
         if(this.state==GameLayer.STATES.STARTED) {
             if( e==37 )
                 this.turnLeft( true );
-            else if( e==39 )
+            if( e==39 )
                 this.turnRight( true );
-            else if( e==32 ) {
-                this.clickEvent();
+            if( e==32 ) {
+                if(!this.spaceClick) {
+                    this.clickEvent();
+                }
             }
         }
         else if(this.state==GameLayer.STATES.FRONT) {
@@ -207,14 +209,12 @@ var GameLayer = cc.LayerColor.extend({
                     this.buttonArr[this.selectButton].unselect();
                     this.selectButton--;
                     this.buttonArr[this.selectButton].select();
-                    console.log(e);
                 }
             if( e==40 )
                 if(this.selectButton<3) {
                     this.buttonArr[this.selectButton].unselect();
                     this.selectButton++;
                     this.buttonArr[this.selectButton].select();
-                    console.log(e);
                 }
 
         }
@@ -224,9 +224,9 @@ var GameLayer = cc.LayerColor.extend({
         if(this.state==GameLayer.STATES.STARTED) {
             if( e==37 )
                 this.turnLeft( false );
-            else if( e==39 )
+            if( e==39 )
                 this.turnRight( false );
-            else if( e==32 ) 
+            if( e==32 ) 
                 this.spaceClick=false;
         }
     },

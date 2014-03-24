@@ -91,7 +91,7 @@ var IntroLogo = cc.Sprite.extend({
             this.unschedule(this.updateSTop);
         }
     },
-    updateBTop: function() {
+    updateSBot: function() {
         if(this.getOpacity()<255)
         {
             var pos=this.getPosition();
@@ -132,11 +132,11 @@ var IntroLogo = cc.Sprite.extend({
         this.setScale(gameScale*Math.pow(1.05,87));
         this.schedule(this.updateSTop,0,Infinity,0);
     },
-    runAnimationBTop: function() {
+    runAnimationSBot: function() {
         var pos=this.getPosition();
         this.setPosition(new cc.Point(pos.x-870,pos.y-870));
         this.setScale(gameScale*Math.pow(1.05,87));
-        this.schedule(this.updateBTop,0,Infinity,0);
+        this.schedule(this.updateSBot,0,Infinity,0);
     },
     runAnimationFull: function() {
         this.v=0.5;
