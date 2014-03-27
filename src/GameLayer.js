@@ -160,26 +160,21 @@ var GameLayer = cc.LayerColor.extend({
         return Math.random()*(max-min)+min;
     },
     reverseMode: function( bool ){
-        for(var i=0; i<GameLayer.UNIT_NUMBER ;i++) {
-            if(i%2==0)
-                this.units[i].isReverse = bool;
-        }
+        for( var i=0; i<this.units.length; i++ ) 
+            this.units[i].isReverse=bool;
     },
     clickEvent: function() {
-        for(var i=0; i<this.units.length ;i++) {
+        for( var i=0; i<this.units.length; i++)
                 this.units[i].checkEvent();
-        }
         this.spaceClick=true;
     },
     turnLeft: function( bool ) {
-        for(var i=0; i<this.units.length ;i++) {
-            this.units[i].keyLeft = bool;
-        }
+        for( var i=0; i<this.units.length; i++)
+            this.units[i].keyLeft = bool;    
     },
     turnRight: function( bool ) {
-        for(var i=0; i<this.units.length ;i++) {
+        for( var i=0; i<this.units.length; i++)
             this.units[i].keyRight = bool;
-        }
     },
     onKeyDown: function( e ) {
         //37 = Left , 39 = Right , 32 = Space , 27 = Escape
