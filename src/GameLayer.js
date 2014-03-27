@@ -335,5 +335,5 @@ GameLayer.PLAYER_DIAMETER = 71*gameScale*GameLayer.PLAYER_SCALE;
 GameLayer.SCORE_PER_UNIT = 300;
 GameLayer.SCORE_PER_COMBO = 5;
 GameLayer.BUTTON_NUMBER = {
-    MAINMENU: 4;
+    MAINMENU: 4
 };

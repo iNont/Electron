@@ -5,7 +5,7 @@ var BG = cc.Sprite.extend({
 		this.setOpacity(255);
         this.initWithFile( 'images/ingameBG.png' );
         this.setScale(gameScale);
-        this.bg.setPosition( new cc.Point( screenWidth,screenHeight/2 ) );
+        this.setPosition( new cc.Point( screenWidth,screenHeight/2 ) );
 		this.setAnchorPoint( new cc.Point( 1, 1 ) );
         this.vx=5*gameScale;
         this.vy=0;

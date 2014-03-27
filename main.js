@@ -9,7 +9,7 @@ var cocos2dApp = cc.Application.extend({
         cc.setup( this.config[ 'tag' ] );
         cc.AppController.shareAppController().didFinishLaunchingWithOptions();
 
-        createjs.Sound.registerSound("musics/roar-katyperry.mp3", "sound");
+        createjs.Sound.registerSound("musics/roar-katyperry.mp3", "music1");
     },
 
     applicationDidFinishLaunching: function() {
