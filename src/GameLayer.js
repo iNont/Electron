@@ -275,7 +275,7 @@ var GameLayer = cc.LayerColor.extend({
         }
     },
     updateStartedCombo: function() {
-        if(this.combo!=0)
+        if( this.combo!=0 )
             this.comboLabel.setString( this.combo );
         else 
             this.comboLabel.setString( "" );

@@ -1,20 +1,23 @@
 var Unit = cc.Sprite.extend({
     ctor: function( layer ) {
-    	this.layer = layer;
+    	this.layer=layer;
         this._super();
-        this.initWithFile( 'images/Unit.png' );
-        this.endPos = new cc.Point( 2*screenWidth , screenHeight/2 );
-        this.setScale( gameScale );
+        this.initWithFile( "images/Unit.png" );
+        this.endPos=new cc.Point( 2*screenWidth,screenHeight/2 );
         this.scheduleUpdate();
-        this.keyLeft = false;
-        this.keyRight = false;
-        this.crashed = false;
-        this.enabled = true;
+        this.initProperties();
+        this.crashSpeed=Math.pow( 1.7,3 );
+    },
+    initProperties: function() {
+        this.setScale( gameScale );
+        this.keyLeft=false;
+        this.keyRight=false;
+        this.crashed=false;
+        this.enabled=true;
         this.passPlayer=false;
-        this.winkSpeed = 17/4;
+        this.winkSpeed=17/4;
         this.doneSpeed=1.3;
         this.crashOpacity=255;
-        this.crashSpeed = Math.pow(1.7,3);
     },
     update: function( dt ) {
     	var pos = this.getPosition();
