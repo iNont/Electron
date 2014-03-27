@@ -36,33 +36,38 @@ var GameLayer = cc.LayerColor.extend({
     },
     startIntro:function() {
         this.introArr=[];
-        this.introLogoO=new IntroLogo(this,"o",1150,256);
-        this.addChild(this.introLogoO);
-        this.introLogoO.runAnimationO();
-        this.introArr.push(this.introLogoO);
-
-        this.introLogoSTop=new IntroLogo(this,"spikeTop",1269,121);
-        this.addChild(this.introLogoSTop);
-        this.introLogoSTop.runAnimationSTop();
-        this.introArr.push(this.introLogoSTop);
-
-        this.introLogoSBot=new IntroLogo(this,"spikeBot",1060,359);
-        this.addChild(this.introLogoSBot);
-        this.introLogoSBot.runAnimationSBot();
-        this.introArr.push(this.introLogoSBot);
-
-        this.introLogoFull=new IntroLogo(this,"logo",778.5,227);
-        this.addChild(this.introLogoFull);
-        this.introLogoFull.runAnimationFull();
-        this.introArr.push(this.introLogoFull);
-
+        this.addIntroLogo();
         this.buttonArr=[];
-        for(var i=1;i<5;i++) {
-            this.introButton = new MainMenuButton(this,i);
-            this.addChild(this.introButton);
-            this.buttonArr.push(this.introButton);
-        }
+        this.addIntroButton();
         this.buttonArr[this.selectButton].select();
+    },
+    addIntroLogo: function() {
+        this.introLogoO=new IntroLogo( this,"o",1150,256 );
+        this.addChild( this.introLogoO );
+        this.introLogoO.runAnimationO();
+        this.introArr.push( this.introLogoO );
+
+        this.introLogoSTop=new IntroLogo( this,"spikeTop",1269,121 );
+        this.addChild( this.introLogoSTop );
+        this.introLogoSTop.runAnimationSTop();
+        this.introArr.push( this.introLogoSTop );
+
+        this.introLogoSBot=new IntroLogo( this,"spikeBot",1060,359 );
+        this.addChild( this.introLogoSBot );
+        this.introLogoSBot.runAnimationSBot();
+        this.introArr.push( this.introLogoSBot );
+
+        this.introLogoFull=new IntroLogo( this,"logo",778.5,227 );
+        this.addChild( this.introLogoFull );
+        this.introLogoFull.runAnimationFull();
+        this.introArr.push( this.introLogoFull );
+    },
+    addIntroButton: function() {
+        for( var i=1; i<=GameLayer.BUTTON_NUMBER.MAINMENU; i++ ) {
+            this.introButton = new MainMenuButton( this,i );
+            this.addChild( this.introButton );
+            this.buttonArr.push( this.introButton );
+        }
     },
     hideIntro: function() {
         for( var i=0; i<this.introArr.length; i++ )
@@ -329,3 +334,6 @@ GameLayer.PLAYER_SCALE = 0.75;
 GameLayer.PLAYER_DIAMETER = 71*gameScale*GameLayer.PLAYER_SCALE;
 GameLayer.SCORE_PER_UNIT = 300;
 GameLayer.SCORE_PER_COMBO = 5;
+GameLayer.BUTTON_NUMBER = {
+    MAINMENU: 4;
+};
