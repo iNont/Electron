@@ -145,18 +145,18 @@ var Unit = cc.Sprite.extend({
     	}
     },
     genStartPos: function() {
-    	var distance = Math.sqrt(3/4*Math.pow(screenWidth,2));
-    	var y = this.layer.randomNumber( -distance , distance );
-    	var x = Math.sqrt(Math.pow(screenWidth,2)-Math.pow(y,2));
-    	var playerPos = GameLayer.PLAYER_POS;
-    	var posX = playerPos.x-x;
-    	var posY = playerPos.y+y;
+    	var distance=Math.sqrt(3/4*Math.pow(screenWidth,2));
+    	var y=this.layer.randomNumber( -distance,distance );
+    	var x=Math.sqrt(Math.pow(screenWidth,2)-Math.pow(y,2));
+    	var playerPos=GameLayer.PLAYER_POS;
+    	var posX=playerPos.x-x;
+    	var posY=playerPos.y+y;
     	return new cc.Point( posX,posY );
     },
     genEndPos: function( point ) {
-    	var playerPos = GameLayer.PLAYER_POS;
-    	var x = playerPos.x+Math.abs(playerPos.x-point.x);
-    	var y = 2*playerPos.y-point.y;
+    	var playerPos=GameLayer.PLAYER_POS;
+    	var x=playerPos.x+Math.abs(playerPos.x-point.x);
+    	var y=2*playerPos.y-point.y;
     	return new cc.Point( x,y );
     },
     checkEvent: function() {
@@ -175,7 +175,7 @@ var Unit = cc.Sprite.extend({
             this.crashPlay( "cool" );
     },
     crashPlay: function( type ) {
-        this.enabled = false;
+        this.enabled=false;
         this.layer.crashEffectPlay( type );
     },
     distance: function( point1,point2 ) {
