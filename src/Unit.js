@@ -161,7 +161,6 @@ var Unit = cc.Sprite.extend({
     	var length = this.distance( pos,GameLayer.PLAYER_POS );
     	var lengthCheck = GameLayer.UNIT_DIAMETER/2-GameLayer.PLAYER_DIAMETER/2-GameLayer.UNIT_BORDER_SIZE;
     	if(this.enabled && !this.layer.spaceClick) {
-            console.log(this.layer.spaceClick);
     		if(length < lengthCheck/5) {
     			//console.log("Perfect");
     			this.enabled = false;

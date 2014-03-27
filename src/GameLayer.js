@@ -290,22 +290,18 @@ var GameLayer = cc.LayerColor.extend({
     updateBeat: function() {
         var pos=this.music.getPosition()-GameLayer.UNIT_VELOCITY*500;
         var time=this.startTime-GameLayer.UNIT_VELOCITY*500;
-        if(pos>=time) {
+        if( pos>=time ) {
             this.startTime+=this.beatTime;
-            var unit = new Unit(this);
-            this.units.push(unit);
+            var unit = new Unit( this );
+            this.units.push( unit );
             this.units[this.units.length-1].startNewRandomUnit();
-            this.addChild(this.units[this.units.length-1]);
-        }
-        if(this.music.getPosition()==this.music.getDuration()) {
+            this.addChild( this.units[this.units.length-1] );
         }
     },
     to06d: function( int ) {
         var string = int.toString();
-        while(string.length<6)
-        {
+        while( string.length<6 )
             string = "0"+string;
-        }
         return string;
     }
 });
