@@ -90,36 +90,24 @@ var Unit = cc.Sprite.extend({
         }
     },
     startNewUnit: function( startTheta ) {
-        this.setOpacity( 255 );
-        this.setScale( gameScale );
-        this.enabled = true;
-        this.passPlayer=false;
-        this.crashed = false;
-        this.doneSpeed = 1.3;
-        var newPos = this.genStartPos();
-        var theta = Math.atan((newPos.y-GameLayer.PLAYER_POS.y)/(GameLayer.PLAYER_POS.x-newPos.x))*180/Math.PI;
-        var newTheta = theta+startTheta;
-        this.endPos = this.genEndPos( newPos );
+        var theta=Math.atan((newPos.y-GameLayer.PLAYER_POS.y)/(GameLayer.PLAYER_POS.x-newPos.x))*180/Math.PI;
+        var newTheta=theta+startTheta;
+        this.makeNewUnit( newTheta );
+    },
+    startNewRandomUnit: function() {
+    	var newPos=this.genStartPos();
+    	var newTheta=this.layer.randomNumber( 0,360 );
+    	this.makeNewUnit( newTheta );
+    },
+    makeNewUnit: function( newTheta ) {
+        this.initProperties();
+        var newPos=this.genStartPos();
+        this.endPos=this.genEndPos( newPos );
         this.setPosition( newPos );
         this.setRotation( newTheta );
         this.stopAllActions();
-        var moveAction = cc.MoveTo.create( GameLayer.UNIT_VELOCITY, this.endPos );
+        var moveAction=cc.MoveTo.create( GameLayer.UNIT_VELOCITY,this.endPos );
         this.runAction( moveAction );
-    },
-    startNewRandomUnit: function() {
-    	this.setOpacity( 255 );
-        this.setScale( gameScale );
-        this.enabled = true;
-        this.crashed = false;
-        this.doneSpeed = 1.3;
-    	var newPos = this.genStartPos();
-    	var newTheta = this.layer.randomNumber( 0,360 );
-    	this.endPos = this.genEndPos( newPos );
-   		this.setPosition( newPos );
-   		this.setRotation( newTheta );
-    	this.stopAllActions();
-       	var moveAction = cc.MoveTo.create(  GameLayer.UNIT_VELOCITY, this.endPos );
-       	this.runAction( moveAction );
     },
     hideUnit: function() {
         if( this.getOpacity()/this.crashOpacity>Math.pow(Unit.HIDE_SPEED,10) )
