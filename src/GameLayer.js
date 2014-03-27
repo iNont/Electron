@@ -108,10 +108,6 @@ var GameLayer = cc.LayerColor.extend({
             this.units[i].endPos = endPos;
             if(i%2==0)
                 this.units[i].setRotation(90);
-            /*LongUnit Test/
-            if(i>0)
-                this.units[i].setOpacity(100);
-            /**/
             var moveAction = cc.MoveTo.create( GameLayer.UNIT_VELOCITY+timePerGap*i+timeForStart, this.units[i].endPos );
             this.units[i].runAction( moveAction );
         }
@@ -125,34 +121,40 @@ var GameLayer = cc.LayerColor.extend({
          this.music = createjs.Sound.play(songKey);
     },
     crashEffectPlay: function( type ) {
-        var spu = GameLayer.SCORE_PER_UNIT;
-        if(type=="perfect") {
-            this.score+=(spu+GameLayer.SCORE_PER_COMBO*this.combo);
+        this.scoreUpdate( type );
+        this.comboBak=this.combo;
+        if( this.isMaxCombo( this.combo ) )
+            this.maxCombo=this.combo;
+        this.runCrashAnimation( type );
+    },
+    scoreUpdate: function( type ) {
+        var scorePerUnit = GameLayer.SCORE_PER_UNIT;
+        if( type=="perfect" ) {
+            this.score+=(scorePerUnit+GameLayer.SCORE_PER_COMBO*this.combo);
             this.combo++;
             this.perfect++;
         }
-        else if(type=="great") {
-            this.score+=(2*spu/3+GameLayer.SCORE_PER_COMBO*this.combo);
+        else if( type=="great" ) {
+            this.score+=(2*scorePerUnit/3+GameLayer.SCORE_PER_COMBO*this.combo);
             this.combo++;
             this.great++;
         }
-        else if(type=="cool") {
-            this.score+=(spu/3+GameLayer.SCORE_PER_COMBO*this.combo);
+        else if( type=="cool" ) {
+            this.score+=(scorePerUnit/3+GameLayer.SCORE_PER_COMBO*this.combo);
             this.combo++;
             this.cool++;
         }
-        else if(type=="miss") {
+        else if( type=="miss" ) {
             this.combo=0;
             this.miss++;
         }
-        this.comboBak=this.combo;
-        if(this.isMaxCombo(this.combo))
-            this.maxCombo=this.combo;
-        this.crashEffect.reset(type);
-        this.crashText.reset(type);
+    },
+    runCrashAnimation: function( type ) {
+        this.crashEffect.reset( type );
+        this.crashText.reset( type );
     },
     isMaxCombo: function( combo ) {
-        if(combo>this.maxCombo)
+        if( combo>this.maxCombo )
             return true;
         return false;
     },
