@@ -252,34 +252,40 @@ var GameLayer = cc.LayerColor.extend({
     createCurrentCombo: function() {
         var fontSize=GameLayer.FONT_SIZE.CURRENT_COMBO;
         this.comboLabel = cc.LabelTTF.create( "",GameLayer.FONT,fontSize );
-        this.comboLabel.setPosition( screenWidth/2,screenHeight/2+2.5*fontSize*gameScale );
+        this.comboLabel.setPosition( screenWidth/2,screenHeight/2+2.5*fontSize );
         this.comboLabel.setFontFillColor( new cc.Color3B( 255,255,255 ) );
         this.addChild( this.comboLabel,10 );
     },
-    update: function(dt) {
-
-        if(this.state==GameLayer.STATES.STARTED) {
-            if(this.scoreBak<this.score)
-            {
-                this.scoreBak+=20;
-                if(this.scoreBak>this.score)
-                    this.scoreBak=this.score;
-                this.scoreLabel.setString(this.to06d(this.scoreBak));
-            }
-            this.maxComboLabel.setString("Max Combo: "+this.maxCombo);
-            if(this.combo!=0) 
-            {
-               this.comboLabel.setString(this.combo);
-            }
-            else 
-                this.comboLabel.setString("");
-            if(this.comboBak-this.combo<=1)
-            {
-                this.comboLabel.setOpacity(255);
-                this.comboBak+=0.02;
-            }
-            else this.comboLabel.setOpacity(this.comboLabel.getOpacity()*0.95);
+    update: function( dt ) {
+        if(this.state==GameLayer.STATES.STARTED) 
+            this.updateStarted();
+    },
+    updateStarted: function() {
+        this.updateStartedScore();
+        this.maxComboLabel.setString("Max Combo: "+this.maxCombo);
+        this.updateStartedCombo();
+    },
+    updateStartedScore: function() {
+        if( this.scoreBak<this.score )
+        {
+            this.scoreBak+=GameLayer.SCORE_UPDATE_SPEED;
+            if( this.scoreBak>this.score )
+                this.scoreBak=this.score;
+            this.scoreLabel.setString( this.to06d( this.scoreBak ) );
         }
+    },
+    updateStartedCombo: function() {
+        if(this.combo!=0)
+            this.comboLabel.setString( this.combo );
+        else 
+            this.comboLabel.setString( "" );
+        if( this.comboBak-this.combo<=1 )
+        {
+            this.comboLabel.setOpacity( 255 );
+            this.comboBak+=GameLayer.COMBO_TIME_CHANGE_SPEED;
+        }
+        else 
+            this.comboLabel.setOpacity( this.comboLabel.getOpacity()*0.95 );
     },
     updateBeat: function() {
         var pos=this.music.getPosition()-GameLayer.UNIT_VELOCITY*500;
@@ -330,6 +336,8 @@ GameLayer.PLAYER_SCALE = 0.75;
 GameLayer.PLAYER_DIAMETER = 71*gameScale*GameLayer.PLAYER_SCALE;
 GameLayer.SCORE_PER_UNIT = 300;
 GameLayer.SCORE_PER_COMBO = 5;
+GameLayer.SCORE_UPDATE_SPEED = 20;
+GameLayer.COMBO_TIME_CHANGE_SPEED = 0.02;
 GameLayer.BUTTON_NUMBER = {
     MAINMENU: 4
 };
