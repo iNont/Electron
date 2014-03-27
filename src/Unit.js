@@ -57,35 +57,32 @@ var Unit = cc.Sprite.extend({
         }
     },
     detection: function() {
-        var pos = this.getPosition();
-        var theta = (this.getRotation()%180+180)%180;
-        var startTheta = Math.atan((pos.y-GameLayer.PLAYER_POS.y)/(GameLayer.PLAYER_POS.x-pos.x))*180/Math.PI;
-        var playerR = GameLayer.PLAYER_DIAMETER/2;
-        var unitR = GameLayer.UNIT_DIAMETER/2;
-        var detectionBalance = 4; //To make it harder or easier detect
-        var checkTheta = 22.5-Math.asin(playerR/unitR)*180/Math.PI+detectionBalance;
-        var check1 = (startTheta-checkTheta%180+180)%180;
-        var check2 = (startTheta+checkTheta%180+180)%180;
-        var bool1 = false;
-        var bool2 = false;
+        var pos=this.getPosition();
+        var theta=(this.getRotation()%180+180)%180;
+        var startTheta=Math.atan((pos.y-GameLayer.PLAYER_POS.y)/(GameLayer.PLAYER_POS.x-pos.x))*180/Math.PI;
+        var playerR=GameLayer.PLAYER_DIAMETER/2;
+        var unitR=GameLayer.UNIT_DIAMETER/2;
+        var checkTheta=Unit.DETECTION_ANGLE-Math.asin(playerR/unitR)*180/Math.PI+Unit.DETECTION_BALANCE*gameScale;
+        var check1=(startTheta-checkTheta%180+180)%180;
+        var check2=(startTheta+checkTheta%180+180)%180;
+        var bool1=false;
+        var bool2=false;
         if( check1>check2 ) {
-            bool1 = theta>=check1&&theta<=check1+2*checkTheta;
-            bool2 = theta<=check2&&theta>=check2-2*checkTheta;
+            bool1=theta>=check1&&theta<=check1+2*checkTheta;
+            bool2=theta<=check2&&theta>=check2-2*checkTheta;
         }
         else {
-            bool1 = theta>=check1&&theta<=check2;
-            bool2 = false;
+            bool1=theta>=check1&&theta<=check2;
+            bool2=false;
         }
-        var R = unitR+playerR;
-        var r = unitR-GameLayer.UNIT_BORDER_SIZE-playerR;
-        var distance = this.distance( pos,GameLayer.PLAYER_POS );
-        if(distance < R && distance > r ) {
+        var R=unitR+playerR;
+        var r=unitR-GameLayer.UNIT_BORDER_SIZE-playerR;
+        var distance=this.distance( pos,GameLayer.PLAYER_POS );
+        if( distance<R && distance>r ) {
             if( !(bool1||bool2) ) {
-                //console.log("Miss");
-                this.enabled=false;
                 this.crashed=true;
                 this.crashOpacity=this.getOpacity();
-                this.layer.crashEffectPlay("miss");
+                this.crashPlay( "miss" );
             }
         }
     },
@@ -175,3 +172,5 @@ var Unit = cc.Sprite.extend({
 Unit.CRASH_SPEED = 1.4; 
 Unit.DONE_SPEED = 1.3;
 Unit.HIDE_SPEED = 0.7;
+Unit.DETECTION_BALANCE = 8; //To make it harder or easier detect
+Unit.DETECTION_ANGLE = 22.5;
