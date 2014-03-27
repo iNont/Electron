@@ -234,31 +234,27 @@ var GameLayer = cc.LayerColor.extend({
             this.spaceClick=false;
     },
     createScore: function() {
-        var scoreSize=90;
-        this.scoreLabel = cc.LabelTTF.create("000000","Lucida Grande",scoreSize*gameScale);
-        this.scoreLabel.setAnchorPoint(0,1);
-        this.scoreLabel.setPosition(50*gameScale, screenHeight-50*gameScale);
-        this.scoreLabel.setFontFillColor(new cc.Color3B(255,255,255));
-        //this.scoreLabel.enableStroke(new cc.Color3B(0,0,0),2);
-        this.addChild(this.scoreLabel,10);
+        var fontSize=GameLayer.FONT_SIZE.SCORE;
+        this.scoreLabel = cc.LabelTTF.create( "000000",GameLayer.FONT,fontSize );
+        this.scoreLabel.setAnchorPoint( 0,1 );
+        this.scoreLabel.setPosition( 50*gameScale, screenHeight-50*gameScale );
+        this.scoreLabel.setFontFillColor( new cc.Color3B( 255,255,255) );
+        this.addChild( this.scoreLabel,10 );
     },
     createMaxCombo: function() {
-        var fontSize=30;
-        this.maxComboLabel = cc.LabelTTF.create("Max Combo: 0","Lucida Grande",fontSize*gameScale);
-        this.maxComboLabel.setAnchorPoint(0,1);
-        this.maxComboLabel.setPosition(50*gameScale, screenHeight-150*gameScale);
-        this.maxComboLabel.setFontFillColor(new cc.Color3B(255,255,255));
-        //this.maxComboLabel.enableStroke(new cc.Color3B(0,0,0),2);
-        this.addChild(this.maxComboLabel,10);
+        var fontSize=GameLayer.FONT_SIZE.MAX_COMBO;
+        this.maxComboLabel = cc.LabelTTF.create( "Max Combo: 0",GameLayer.FONT,fontSize );
+        this.maxComboLabel.setAnchorPoint( 0,1 );
+        this.maxComboLabel.setPosition( 50*gameScale,screenHeight-150*gameScale );
+        this.maxComboLabel.setFontFillColor( new cc.Color3B( 255,255,255 ) );
+        this.addChild( this.maxComboLabel,10 );
     },
     createCurrentCombo: function() {
-        var fontSize=100;
-        this.comboLabel = cc.LabelTTF.create("","Lucida Grande",fontSize*gameScale);
-        //this.comboLabel.setAnchorPoint(0,0);
-        this.comboLabel.setPosition(screenWidth/2, screenHeight/2+2.5*fontSize*gameScale);
-        this.comboLabel.setFontFillColor(new cc.Color3B(255,255,255));
-        //this.comboLabel.enableStroke(new cc.Color3B(0,0,0),2);
-        this.addChild(this.comboLabel,10);
+        var fontSize=GameLayer.FONT_SIZE.CURRENT_COMBO;
+        this.comboLabel = cc.LabelTTF.create( "",GameLayer.FONT,fontSize );
+        this.comboLabel.setPosition( screenWidth/2,screenHeight/2+2.5*fontSize*gameScale );
+        this.comboLabel.setFontFillColor( new cc.Color3B( 255,255,255 ) );
+        this.addChild( this.comboLabel,10 );
     },
     update: function(dt) {
 
@@ -337,3 +333,9 @@ GameLayer.SCORE_PER_COMBO = 5;
 GameLayer.BUTTON_NUMBER = {
     MAINMENU: 4
 };
+GameLayer.FONT_SIZE = {
+    SCORE: 90*gameScale,
+    MAX_COMBO: 30*gameScale,
+    CURRENT_COMBO: 100*gameScale
+};
+GameLayer.FONT = "Lucida Grande";
