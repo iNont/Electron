@@ -5,6 +5,20 @@ var screenHeight = 1536*gameScale;
 var GameLayer = cc.LayerColor.extend({
     
     init: function() {
+        this._super( new cc.Color4B( 0,0,0,255 ) );
+        this.setPosition( new cc.Point( 0,0 ) );
+
+        this.initProperties();
+        this.bg=new BG();
+        this.addChild( this.bg );
+        this.startIntro();
+
+        this.state=GameLayer.STATES.FRONT;
+        this.setKeyboardEnabled( true );
+        this.scheduleUpdate();
+        return true;
+    },
+    initProperties: function() {
         this.stat="miss";
         this.isReverse = false;
         this.isWink = false;
@@ -19,20 +33,6 @@ var GameLayer = cc.LayerColor.extend({
         this.cool=0;
         this.miss=0;
         this.selectButton=0;
-
-        this.bg = new BG();
-        this.bg.setPosition( new cc.Point( screenWidth, screenHeight/2 ) );
-        this.addChild( this.bg );
-
-        this.startIntro();
-
-        this._super( new cc.Color4B( 0, 0, 0, 255 ) );
-        this.setPosition( new cc.Point( 0, 0 ) );
-
-        this.state = GameLayer.STATES.FRONT;
-        this.setKeyboardEnabled( true );
-        this.scheduleUpdate();
-        return true;
     },
     startIntro:function() {
         this.introArr=[];
