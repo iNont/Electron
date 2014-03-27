@@ -21,7 +21,7 @@ var Unit = cc.Sprite.extend({
     },
     update: function( dt ) {
     	var pos=this.getPosition();
-        if(this.enabled)
+        if( this.enabled )
             this.updateEnabled();
         else 
             this.updateDisabled();
@@ -29,7 +29,7 @@ var Unit = cc.Sprite.extend({
             this.removeThis();
     },
     updateEnabled: function() {
-        var pos = this.getPosition();
+        var pos=this.getPosition();
         this.turnThis();
         if( this.layer.isWink ) 
             this.wink();
