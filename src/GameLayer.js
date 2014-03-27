@@ -65,60 +65,58 @@ var GameLayer = cc.LayerColor.extend({
         this.buttonArr[this.selectButton].select();
     },
     hideIntro: function() {
-        for(var i=0;i<this.introArr.length;i++)
+        for( var i=0; i<this.introArr.length; i++ )
             this.introArr[i].hideThis();
-        for(var i=0;i<this.buttonArr.length;i++)
+        for( var i=0; i<this.buttonArr.length; i++ )
             this.buttonArr[i].hideThis();
     },
     startGame: function() {
         this.units = [];
         this.hideIntro();
         this.state=GameLayer.STATES.STARTED;
-        this.startSong("sound");
-        this.player = new Player();
-        this.player.setScale( gameScale*0.75 );
+        this.player=new Player();
+        this.player.setScale( gameScale*GameLayer.PLAYER_SCALE );
         this.player.setPosition( GameLayer.PLAYER_POS );
         this.addChild( this.player );
         this.bg.startGameAnimation();
-
-        //this.startGameRandom();
-        this.startGameBeat(2600,1300);
-
-        this.crashEffect = new CrashEffect(this);
-        this.addChild(this.crashEffect);
-        this.crashText = new CrashText(this);
-        this.addChild(this.crashText);
+        this.startSong( "music1" );
+        this.crashEffect=new CrashEffect( this );
+        this.addChild( this.crashEffect );
+        this.crashText=new CrashText( this );
+        this.addChild( this.crashText );
 
         this.createScore();
         this.createMaxCombo();
         this.createCurrentCombo();
     },
     startGameRandom: function() {
-        var timePerGap = GameLayer.UNIT_GAP*GameLayer.timePerPixel;
-        var gapForStart = GameLayer.UNIT_GAP-GameLayer.PLAYER_DIAMETER*gameScale;
-        var timeForStart = gapForStart*GameLayer.timePerPixel;
-        for(var i=0; i<GameLayer.UNIT_NUMBER ;i++)
+        var timePerGap=GameLayer.UNIT_GAP*GameLayer.timePerPixel;
+        var gapForStart=GameLayer.UNIT_GAP-GameLayer.PLAYER_DIAMETER*gameScale;
+        var timeForStart=gapForStart*GameLayer.timePerPixel;
+        for( var i=0; i<GameLayer.UNIT_NUMBER; i++ )
         {
-            var unit = new Unit( this );
+            var unit=new Unit( this );
             this.units.push( unit );
-            this.units[i].setPosition( new cc.Point( -screenWidth/4-i*GameLayer.UNIT_GAP-gapForStart, screenHeight/2));
+            this.units[i].setPosition( new cc.Point( -screenWidth/4-i*GameLayer.UNIT_GAP-gapForStart,screenHeight/2 ) );
             this.addChild( this.units[i] );
-            var pos = this.units[i].getPosition();
-            var endPos = new cc.Point( 2*screenWidth , pos.y );
+            var pos=this.units[i].getPosition();
+            var endPos=new cc.Point( 2*screenWidth,pos.y );
             this.units[i].endPos = endPos;
-            if(i%2==0)
-                this.units[i].setRotation(90);
-            var moveAction = cc.MoveTo.create( GameLayer.UNIT_VELOCITY+timePerGap*i+timeForStart, this.units[i].endPos );
+            if( i%2==0 )
+                this.units[i].setRotation( 90 );
+            var moveAction=cc.MoveTo.create( GameLayer.UNIT_VELOCITY+timePerGap*i+timeForStart,this.units[i].endPos );
             this.units[i].runAction( moveAction );
         }
     },
-    startGameBeat: function(startTime,beat) {
+    startGameBeat: function( startTime,beat ) {
         this.startTime=startTime;
         this.beatTime=beat;
-        this.schedule(this.updateBeat,0,Infinity,0);
+        this.schedule( this.updateBeat,0,Infinity,0 );
     },
-    startSong: function( songKey){
-         this.music = createjs.Sound.play(songKey);
+    startSong: function( songKey ) {
+         this.music = createjs.Sound.play( songKey );
+         if( songKey=="music1" ) //roar
+            this.startGameBeat( 2600,1300 );
     },
     crashEffectPlay: function( type ) {
         this.scoreUpdate( type );
@@ -327,6 +325,7 @@ GameLayer.UNIT_TURN_SPEED = 4; //normal 4
 GameLayer.timePerPixel = (GameLayer.UNIT_VELOCITY/(2*screenWidth));
 GameLayer.UNIT_DIAMETER = 320*gameScale;
 GameLayer.UNIT_BORDER_SIZE = 15*gameScale;
-GameLayer.PLAYER_DIAMETER = 71*gameScale*0.75;
+GameLayer.PLAYER_SCALE = 0.75;
+GameLayer.PLAYER_DIAMETER = 71*gameScale*GameLayer.PLAYER_SCALE;
 GameLayer.SCORE_PER_UNIT = 300;
 GameLayer.SCORE_PER_COMBO = 5;
