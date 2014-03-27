@@ -148,12 +148,6 @@ var GameLayer = cc.LayerColor.extend({
         this.comboBak=this.combo;
         if(this.isMaxCombo(this.combo))
             this.maxCombo=this.combo;
-        /*/
-        console.log("--------------");
-        console.log("Score: "+this.score);
-        console.log("Max Combo: "+this.maxCombo);
-        console.log("Combo: "+this.combo);
-        /**/
         this.crashEffect.reset(type);
         this.crashText.reset(type);
     },
@@ -172,63 +166,72 @@ var GameLayer = cc.LayerColor.extend({
         }
     },
     clickEvent: function() {
-        for(var i=0; i<GameLayer.UNIT_NUMBER ;i++) {
+        for(var i=0; i<this.units.length ;i++) {
                 this.units[i].checkEvent();
         }
         this.spaceClick=true;
     },
     turnLeft: function( bool ) {
-        for(var i=0; i<GameLayer.UNIT_NUMBER ;i++) {
+        for(var i=0; i<this.units.length ;i++) {
             this.units[i].keyLeft = bool;
         }
     },
     turnRight: function( bool ) {
-        for(var i=0; i<GameLayer.UNIT_NUMBER ;i++) {
+        for(var i=0; i<this.units.length ;i++) {
             this.units[i].keyRight = bool;
         }
     },
     onKeyDown: function( e ) {
         //37 = Left , 39 = Right , 32 = Space , 27 = Escape
-        if(this.state==GameLayer.STATES.STARTED) {
-            if( e==37 )
-                this.turnLeft( true );
-            if( e==39 )
-                this.turnRight( true );
-            if( e==32 ) {
-                if(!this.spaceClick) {
-                    this.clickEvent();
-                }
-            }
+        if( this.state==GameLayer.STATES.STARTED )
+            this.onKeyDownStarted( e );
+        else if( this.state==GameLayer.STATES.FRONT )
+            this.onKeyDownFront( e );
+    },
+    onKeyDownStarted: function( e ) {
+        if( e==37 )
+            this.turnLeft( true );
+        if( e==39 )
+            this.turnRight( true );
+        if( e==32 )
+            if( !this.spaceClick )
+                this.clickEvent();
+    },
+    onKeyDownFront: function( e ) {
+        if( e==32 )
+            if( this.selectButton==0 )
+                this.startGame();
+        if( e==38 )
+            this.selectButtonUp();
+        if( e==40 )
+            this.selectButtonDown();
+    },
+    selectButtonUp: function() {
+        if( this.selectButton>0 ) {
+            this.buttonArr[this.selectButton].unselect();
+            this.selectButton--;
+            this.buttonArr[this.selectButton].select();
         }
-        else if(this.state==GameLayer.STATES.FRONT) {
-            if( e==32 )
-                if(this.selectButton==0)
-                    this.startGame();
-            if( e==38 )
-                if(this.selectButton>0) {
-                    this.buttonArr[this.selectButton].unselect();
-                    this.selectButton--;
-                    this.buttonArr[this.selectButton].select();
-                }
-            if( e==40 )
-                if(this.selectButton<3) {
-                    this.buttonArr[this.selectButton].unselect();
-                    this.selectButton++;
-                    this.buttonArr[this.selectButton].select();
-                }
-
+    },
+    selectButtonDown: function() {
+        if( this.selectButton<this.buttonArr.length-1 ) {
+            this.buttonArr[this.selectButton].unselect();
+            this.selectButton++;
+            this.buttonArr[this.selectButton].select();
         }
     },
     onKeyUp: function( e ) {
         //37 = Left , 39 = Right , 32 = Space , 27 = Escape
-        if(this.state==GameLayer.STATES.STARTED) {
-            if( e==37 )
-                this.turnLeft( false );
-            if( e==39 )
-                this.turnRight( false );
-            if( e==32 ) 
-                this.spaceClick=false;
-        }
+        if( this.state==GameLayer.STATES.STARTED ) 
+            this.onKeyUpStarted( e );
+    },
+    onKeyUpStarted: function( e ) {
+        if( e==37 )
+            this.turnLeft( false );
+        if( e==39 )
+            this.turnRight( false );
+        if( e==32 ) 
+            this.spaceClick=false;
     },
     createScore: function() {
         var scoreSize=90;
