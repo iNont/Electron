@@ -160,26 +160,23 @@ var Unit = cc.Sprite.extend({
     	return new cc.Point( x,y );
     },
     checkEvent: function() {
-    	var pos = this.getPosition();
-    	var length = this.distance( pos,GameLayer.PLAYER_POS );
-    	var lengthCheck = GameLayer.UNIT_DIAMETER/2-GameLayer.PLAYER_DIAMETER/2-GameLayer.UNIT_BORDER_SIZE;
-    	if(this.enabled && !this.layer.spaceClick) {
-    		if(length < lengthCheck/5) {
-    			//console.log("Perfect");
-    			this.enabled = false;
-                this.layer.crashEffectPlay("perfect");
-    		}
-    		else if(length < lengthCheck*3/5) {
-    			//console.log("Great");
-    			this.enabled = false;
-                this.layer.crashEffectPlay("great");
-    		}
-    		else if(length < 1.5*lengthCheck) {
-    			//console.log("Cool");
-    			this.enabled = false;
-                this.layer.crashEffectPlay("cool");
-    		}
-    	}
+    	var lengthCheck=GameLayer.UNIT_DIAMETER/2-GameLayer.PLAYER_DIAMETER/2-GameLayer.UNIT_BORDER_SIZE;
+    	if( this.enabled && !this.layer.spaceClick )
+            this.checkLengthToCrash( lengthCheck );
+    },
+    checkLengthToCrash: function( lengthCheck ) {
+        var pos=this.getPosition();
+        var length=this.distance( pos,GameLayer.PLAYER_POS );
+        if( length<lengthCheck/5 )
+            this.crashPlay( "perfect" );
+        else if( length<lengthCheck*3/5 )
+            this.crashPlay( "great" );
+        else if( length<lengthCheck*1.5 )
+            this.crashPlay( "cool" );
+    },
+    crashPlay: function( type ) {
+        this.enabled = false;
+        this.layer.crashEffectPlay( type );
     },
     distance: function( point1,point2 ) {
     	return Math.sqrt( Math.pow(point1.x-point2.x,2)+Math.pow(point1.y-point2.y,2) );
