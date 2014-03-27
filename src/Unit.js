@@ -6,7 +6,7 @@ var Unit = cc.Sprite.extend({
         this.endPos=new cc.Point( 2*screenWidth,screenHeight/2 );
         this.scheduleUpdate();
         this.initProperties();
-        this.crashSpeed=Math.pow( 1.7,3 );
+        this.crashSpeed=Math.pow( Unit.CRASH_SPEED,6 );
     },
     initProperties: function() {
         this.setScale( gameScale );
@@ -16,7 +16,7 @@ var Unit = cc.Sprite.extend({
         this.enabled=true;
         this.passPlayer=false;
         this.winkSpeed=17/4;
-        this.doneSpeed=1.3;
+        this.doneSpeed=Unit.DONE_SPEED;
         this.crashOpacity=255;
     },
     update: function( dt ) {
@@ -122,27 +122,28 @@ var Unit = cc.Sprite.extend({
        	this.runAction( moveAction );
     },
     hideUnit: function() {
-        if(this.getOpacity()/this.crashOpacity > Math.pow(0.7,10))
-    	   this.setOpacity( this.getOpacity()*0.7 );
-        else this.setOpacity(0);
+        if( this.getOpacity()/this.crashOpacity>Math.pow(Unit.HIDE_SPEED,10) )
+    	   this.setOpacity( this.getOpacity()*Unit.HIDE_SPEED );
+        else
+            this.setOpacity( 0 );
     },
     doneUnit: function() {
-        if(this.getScale()/gameScale == Math.pow(1.3,2))
+        if( this.getScale()/gameScale==Math.pow(Unit.DONE_SPEED,2) )
             this.doneSpeed=0.5;
         this.setScale( this.getScale()*this.doneSpeed );
     },
     crashUnit: function() {
-        if(this.getScale()/gameScale < this.crashSpeed)
-            this.setScale( this.getScale()*1.7 );
-        else this.setScale(0);
+        if( this.getScale()/gameScale<this.crashSpeed )
+            this.setScale( this.getScale()*Unit.CRASH_SPEED );
+        else 
+            this.setScale( 0 );
     },
     wink: function() {
-    	var opacity = this.getOpacity();
+    	var opacity=this.getOpacity();
     	this.setOpacity( opacity-this.winkSpeed );
-    	opacity = this.getOpacity();
-    	if( opacity < 0 || opacity > 255) {
-    		this.winkSpeed *= -1;
-    	}
+    	opacity=this.getOpacity();
+    	if( opacity<0 || opacity>255)
+    		this.winkSpeed*=-1;
     },
     genStartPos: function() {
     	var distance=Math.sqrt(3/4*Math.pow(screenWidth,2));
@@ -183,3 +184,6 @@ var Unit = cc.Sprite.extend({
     }
 });
 
+Unit.CRASH_SPEED = 1.4; 
+Unit.DONE_SPEED = 1.3;
+Unit.HIDE_SPEED = 0.7;
