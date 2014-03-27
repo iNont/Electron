@@ -20,41 +20,47 @@ var Unit = cc.Sprite.extend({
         this.crashOpacity=255;
     },
     update: function( dt ) {
-    	var pos = this.getPosition();
-    	var theta = this.getRotation();
-    	var turnSpeed = 0;
-        if(this.layer.state==GameLayer.STATES.STARTED) {
-            if(this.enabled) {
-                if(this.keyLeft) 
-                turnSpeed -= GameLayer.UNIT_TURN_SPEED;
-                if(this.keyRight)
-                    turnSpeed += GameLayer.UNIT_TURN_SPEED;
-                if(this.layer.isReverse) 
-                    turnSpeed *= -1;
-                if(this.layer.isWink) 
-                    this.wink();
-                this.setRotation(theta+turnSpeed);
-                this.detection();
-                if(pos.x > screenWidth-GameLayer.UNIT_DIAMETER/2) {
-                    this.enabled=false;
-                    this.passPlayer=true;
-                    this.crashOpacity=this.getOpacity();
-                    this.layer.crashEffectPlay("miss");
-                }
-            }
-            else {
-                this.hideUnit();
-                if(this.crashed)
-                    this.crashUnit();
-                else if(!this.passPlayer)
-                    this.doneUnit();
-            }
-            if(this.distance( pos,this.endPos ) < 1) {
-                this.layer.units.shift();
-                this.layer.removeChild(this);
-                this.startNewRandomUnit();
-    	    }
+    	var pos=this.getPosition();
+        if(this.enabled)
+            this.updateEnabled();
+        else 
+            this.updateDisabled();
+        if( this.distance( pos,this.endPos )<1 ) 
+            this.removeThis();
+    },
+    updateEnabled: function() {
+        var pos = this.getPosition();
+        this.turnThis();
+        if( this.layer.isWink ) 
+            this.wink();
+        if( pos.x>screenWidth-GameLayer.UNIT_DIAMETER/2 ) {
+            this.passPlayer=true;
+            this.crashOpacity=this.getOpacity();
+            this.crashPlay( "miss" );
         }
+        this.detection();
+    },
+    updateDisabled: function() {
+        this.hideUnit();
+        if( this.crashed )
+            this.crashUnit();
+        else if( !this.passPlayer )
+            this.doneUnit();
+    },
+    removeThis: function() {
+        this.layer.units.shift();
+        this.layer.removeChild( this );
+    },
+    turnThis: function() {
+        var theta=this.getRotation();
+        var turnSpeed=0;
+        if(this.keyLeft) 
+            turnSpeed-=GameLayer.UNIT_TURN_SPEED;
+        if(this.keyRight)
+            turnSpeed+=GameLayer.UNIT_TURN_SPEED;
+        if(this.layer.isReverse) 
+            turnSpeed*=-1;
+        this.setRotation(theta+turnSpeed);
     },
     detection: function() {
         var pos=this.getPosition();

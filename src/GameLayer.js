@@ -175,11 +175,11 @@ var GameLayer = cc.LayerColor.extend({
     },
     turnLeft: function( bool ) {
         for( var i=0; i<this.units.length; i++)
-            this.units[i].keyLeft = bool;    
+            this.units[i].keyLeft=bool;    
     },
     turnRight: function( bool ) {
         for( var i=0; i<this.units.length; i++)
-            this.units[i].keyRight = bool;
+            this.units[i].keyRight=bool;
     },
     onKeyDown: function( e ) {
         //37 = Left , 39 = Right , 32 = Space , 27 = Escape
