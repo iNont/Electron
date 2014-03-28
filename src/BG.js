@@ -2,11 +2,11 @@ var BG = cc.Sprite.extend({
     ctor: function() {
     	this.oneRoundX=4221*gameScale;
         this._super();
-		this.setOpacity(255);
-        this.initWithFile( 'images/ingameBG.png' );
-        this.setScale(gameScale);
+		this.setOpacity( 255 );
+        this.initWithFile( "images/ingameBG.png" );
+        this.setScale( gameScale );
         this.setPosition( new cc.Point( screenWidth,screenHeight/2 ) );
-		this.setAnchorPoint( new cc.Point( 1, 1 ) );
+		this.setAnchorPoint( new cc.Point( 1,1 ) );
         this.vx=5*gameScale;
         this.vy=0;
         this.winkSpeed=0.5;
