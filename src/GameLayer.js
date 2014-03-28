@@ -84,7 +84,7 @@ var GameLayer = cc.LayerColor.extend({
         this.player.setPosition( GameLayer.PLAYER_POS );
         this.addChild( this.player );
         this.bg.startGameAnimation();
-        this.startSong( "music1" );
+        this.startSong( "music2" );
         this.crashEffect=new CrashEffect( this );
         this.addChild( this.crashEffect );
         this.crashText=new CrashText( this );
@@ -119,9 +119,14 @@ var GameLayer = cc.LayerColor.extend({
         this.schedule( this.updateBeat,0,Infinity,0 );
     },
     startSong: function( songKey ) {
-         this.music = createjs.Sound.play( songKey );
-         if( songKey=="music1" ) //roar
-            this.startGameBeat( 2600,1300 );
+        this.music = createjs.Sound.play( songKey );
+        var BPM=100;
+        if( songKey=="music1" ) //roar
+            BPM=92.5;
+        else if( songKey=="music2" )
+            BPM=87;
+        var beat=60/BPM*1000*2;
+        this.startGameBeat( 2*beat,beat );
     },
     crashEffectPlay: function( type ) {
         this.scoreUpdate( type );

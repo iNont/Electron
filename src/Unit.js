@@ -159,9 +159,9 @@ var Unit = cc.Sprite.extend({
     checkLengthToCrash: function( lengthCheck ) {
         var pos=this.getPosition();
         var length=this.distance( pos,GameLayer.PLAYER_POS );
-        if( length<lengthCheck/5 )
+        if( length<lengthCheck*1.5/5 )
             this.crashPlay( "perfect" );
-        else if( length<lengthCheck*3/5 )
+        else if( length<lengthCheck*4.5/5 )
             this.crashPlay( "great" );
         else if( length<lengthCheck*1.5 )
             this.crashPlay( "cool" );
