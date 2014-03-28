@@ -5,7 +5,9 @@ var MainMenuButton = cc.Sprite.extend({
         this.initWithFile( "images/intro/button"+number+".png" );
         this.setScale( gameScale*MainMenuButton.SCALE_UNSELECTED );
         this.setOpacity( MainMenuButton.OPACITY_UNSELECTED );
-        this.setPosition(new cc.Point(screenWidth+MainMenuButton.POSITION_INIT,screenHeight/2-number*MainMenuButton.GAP*gameScale));
+        var initPosX=screenWidth+MainMenuButton.POSITION_INIT;
+        var initPosY=screenHeight/2-number*MainMenuButton.GAP*gameScale;
+        this.setPosition( new cc.Point( initPosX,initPosY ) );
         this.scheduleUpdate();
         this.selected=false;
     },
