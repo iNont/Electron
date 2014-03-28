@@ -93,6 +93,7 @@ var Unit = cc.Sprite.extend({
         }
     },
     startNewUnit: function( startTheta ) {
+        var newPos=this.genStartPos();
         var theta=Math.atan((newPos.y-GameLayer.PLAYER_POS.y)/(GameLayer.PLAYER_POS.x-newPos.x))*180/Math.PI;
         var newTheta=theta+startTheta;
         this.makeNewUnit( newTheta );
