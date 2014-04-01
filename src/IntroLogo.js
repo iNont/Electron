@@ -103,7 +103,7 @@ var IntroLogo = cc.Sprite.extend({
             this.setOpacity(255);
             this.setScale(gameScale);
             this.winkThis(17/4,0);
-            this.unschedule(this.updateBTop);
+            this.unschedule(this.updateSBot);
         }
     },
     updateFull: function() {
