@@ -271,8 +271,7 @@ var GameLayer = cc.LayerColor.extend({
         this.updateStartedCombo();
     },
     updateStartedScore: function() {
-        if( this.scoreBak<this.score )
-        {
+        if( this.scoreBak<this.score ) {
             this.scoreBak+=GameLayer.SCORE_UPDATE_SPEED;
             if( this.scoreBak>this.score )
                 this.scoreBak=this.score;
@@ -284,8 +283,7 @@ var GameLayer = cc.LayerColor.extend({
             this.comboLabel.setString( this.combo );
         else 
             this.comboLabel.setString( "" );
-        if( this.comboBak-this.combo<=1 )
-        {
+        if( this.comboBak-this.combo<=1 ) {
             this.comboLabel.setOpacity( 255 );
             this.comboBak+=GameLayer.COMBO_TIME_CHANGE_SPEED;
         }
