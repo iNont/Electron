@@ -1,6 +1,6 @@
 var BG = cc.Sprite.extend({
     ctor: function() {
-    	this.oneRoundX=4221*gameScale;
+    	this.oneRoundX=BG.ONE_ROUND_X.START*gameScale;
         this._super();
 		this.setOpacity( 255 );
         this.initWithFile( "images/ingameBG.png" );
@@ -40,6 +40,9 @@ var BG = cc.Sprite.extend({
     }
 });
 
+BG.ONE_ROUND_X = {
+    START: 4221
+};
 BG.WINK_OPACITY_MIN = 85;
 BG.WINK_OPACITY_MAX = 155;
 BG.WINK_SPEED = 0.5;
