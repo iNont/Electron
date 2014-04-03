@@ -137,18 +137,19 @@ var GameLayer = cc.LayerColor.extend({
     },
     scoreUpdate: function( type ) {
         var scorePerUnit = GameLayer.SCORE_PER_UNIT;
+        var bonusScore = GameLayer.SCORE_PER_COMBO*this.combo;
         if( type=="perfect" ) {
-            this.score+=(scorePerUnit+GameLayer.SCORE_PER_COMBO*this.combo);
+            this.score+=(scorePerUnit+bonusScore);
             this.combo++;
             this.perfect++;
         }
         else if( type=="great" ) {
-            this.score+=(2*scorePerUnit/3+GameLayer.SCORE_PER_COMBO*this.combo);
+            this.score+=(2*scorePerUnit/3+bonusScore);
             this.combo++;
             this.great++;
         }
         else if( type=="cool" ) {
-            this.score+=(scorePerUnit/3+GameLayer.SCORE_PER_COMBO*this.combo);
+            this.score+=(scorePerUnit/3+bonusScore);
             this.combo++;
             this.cool++;
         }
