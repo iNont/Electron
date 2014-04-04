@@ -141,9 +141,5 @@ var IntroLogo = cc.Sprite.extend({
     runAnimationFull: function() {
         this.v=0.5;
         this.schedule(this.updateFull,0,Infinity,0);
-    },
-    runAnimationLight: function() {
-        this.schedule(this.updateLight,0,Infinity,0);
     }
-
 });

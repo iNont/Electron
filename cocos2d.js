@@ -19,7 +19,6 @@
             'src/CrashText.js',
             'src/Player.js',
             'src/Unit.js',
-            'src/LongUnit.js',
             'src/GameLayer.js'     //add your own files in order here
         ],
         resourceFiles: [
@@ -33,7 +32,6 @@
             {src: 'images/perfectEffect.png'},
             {src: 'images/Player.png'},
             {src: 'images/unit.png'},
-            {src: 'images/longUnit.png'},
             {src: 'images/perfectText.png'},
             {src: 'images/greatText.png'},
             {src: 'images/coolText.png'},
@@ -47,7 +45,6 @@
             {src: 'images/intro/n.png'},
             {src: 'images/intro/spikeTop.png'},
             {src: 'images/intro/spikeBot.png'},
-            {src: 'images/intro/mg.png'},
             {src: 'images/intro/button1.png'},
             {src: 'images/intro/button2.png'},
             {src: 'images/intro/button3.png'},
