@@ -129,7 +129,8 @@ var GameLayer = cc.LayerColor.extend({
         this.player.setPosition( GameLayer.PLAYER_POS );
         this.addChild( this.player );
         // this.bg.startGameAnimation();
-        this.startSongByNote( "music2" ,this.getNotes());
+        //this.startSongByNote( "music2" ,this.getNotes());
+        this.startSongByBeat( "music2" );
         this.crashEffect=new CrashEffect( this );
         this.addChild( this.crashEffect );
         this.crashText=new CrashText( this );
