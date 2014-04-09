@@ -17,6 +17,7 @@ var IntroLogo = cc.Sprite.extend({
     },
     unscheduleAll: function() {
         this.unschedule(this.updateFull);
+        this.unschedule(this.updatePressAnyKey);
         this.unschedule(this.updateO);
         this.unschedule(this.updateSTop);
         this.unschedule(this.updateBTop);
@@ -121,6 +122,21 @@ var IntroLogo = cc.Sprite.extend({
             this.winkThis(1,155);
         }
     },
+    updatePressAnyKey: function() {
+        if(this.getOpacity()<40)
+        {
+            this.setOpacity(this.getOpacity()+this.v);
+        }
+        else if(this.getOpacity()<255){
+            this.v+=17/8;
+            this.setOpacity(this.getOpacity()+this.v);
+        }
+        else
+        {
+            this.setOpacity(255);
+            this.winkThis(10,105);
+        }
+    },
     runAnimationO: function() {
         this.v=180;
         this.setScale(gameScale*Math.pow(1.05,51));
@@ -141,5 +157,9 @@ var IntroLogo = cc.Sprite.extend({
     runAnimationFull: function() {
         this.v=0.5;
         this.schedule(this.updateFull,0,Infinity,0);
+    },
+    runAnimationPressAnyKey: function() {
+        this.v=0.5;
+        this.schedule(this.updatePressAnyKey,0,Infinity,0);
     }
 });
