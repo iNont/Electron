@@ -12,7 +12,13 @@ var GameLayer = cc.LayerColor.extend({
         this.initProperties();
         this.bg=new BG();
         this.addChild( this.bg );
-        this.startIntro();
+
+        this.frontLayer=new FrontLayer( this );
+        this.frontLayer.startIntro();
+        this.addChild( this.frontLayer );
+
+        this.mainMenuLayer=new MainMenuLayer( this );
+        this.addChild( this.mainMenuLayer );
 
         this.state=GameLayer.STATES.FRONT;
         this.setKeyboardEnabled( true );
@@ -54,7 +60,7 @@ var GameLayer = cc.LayerColor.extend({
     initProperties: function() {
         this.stat="miss";
         this.isReverse = false;
-        this.isWink = false;
+        this.isWink = true;
         this.spaceClick=false;
         this.score=0;
         this.scoreBak=0;
@@ -65,70 +71,16 @@ var GameLayer = cc.LayerColor.extend({
         this.great=0;
         this.cool=0;
         this.miss=0;
-        this.selectButton=0;
-    },
-    startIntro:function() {
-        this.introArr=[];
-        this.addIntroLogo();
-    },
-    addIntroLogo: function() {
-        this.introLogoO=new IntroLogo( this,"o",1150,256 );
-        this.addChild( this.introLogoO );
-        this.introLogoO.runAnimationO();
-        this.introArr.push( this.introLogoO );
-
-        this.introLogoSTop=new IntroLogo( this,"spikeTop",1269,121 );
-        this.addChild( this.introLogoSTop );
-        this.introLogoSTop.runAnimationSTop();
-        this.introArr.push( this.introLogoSTop );
-
-        this.introLogoSBot=new IntroLogo( this,"spikeBot",1060,359 );
-        this.addChild( this.introLogoSBot );
-        this.introLogoSBot.runAnimationSBot();
-        this.introArr.push( this.introLogoSBot );
-
-        this.introLogoFull=new IntroLogo( this,"logo",778.5,227 );
-        this.addChild( this.introLogoFull );
-        this.introLogoFull.runAnimationFull();
-        this.introArr.push( this.introLogoFull );
-
-        this.introMessage=new IntroLogo( this,"pressAnyKey",0,0 );
-        this.introMessage.setPosition( new cc.Point( screenWidth*3/4,screenHeight/2 ) );
-        this.addChild( this.introMessage );
-        this.introMessage.runAnimationPressAnyKey();
-        this.introArr.push( this.introMessage );
-    },
-    addIntroButton: function() {
-        for( var i=1; i<=GameLayer.BUTTON_NUMBER.MAINMENU; i++ ) {
-            this.introButton = new MainMenuButton( this,i );
-            this.addChild( this.introButton );
-            this.buttonArr.push( this.introButton );
-        }
-    },
-    hideIntro: function() {
-        for( var i=0; i<this.introArr.length; i++ )
-            this.introArr[i].hideThis();
-    },
-    hideButtonIntro: function() {
-        for( var i=0; i<this.buttonArr.length; i++ )
-            this.buttonArr[i].hideThis();
-    },
-    mainMenu: function() {
-        this.hideIntro();
-        this.buttonArr=[];
-        this.addIntroButton();
-        this.buttonArr[this.selectButton].select();
-        this.state=GameLayer.STATES.MAINMENU;
     },
     startGame: function() {
         this.units = [];
-        this.hideButtonIntro();
+        this.mainMenuLayer.hideButtonIntro();
         this.state=GameLayer.STATES.STARTED;
         this.player=new Player();
         this.player.setScale( gameScale*GameLayer.PLAYER_SCALE );
         this.player.setPosition( GameLayer.PLAYER_POS );
         this.addChild( this.player );
-        // this.bg.startGameAnimation();
+        this.bg.startGameAnimation();
         //this.startSongByNote( "music2" ,this.getNotes());
         this.startSongByBeat( "music2" );
         this.crashEffect=new CrashEffect( this );
@@ -244,11 +196,11 @@ var GameLayer = cc.LayerColor.extend({
         if( this.state==GameLayer.STATES.STARTED )
             this.onKeyDownStarted( e );
         else if( this.state==GameLayer.STATES.MAINMENU )
-            this.onKeyDownMainMenu( e );
-        else if( this.state==GameLayer.STATES.FRONT )
-            this.onKeyDownFront( e );
+            this.mainMenuLayer.onKeyDown( e );
         else if( this.state==GameLayer.STATES.NOTE_CREATOR )
             this.onKeyDownNoteRecorder( e );
+        else if( this.state==GameLayer.STATES.FRONT )
+            this.frontLayer.onKeyDown( e );
     },
     onKeyDownStarted: function( e ) {
         if( e==37 )
@@ -259,21 +211,6 @@ var GameLayer = cc.LayerColor.extend({
             if( !this.spaceClick )
                 this.clickEvent();
     },
-    onKeyDownFront: function( e ) {
-        this.mainMenu();
-    },
-    onKeyDownMainMenu: function( e ) {
-        if( e==32 )
-            if( this.selectButton==0 )
-                if(this.noteRecorderMode)
-                    this.startNoteRecorderMode("music2");
-                else
-                    this.startGame();
-        if( e==38 )
-            this.selectButtonUp();
-        if( e==40 )
-            this.selectButtonDown();
-    },
     onKeyDownNoteRecorder: function( e ) {
         if( e==37 )
             this.recorderTurnLeft=true;
@@ -281,20 +218,6 @@ var GameLayer = cc.LayerColor.extend({
             this.recorderTurnRight=true;
         if( e==32 )
             this.recordNote();
-    },
-    selectButtonUp: function() {
-        if( this.selectButton>0 ) {
-            this.buttonArr[this.selectButton].unselect();
-            this.selectButton--;
-            this.buttonArr[this.selectButton].select();
-        }
-    },
-    selectButtonDown: function() {
-        if( this.selectButton<this.buttonArr.length-1 ) {
-            this.buttonArr[this.selectButton].unselect();
-            this.selectButton++;
-            this.buttonArr[this.selectButton].select();
-        }
     },
     onKeyUp: function( e ) {
         //37 = Left , 39 = Right , 32 = Space , 27 = Escape

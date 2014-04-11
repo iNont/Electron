@@ -20,6 +20,8 @@
             'src/Player.js',
             'src/Note.js',
             'src/Unit.js',
+            'src/FrontLayer.js',
+            'src/MainMenuLayer.js',
             'src/GameLayer.js'     //add your own files in order here
         ],
         resourceFiles: [
