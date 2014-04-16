@@ -13,11 +13,17 @@ var GameLayer = cc.LayerColor.extend({
         this.addChild( this.bg );
 
         this.addAllLayers();
+        this.option();
 
         this.state=GameLayer.STATES.FRONT;
         this.setKeyboardEnabled( true );
         this.scheduleUpdate();
         return true;
+    },
+    option: function() {
+        this.isSingleTurn=true;
+        if( this.isSingleTurn )
+            GameLayer.UNIT_TURN_SPEED=45;
     },
     addAllLayers: function() {
         this.frontLayer=new FrontLayer( this );
@@ -39,6 +45,7 @@ var GameLayer = cc.LayerColor.extend({
         this.state=GameLayer.STATES.NOTE_CREATOR;
     },
     recordNote: function() {
+        this.recorederClicked=false;
         this.recorderTurnLeft=false;
         this.recorderTurnRight=false;
         var clickPos = Math.floor(this.music.getPosition());
@@ -89,12 +96,17 @@ var GameLayer = cc.LayerColor.extend({
             this.recorderTurnLeft=false;
         if( e==39 )
             this.recorderTurnRight=false;
+        this.recorederClicked=false;
     },
     updateRecorder: function() {
-        if(this.recorderTurnLeft)
-            this.noteRecorder_angle-=GameLayer.UNIT_TURN_SPEED;
-        if(this.recorderTurnRight)
-            this.noteRecorder_angle+=GameLayer.UNIT_TURN_SPEED;
+        if(this.recorderTurnLeft&&!this.recorederClicked) {
+            this.noteRecorder_angle-=1;
+            this.recorederClicked=true;
+        }
+        if(this.recorderTurnRight&&!this.recorederClicked) {
+            this.noteRecorder_angle+=1;
+            this.recorederClicked=true;
+        }
     }
 });
 

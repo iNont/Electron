@@ -54,13 +54,15 @@ var Unit = cc.Sprite.extend({
     turnThis: function() {
         var theta=this.getRotation();
         var turnSpeed=0;
-        if(this.keyLeft) 
+        if( this.keyLeft )  
             turnSpeed-=GameLayer.UNIT_TURN_SPEED;
-        if(this.keyRight)
+        if( this.keyRight )
             turnSpeed+=GameLayer.UNIT_TURN_SPEED;
-        if(this.layer.isReverse) 
+        if( this.layer.isReverse ) 
             turnSpeed*=-1;
         this.setRotation(theta+turnSpeed);
+        this.keyLeft=false;
+        this.keyRight=false;
     },
     detection: function() {
         var pos=this.getPosition();
@@ -100,7 +102,8 @@ var Unit = cc.Sprite.extend({
     },
     startNewRandomUnit: function() {
     	var newPos=this.genStartPos();
-    	var newTheta=this.layer.randomNumber( 0,360 );
+    	//var newTheta=this.layer.randomNumber( 0,360 );
+        var newTheta=Math.floor(this.layer.randomNumber( 0,360 ))%8*45;  //SingleTurn
     	this.makeNewUnit( newTheta );
     },
     makeNewUnit: function( newTheta ) {

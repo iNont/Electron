@@ -8,7 +8,9 @@ var PlayingLayer = cc.LayerColor.extend({
         this.stat="miss";
         this.isReverse = false;
         this.isWink = true;
-        this.spaceClick=false;
+        this.spacePressed=false;
+        this.turnPressed=false;
+        this.turn
         this.score=0;
         this.scoreBak=0;
         this.maxCombo=0;
@@ -178,24 +180,27 @@ var PlayingLayer = cc.LayerColor.extend({
     clickEvent: function() {
         for( var i=0; i<this.units.length; i++)
                 this.units[i].checkEvent();
-        this.spaceClick=true;
+        this.spacePressed=true;
     },
     turnLeft: function( bool ) {
         for( var i=0; i<this.units.length; i++)
-            this.units[i].keyLeft=bool;    
+            this.units[i].keyLeft=bool;
+        if( this.layer.isSingleTurn )
+            this.turnPressed=bool;
     },
     turnRight: function( bool ) {
         for( var i=0; i<this.units.length; i++)
             this.units[i].keyRight=bool;
+        if( this.layer.isSingleTurn )
+            this.turnPressed=bool;
     },
     onKeyDown: function( e ) {
-        if( e==37 )
+        if( e==37 && !this.turnPressed )
             this.turnLeft( true );
-        if( e==39 )
+        if( e==39 && !this.turnPressed )
             this.turnRight( true );
-        if( e==32 )
-            if( !this.spaceClick )
-                this.clickEvent();
+        if( e==32 && !this.spacePressed )
+            this.clickEvent();
     },
     onKeyUp: function( e ) {
         if( e==37 )
@@ -203,7 +208,7 @@ var PlayingLayer = cc.LayerColor.extend({
         if( e==39 )
             this.turnRight( false );
         if( e==32 ) 
-            this.spaceClick=false;
+            this.spacePressed=false;
     },
 
 
@@ -241,7 +246,7 @@ var PlayingLayer = cc.LayerColor.extend({
             var unit = new Unit( this );
             this.units.push( unit );
             if(this.noteRunner!=0)
-                this.units[this.units.length-1].startNewUnit(this.units[this.units.length-2].getRotation()+this.notes[this.noteRunner].angle);
+                this.units[this.units.length-1].startNewUnit(this.units[this.units.length-2].getRotation()+this.notes[this.noteRunner].angle*45);
             else
                 this.units[this.units.length-1].startNewRandomUnit();
             this.addChild( this.units[this.units.length-1] );
