@@ -98,17 +98,19 @@ var Unit = cc.Sprite.extend({
         var newPos=this.genStartPos();
         var theta=Math.atan((newPos.y-GameLayer.PLAYER_POS.y)/(GameLayer.PLAYER_POS.x-newPos.x))*180/Math.PI;
         var newTheta=theta+startTheta;
-        this.makeNewUnit( newTheta );
+        this.makeNewUnit( newPos,newTheta );
     },
     startNewRandomUnit: function() {
-    	var newPos=this.genStartPos();
-    	//var newTheta=this.layer.randomNumber( 0,360 );
+    	// var newPos=this.genStartPos();
+    	// var newTheta=this.layer.randomNumber( 0,360 );
+    	// this.makeNewUnit( newTheta );
+
         var newTheta=Math.floor(this.layer.randomNumber( 0,360 ))%8*45;  //SingleTurn
-    	this.makeNewUnit( newTheta );
+        this.startNewUnit( newTheta );
     },
-    makeNewUnit: function( newTheta ) {
+    makeNewUnit: function( newPos,newTheta ) {
         this.initProperties();
-        var newPos=this.genStartPos();
+        //var newPos=this.genStartPos();
         this.endPos=this.genEndPos( newPos );
         this.setPosition( newPos );
         this.setRotation( newTheta );
