@@ -18,6 +18,7 @@ var Unit = cc.Sprite.extend({
         this.winkSpeed=17/4;
         this.doneSpeed=Unit.DONE_SPEED;
         this.crashOpacity=255;
+        this.alreadyTurned=0;
     },
     update: function( dt ) {
     	var pos=this.getPosition();
@@ -60,6 +61,7 @@ var Unit = cc.Sprite.extend({
             turnSpeed+=GameLayer.UNIT_TURN_SPEED;
         if( this.layer.isReverse ) 
             turnSpeed*=-1;
+        this.alreadyTurned+=turnSpeed;
         this.setRotation(theta+turnSpeed);
         this.keyLeft=false;
         this.keyRight=false;
@@ -105,7 +107,7 @@ var Unit = cc.Sprite.extend({
     	// var newTheta=this.layer.randomNumber( 0,360 );
     	// this.makeNewUnit( newTheta );
 
-        var newTheta=Math.floor(this.layer.randomNumber( 0,360 ))%8*45;  //SingleTurn
+        var newTheta=Math.floor(this.layer.randomNumber( 0,360 ))%4*45;  //SingleTurn
         this.startNewUnit( newTheta );
     },
     makeNewUnit: function( newPos,newTheta ) {

@@ -37,7 +37,7 @@ var GameLayer = cc.LayerColor.extend({
         this.addChild( this.playingLayer );
     },
     startNoteRecorderMode: function( songKey ) {
-        this.hideButtonIntro();
+        this.mainMenuLayer.hideButtonIntro();
         this.schedule(this.updateRecorder,0,Infinity,0);
         this.music = createjs.Sound.play( songKey );
         this.noteRecorder_angle=0;
