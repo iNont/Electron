@@ -3,7 +3,7 @@ var BattleItems = cc.Sprite.extend({
     	this.layer = layer;
         this._super();
         this.initProperties();
-        this.controller(0);
+        this.controller(key);
     },
     initProperties: function() {
     },
@@ -14,23 +14,24 @@ var BattleItems = cc.Sprite.extend({
     runInkItem: function() {
         var src = "images/BI0.png";
         this.initWithFile( src );
-        this.setPosition( new cc.Point(screenWidth,screenHeight) );
+        this.setPosition( new cc.Point( screenWidth/2,screenHeight/2 ) );
         this.setScale( gameScale );
-        setOpacity( 0 );
+        this.setOpacity( 0 );
         this.inkShown=false;
+        this.layer.addChild( this,50 );
         this.schedule( this.updateInk,0,Infinity,0 );
     },
     updateInk: function() {
         var opac=this.getOpacity();
         if( opac<255 && !this.inkShown ) {
             this.setOpacity( opac+BattleItems.INK_OPAC.UP );
-            if( this.getOpacity()==255 );
-                this.inkShown=true;
         }
-        else if( opac>0 )
+        else if( opac>0 ) {
+            this.inkShown=true;
             this.setOpacity( opac-BattleItems.INK_OPAC.DOWN );
+        }
         else
-            this.unschedule( this.updateInk );
+            this.layer.removeChild( this );
     },
 
 
@@ -47,5 +48,5 @@ BattleItems.KEYS = {
 };
 BattleItems.INK_OPAC = {
     UP: 17,
-    DOWN: 0.5
+    DOWN: 1
 };

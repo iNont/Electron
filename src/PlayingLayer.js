@@ -201,6 +201,8 @@ var PlayingLayer = cc.LayerColor.extend({
             this.turnRight( true );
         if( e==32 && !this.spacePressed )
             this.clickEvent();
+        if( e==49 )
+            this.useBattleItem( 0 );
     },
     onKeyUp: function( e ) {
         if( e==37 )
@@ -209,6 +211,9 @@ var PlayingLayer = cc.LayerColor.extend({
             this.turnRight( false );
         if( e==32 ) 
             this.spacePressed=false;
+    },
+    useBattleItem: function( key ) {
+        var battleItem = new BattleItems( this,key );
     },
 
 
