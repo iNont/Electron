@@ -3,6 +3,7 @@ var BattleItems = cc.Sprite.extend({
     	this.layer = layer;
         this._super();
         this.initProperties();
+        this.controller(0);
     },
     initProperties: function() {
     },
@@ -15,6 +16,21 @@ var BattleItems = cc.Sprite.extend({
         this.initWithFile( src );
         this.setPosition( new cc.Point(screenWidth,screenHeight) );
         this.setScale( gameScale );
+        setOpacity( 0 );
+        this.inkShown=false;
+        this.schedule( this.updateInk,0,Infinity,0 );
+    },
+    updateInk: function() {
+        var opac=this.getOpacity();
+        if( opac<255 && !this.inkShown ) {
+            this.setOpacity( opac+BattleItems.INK_OPAC.UP );
+            if( this.getOpacity()==255 );
+                this.inkShown=true;
+        }
+        else if( opac>0 )
+            this.setOpacity( opac-BattleItems.INK_OPAC.DOWN );
+        else
+            this.unschedule( this.updateInk );
     },
 
 
@@ -28,4 +44,8 @@ BattleItems.KEYS = {
     INVERSE: 1,
     RANDOM_TURN: 2,
     INVISIBILITY: 3
+};
+BattleItems.INK_OPAC = {
+    UP: 17,
+    DOWN: 0.5
 };
