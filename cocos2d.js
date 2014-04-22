@@ -50,6 +50,7 @@
             {src: 'images/intro/button3.png'},
             {src: 'images/intro/button4.png'},
             {src: 'images/intro/pressAnyKey.png'},
+            {src: 'images/BI0.png'},
         ]
     };
 

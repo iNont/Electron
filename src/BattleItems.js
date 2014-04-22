@@ -1,18 +1,31 @@
 var BattleItems = cc.Sprite.extend({
-    ctor: function( layer ) {
+    ctor: function( layer,key ) {
     	this.layer = layer;
         this._super();
         this.initProperties();
     },
     initProperties: function() {
     },
-    update: function( dt ) {
+    controller: function( key ) {
+        if( key==BattleItems.KEYS.INK )
+            this.runInkItem();
+    },
+    runInkItem: function() {
+        var src = "images/BI0.png";
+        this.initWithFile( src );
+        this.setPosition( new cc.Point(screenWidth,screenHeight) );
+        this.setScale( gameScale );
     },
 
-    reset: function(type){
-        var src = "images/BI"+key+".png";
-        this.initWithFile( src );
-        this.initProperties();
-        this.scheduleUpdate();
-    }
+
+
+    update: function( dt ) {
+    },
 });
+
+BattleItems.KEYS = {
+    INK: 0,
+    INVERSE: 1,
+    RANDOM_TURN: 2,
+    INVISIBILITY: 3
+};
