@@ -6,7 +6,7 @@ var PlayingLayer = cc.LayerColor.extend({
     },
     initProperties: function() {
         this.stat="miss";
-        this.isInverse = true;
+        this.isInverse = false;
         this.isWink = true;
         this.spacePressed=false;
         this.turnPressed=false;
@@ -40,6 +40,7 @@ var PlayingLayer = cc.LayerColor.extend({
     },
     startSongByBeat: function( songKey ) {
         this.music = createjs.Sound.play( songKey );
+        this.music.on("complete",this.showStatus);
         var BPM=100;
         if( songKey=="music1" ) //roar
             BPM=92.5;
@@ -47,6 +48,14 @@ var PlayingLayer = cc.LayerColor.extend({
             BPM=87;
         var beat=60/BPM*1000*2;
         this.startGameBeat( 2*beat,beat );
+    },
+    showStatus: function() {
+        console.log("Score: "+this.score);
+        console.log("Max Combo: "+this.maxCombo);
+        console.log("Perfect: "+this.perfect);
+        console.log("Great: "+this.great);
+        console.log("Cool: "+this.cool);
+        console.log("Miss: "+this.miss);
     },
     startGameBeat: function( startTime,beat ) {
         this.startTime=startTime;
