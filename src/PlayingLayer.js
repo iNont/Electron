@@ -6,7 +6,7 @@ var PlayingLayer = cc.LayerColor.extend({
     },
     initProperties: function() {
         this.stat="miss";
-        this.isReverse = false;
+        this.isInverse = true;
         this.isWink = true;
         this.spacePressed=false;
         this.turnPressed=false;
@@ -173,9 +173,9 @@ var PlayingLayer = cc.LayerColor.extend({
             return true;
         return false;
     },
-    reverseMode: function( bool ){
+    InverseMode: function( bool ){
         for( var i=0; i<this.units.length; i++ ) 
-            this.units[i].isReverse=bool;
+            this.units[i].isInverse=bool;
     },
     clickEvent: function() {
         for( var i=0; i<this.units.length; i++)
@@ -203,6 +203,8 @@ var PlayingLayer = cc.LayerColor.extend({
             this.clickEvent();
         if( e==49 )
             this.useBattleItem( 0 );
+        if( e==50 )
+            this.useBattleItem( 1 );
     },
     onKeyUp: function( e ) {
         if( e==37 )

@@ -59,7 +59,7 @@ var Unit = cc.Sprite.extend({
             turnSpeed-=GameLayer.UNIT_TURN_SPEED;
         if( this.keyRight )
             turnSpeed+=GameLayer.UNIT_TURN_SPEED;
-        if( this.layer.isReverse ) 
+        if( this.layer.isInverse ) 
             turnSpeed*=-1;
         this.alreadyTurned+=turnSpeed;
         this.setRotation(theta+turnSpeed);

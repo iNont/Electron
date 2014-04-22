@@ -10,6 +10,8 @@ var BattleItems = cc.Sprite.extend({
     controller: function( key ) {
         if( key==BattleItems.KEYS.INK )
             this.runInkItem();
+        if( key==BattleItems.KEYS.INVERSE )
+            this.runInverseItem();
     },
     runInkItem: function() {
         var src = "images/BI0.png";
@@ -33,8 +35,18 @@ var BattleItems = cc.Sprite.extend({
         else
             this.layer.removeChild( this );
     },
-
-
+    runInverseItem: function() {
+        this.layer.addChild( this );
+        this.schedule( this.updateInverse,0,0,0 );
+        this.schedule( this.updateInverseTimer,10,0,0 );
+    },
+    updateInverse: function() {
+        this.layer.isInverse=!this.layer.isInverse;
+    },
+    updateInverseTimer: function() {
+        this.layer.isInverse=!this.layer.isInverse;
+        this.layer.removeChild( this );
+    },
 
     update: function( dt ) {
     },
