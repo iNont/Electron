@@ -11,6 +11,7 @@ var cocos2dApp = cc.Application.extend({
 
         createjs.Sound.registerSound("musics/roar-katyperry.mp3", "music1");
         createjs.Sound.registerSound("musics/whenyousaynothingatall-ronankeating.mp3", "music2");
+        createjs.Sound.registerSound("musics/ifineverseeyourfaceagain-maroon5.mp3", "music3");
     },
 
     applicationDidFinishLaunching: function() {

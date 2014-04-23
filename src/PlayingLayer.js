@@ -32,7 +32,7 @@ var PlayingLayer = cc.LayerColor.extend({
         this.addChild( this.player );
 
         //this.startSongByNote( "music2" ,this.getNotes());
-        this.startSongByBeat( "music2" );
+        this.startSongByBeat( "music3" );
         this.addEffectToLayer();
         this.addLabelToLayer();
         
@@ -40,12 +40,14 @@ var PlayingLayer = cc.LayerColor.extend({
     },
     startSongByBeat: function( songKey ) {
         this.music = createjs.Sound.play( songKey );
-        this.music.on("complete",this.showStatus);
+        //this.music.on("complete",this.showStatus);
         var BPM=100;
         if( songKey=="music1" ) //roar
             BPM=92.5;
         else if( songKey=="music2" )
             BPM=87;
+        else if( songKey=="music3" ) //if i never see your face again
+            BPM=106;
         var beat=60/BPM*1000*2;
         this.startGameBeat( 2*beat,beat );
     },
