@@ -103,16 +103,11 @@ var Unit = cc.Sprite.extend({
         this.makeNewUnit( newPos,newTheta );
     },
     startNewRandomUnit: function() {
-    	// var newPos=this.genStartPos();
-    	// var newTheta=this.layer.randomNumber( 0,360 );
-    	// this.makeNewUnit( newTheta );
-
         var newTheta=Math.floor(this.layer.randomNumber( 0,360 ))%4*45;  //SingleTurn
         this.startNewUnit( newTheta );
     },
     makeNewUnit: function( newPos,newTheta ) {
         this.initProperties();
-        //var newPos=this.genStartPos();
         this.endPos=this.genEndPos( newPos );
         this.setPosition( newPos );
         this.setRotation( newTheta );
