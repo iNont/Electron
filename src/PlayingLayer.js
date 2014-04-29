@@ -45,8 +45,12 @@ var PlayingLayer = cc.LayerColor.extend({
     addPowerShow: function() {
         this.powerGrid=new ImageShow( "powerGrid.png" );
         this.powerGrid.setPosition( new cc.Point( screenWidth-30*gameScale,screenHeight/2 ) );
+        this.powerGrid.setScale( gameScale );
         this.powerBar=new ImageShow( "powerBar.png" );
-        this.powerBar.setPosition( new cc.Point( screenWidth-30*gameScale,screenHeight/2 ) );
+        this.powerBar.setAnchorPoint( new cc.Point( 0.5,0 ) );
+        this.powerBar.setPosition( new cc.Point( screenWidth-30*gameScale,screenHeight/2-750*gameScale ) );
+        this.powerBar.setScaleX( gameScale );
+        this.powerBar.setScaleY( 0 );
         this.addChild( this.powerBar,30 );
         this.addChild( this.powerGrid,31 );
     },
@@ -159,7 +163,8 @@ var PlayingLayer = cc.LayerColor.extend({
             this.comboLabel.setOpacity( this.comboLabel.getOpacity()*0.95 );
     },
     updateStartedPower: function() {
-
+        var scale=this.power/1500;
+        this.powerBar.setScaleY( scale*gameScale );
     },
     crashEffectPlay: function( type ) {
         this.scoreUpdate( type );
@@ -191,6 +196,9 @@ var PlayingLayer = cc.LayerColor.extend({
             this.combo=0;
             this.miss++;
         }
+        this.power+=Math.round( scoreGet/5 );
+        if( this.power>PlayingLayer.MAX_POWER )
+            this.power=PlayingLayer.MAX_POWER;
         this.score+=scoreGet;
     },
     runCrashAnimation: function( type ) {
@@ -242,8 +250,16 @@ var PlayingLayer = cc.LayerColor.extend({
             this.spacePressed=false;
     },
     useBattleItem: function( key ) {
-        var battleItem = new BattleItems( this,key );
+        if( this.isEnoughPower( key ) ) {
+            this.power-=BattleItems.POWER_COST[key];
+            var battleItem = new BattleItems( this,key );
+        }
     },
+    isEnoughPower: function( key ) {
+        if( key>=0 && key<=3 )
+            return this.power>=BattleItems.POWER_COST[key];
+    },
+
 
 
     /*//Additional Features*/

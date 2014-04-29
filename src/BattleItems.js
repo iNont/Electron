@@ -82,6 +82,7 @@ BattleItems.KEYS = {
     RANDOM_TURN: 2,
     INVISIBILITY: 3
 };
+BattleItems.POWER_COST = [900,1200,750,900];
 BattleItems.INK_OPAC = {
     UP: 17,
     DOWN: 1
