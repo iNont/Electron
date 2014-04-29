@@ -193,7 +193,7 @@ var PlayingLayer = cc.LayerColor.extend({
             this.cool++;
         }
         else if( type=="miss" ) {
-            this.power-=(50+this.combo*30);
+            this.power-=(50+this.combo*20);
             if(this.power<0)
                 this.power=0;
             this.combo=0;
