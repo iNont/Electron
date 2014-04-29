@@ -193,10 +193,13 @@ var PlayingLayer = cc.LayerColor.extend({
             this.cool++;
         }
         else if( type=="miss" ) {
+            this.power-=(50+this.combo*30);
+            if(this.power<0)
+                this.power=0;
             this.combo=0;
             this.miss++;
         }
-        this.power+=Math.round( scoreGet/5 );
+        this.power+=Math.round( scoreGet/4 );
         if( this.power>PlayingLayer.MAX_POWER )
             this.power=PlayingLayer.MAX_POWER;
         this.score+=scoreGet;
