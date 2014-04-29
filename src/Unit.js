@@ -32,7 +32,7 @@ var Unit = cc.Sprite.extend({
     updateEnabled: function() {
         var pos=this.getPosition();
         this.turnThis();
-        if( this.layer.isWink ) 
+        if( this.layer.isWink && !this.layer.invisibleMode ) 
             this.wink();
         if( pos.x>screenWidth-GameLayer.UNIT_DIAMETER/2 ) {
             this.passPlayer=true;
@@ -114,6 +114,18 @@ var Unit = cc.Sprite.extend({
         this.stopAllActions();
         var moveAction=cc.MoveTo.create( GameLayer.UNIT_VELOCITY,this.endPos );
         this.runAction( moveAction );
+        if( this.layer.invisibleMode ) {
+            this.setOpacity( 0 );
+            this.schedule( this.updateInvisible,0,Infinity,0 );
+        }
+    },
+    updateInvisible: function() {
+        var pos=this.getPosition();
+        var length=this.distance( pos,GameLayer.PLAYER_POS );
+        if( length<2*screenWidth/5 )
+            this.setOpacity( this.getOpacity()+17/4 );
+        if( this.getOpacity()>=255 )
+            this.unschedule( this.updateInvisible );
     },
     hideUnit: function() {
         if( this.getOpacity()/this.crashOpacity>Math.pow(Unit.HIDE_SPEED,10) )

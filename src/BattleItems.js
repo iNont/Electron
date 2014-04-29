@@ -14,6 +14,8 @@ var BattleItems = cc.Sprite.extend({
             this.runInverseItem();
         if( key==BattleItems.KEYS.RANDOM_TURN )
             this.runRandomTurnItem();
+        if( key==BattleItems.KEYS.INVISIBILITY )
+            this.runInvisibilityItem();
     },
     runInkItem: function() {
         var src = "images/BI0.png";
@@ -55,6 +57,18 @@ var BattleItems = cc.Sprite.extend({
     },
     updateInverseTimer: function() {
         this.changeInverseControl();
+        this.layer.removeChild( this );
+    },
+    runInvisibilityItem: function() {
+        this.layer.addChild( this );
+        this.changeInvisibleMode();
+        this.schedule( this.updateInvisibleTimer,10,0,0 );
+    },
+    changeInvisibleMode: function() {
+        this.layer.invisibleMode=true;
+    },
+    updateInvisibleTimer: function() {
+        this.layer.invisibleMode=false;
         this.layer.removeChild( this );
     },
 

@@ -8,6 +8,7 @@ var PlayingLayer = cc.LayerColor.extend({
         this.stat="miss";
         this.isInverse = false;
         this.isWink = true;
+        this.invisibleMode=false;
         this.spacePressed=false;
         this.turnPressed=false;
         this.turn
@@ -212,7 +213,7 @@ var PlayingLayer = cc.LayerColor.extend({
             this.turnRight( true );
         if( e==32 && !this.spacePressed )
             this.clickEvent();
-        if( e>==49 && e<=51 )
+        if( e>=49 && e<=52 )
             this.useBattleItem( e-49 );
     },
     onKeyUp: function( e ) {
