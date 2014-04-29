@@ -40,7 +40,7 @@ var BattleItems = cc.Sprite.extend({
     runInverseItem: function() {
         this.layer.addChild( this );
         this.changeInverseControl();
-        this.schedule( this.updateInverseTimer,10,0,0 );
+        this.schedule( this.updateInverseTimer,7,0,0 );
     },
     runRandomTurnItem: function() {
         var random=Math.floor( Math.random()*2 );
