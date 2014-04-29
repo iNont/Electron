@@ -39,7 +39,7 @@ var BattleItems = cc.Sprite.extend({
     },
     runInverseItem: function() {
         this.layer.addChild( this );
-        this.schedule( this.updateInverse,0,0,0 );
+        this.changeInverseControl();
         this.schedule( this.updateInverseTimer,10,0,0 );
     },
     runRandomTurnItem: function() {
@@ -50,11 +50,11 @@ var BattleItems = cc.Sprite.extend({
         for( var i=0; i<this.layer.units.length; i++)
             this.layer.units[i].setRotation( this.layer.units[i].getRotation()-speed );
     },
-    updateInverse: function() {
+    changeInverseControl: function() {
         this.layer.isInverse=!this.layer.isInverse;
     },
     updateInverseTimer: function() {
-        this.layer.isInverse=!this.layer.isInverse;
+        this.changeInverseControl();
         this.layer.removeChild( this );
     },
 
