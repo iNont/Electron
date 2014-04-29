@@ -24,6 +24,7 @@
             'src/MainMenuLayer.js',
             'src/PlayingLayer.js',
             'src/BattleItems.js',
+            'src/ImageShow.js',
             'src/GameLayer.js'     //add your own files in order here
         ],
         resourceFiles: [

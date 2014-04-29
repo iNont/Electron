@@ -21,6 +21,7 @@ var PlayingLayer = cc.LayerColor.extend({
         this.great=0;
         this.cool=0;
         this.miss=0;
+        this.power=0;
     },
     startGame: function() {
         this.units = [];
@@ -32,12 +33,22 @@ var PlayingLayer = cc.LayerColor.extend({
         this.player.setPosition( GameLayer.PLAYER_POS );
         this.addChild( this.player );
 
+        this.addPowerShow();
+
         //this.startSongByNote( "music2" ,this.getNotes());
         this.startSongByBeat( "music3" );
         this.addEffectToLayer();
         this.addLabelToLayer();
         
         this.schedule(this.updateStarted,0,Infinity,0);
+    },
+    addPowerShow: function() {
+        this.powerGrid=new ImageShow( "powerGrid.png" );
+        this.powerGrid.setPosition( new cc.Point( screenWidth-30*gameScale,screenHeight/2 ) );
+        this.powerBar=new ImageShow( "powerBar.png" );
+        this.powerBar.setPosition( new cc.Point( screenWidth-30*gameScale,screenHeight/2 ) );
+        this.addChild( this.powerBar,30 );
+        this.addChild( this.powerGrid,31 );
     },
     startSongByBeat: function( songKey ) {
         this.music = createjs.Sound.play( songKey );
@@ -125,6 +136,7 @@ var PlayingLayer = cc.LayerColor.extend({
         this.updateStartedScore();
         this.maxComboLabel.setString("Max Combo: "+this.maxCombo);
         this.updateStartedCombo();
+        this.updateStartedPower();
     },
     updateStartedScore: function() {
         if( this.scoreBak<this.score ) {
@@ -146,6 +158,9 @@ var PlayingLayer = cc.LayerColor.extend({
         else 
             this.comboLabel.setOpacity( this.comboLabel.getOpacity()*0.95 );
     },
+    updateStartedPower: function() {
+
+    },
     crashEffectPlay: function( type ) {
         this.scoreUpdate( type );
         this.comboBak=this.combo;
@@ -156,18 +171,19 @@ var PlayingLayer = cc.LayerColor.extend({
     scoreUpdate: function( type ) {
         var scorePerUnit = GameLayer.SCORE_PER_UNIT;
         var bonusScore = GameLayer.SCORE_PER_COMBO*this.combo;
+        var scoreGet=0;
         if( type=="perfect" ) {
-            this.score+=(scorePerUnit+bonusScore);
+            scoreGet=(scorePerUnit+bonusScore);
             this.combo++;
             this.perfect++;
         }
         else if( type=="great" ) {
-            this.score+=(2*scorePerUnit/3+bonusScore);
+            scoreGet=(2*scorePerUnit/3+bonusScore);
             this.combo++;
             this.great++;
         }
         else if( type=="cool" ) {
-            this.score+=(scorePerUnit/3+bonusScore);
+            scoreGet=(scorePerUnit/3+bonusScore);
             this.combo++;
             this.cool++;
         }
@@ -175,6 +191,7 @@ var PlayingLayer = cc.LayerColor.extend({
             this.combo=0;
             this.miss++;
         }
+        this.score+=scoreGet;
     },
     runCrashAnimation: function( type ) {
         this.crashEffect.reset( type );
@@ -280,3 +297,5 @@ var PlayingLayer = cc.LayerColor.extend({
 
     /**/
 });
+
+PlayingLayer.MAX_POWER = 1500;
