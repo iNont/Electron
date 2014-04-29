@@ -13,9 +13,9 @@ var MainMenuLayer = cc.LayerColor.extend({
     },
     addIntroButton: function() {
         for( var i=1; i<=GameLayer.BUTTON_NUMBER.MAINMENU; i++ ) {
-            this.introButton = new MainMenuButton( this,i );
-            this.addChild( this.introButton );
-            this.buttonArr.push( this.introButton );
+            var introButton = new MainMenuButton( this,i );
+            this.addChild( introButton );
+            this.buttonArr.push( introButton );
         }
     },    
     hideButtonIntro: function() {

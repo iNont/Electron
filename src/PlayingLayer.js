@@ -216,6 +216,8 @@ var PlayingLayer = cc.LayerColor.extend({
             this.useBattleItem( 0 );
         if( e==50 )
             this.useBattleItem( 1 );
+        if( e==51 )
+            this.useBattleItem( 2 );
     },
     onKeyUp: function( e ) {
         if( e==37 )

@@ -12,6 +12,8 @@ var BattleItems = cc.Sprite.extend({
             this.runInkItem();
         if( key==BattleItems.KEYS.INVERSE )
             this.runInverseItem();
+        if( key==BattleItems.KEYS.RANDOM_TURN )
+            this.runRandomTurnItem();
     },
     runInkItem: function() {
         var src = "images/BI0.png";
@@ -39,6 +41,14 @@ var BattleItems = cc.Sprite.extend({
         this.layer.addChild( this );
         this.schedule( this.updateInverse,0,0,0 );
         this.schedule( this.updateInverseTimer,10,0,0 );
+    },
+    runRandomTurnItem: function() {
+        var random=Math.floor( Math.random()*2 );
+        var speed=45;
+        if( random==0 )
+            speed*=-1;
+        for( var i=0; i<this.layer.units.length; i++)
+            this.layer.units[i].setRotation( this.layer.units[i].getRotation()-speed );
     },
     updateInverse: function() {
         this.layer.isInverse=!this.layer.isInverse;
