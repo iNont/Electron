@@ -12,7 +12,6 @@ var PlayingLayer = cc.LayerColor.extend({
         this.spacePressed=false;
         this.turnPressed=false;
         this.altPressed=false;
-        this.turn
         this.score=0;
         this.scoreBak=0;
         this.maxCombo=0;
@@ -240,7 +239,7 @@ var PlayingLayer = cc.LayerColor.extend({
             this.turnLeft( true );
         if( e==39 && !this.turnPressed )
             this.turnRight( true );
-        if( e==38 && !this.spacePressed )
+        if( ( e==38 || e==32 ) && !this.spacePressed )
             this.clickEvent();
         if( this.altPressed )
             this.onKeyDownItem( e );
@@ -260,7 +259,7 @@ var PlayingLayer = cc.LayerColor.extend({
             this.turnLeft( false );
         if( e==39 )
             this.turnRight( false );
-        if( e==38 ) 
+        if( e==38 || e==32 ) 
             this.spacePressed=false;
         if( e==18 )
             this.altPressed=false;

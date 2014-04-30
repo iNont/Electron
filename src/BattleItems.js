@@ -77,10 +77,10 @@ var BattleItems = cc.Sprite.extend({
 });
 
 BattleItems.KEYS = {
-    INK: 0,
-    INVERSE: 1,
-    RANDOM_TURN: 2,
-    INVISIBILITY: 3
+    INK: 3,
+    INVERSE: 0,
+    RANDOM_TURN: 1,
+    INVISIBILITY: 2
 };
 BattleItems.POWER_COST = [900,1200,750,900];
 BattleItems.INK_OPAC = {
