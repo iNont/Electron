@@ -42,7 +42,7 @@ var MainMenuLayer = cc.LayerColor.extend({
                 if(this.layer.noteRecorderMode)
                     this.layer.startNoteRecorderMode("music2");
                 else
-                    this.layer.playingLayer.startGame();
+                    this.layer.playingLayer.startInstruction();
         if( e==38 )
             this.selectButtonUp();
         if( e==40 )

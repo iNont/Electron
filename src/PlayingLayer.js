@@ -23,11 +23,39 @@ var PlayingLayer = cc.LayerColor.extend({
         this.miss=0;
         this.power=0;
     },
+    startInstruction: function() {
+        this.layer.state=GameLayer.STATES.STARTED;
+        this.layer.mainMenuLayer.hideButtonIntro();
+        this.instructionShow=new ImageShow( "instruction.png" );
+        this.instructionShow.setScale( gameScale );
+        this.instructionShow.setPosition( new cc.Point(screenWidth/2,screenHeight/2) );
+        this.instructionShow.setOpacity( 0 );
+        this.addChild( this.instructionShow,51 );
+        this.schedule( this.instructionShowAnimate,0,Infinity,0 );
+    },
+    hideInstruction: function() {
+        this.isInstruction=false;
+        this.schedule( this.instructionHideAnimate,0,Infinity,0 );
+    },
+    instructionShowAnimate: function() {
+        this.instructionShow.setOpacity( this.instructionShow.getOpacity()+17/2 );
+        if( this.instructionShow.getOpacity()>=255 ) {
+            this.instructionShow.setOpacity( 255 );
+            this.isInstruction=true;
+            this.unschedule( this.instructionShowAnimate );
+        }
+    },
+    instructionHideAnimate: function() {
+        this.instructionShow.setOpacity( this.instructionShow.getOpacity()-17/2 );
+        if( this.instructionShow.getOpacity()<=0 ) {
+            this.instructionShow.setOpacity( 0 );
+            this.removeChild( this.instructionShow );
+            this.unschedule( this.instructionHideAnimate );
+        }
+    } ,
     startGame: function() {
         this.units = [];
-        this.layer.mainMenuLayer.hideButtonIntro();
-        this.layer.state=GameLayer.STATES.STARTED;
-
+        this.hideInstruction();
         this.player=new Player();
         this.player.setScale( gameScale*GameLayer.PLAYER_SCALE );
         this.player.setPosition( GameLayer.PLAYER_POS );
@@ -239,13 +267,14 @@ var PlayingLayer = cc.LayerColor.extend({
             this.turnLeft( true );
         if( e==39 && !this.turnPressed )
             this.turnRight( true );
+        if( e==32 && this.isInstruction )
+            this.startGame();
         if( ( e==38 || e==32 ) && !this.spacePressed )
             this.clickEvent();
         if( this.altPressed )
             this.onKeyDownItem( e );
         if( e==18 )
             this.altPressed=true;
-        console.log(e);
     },
     onKeyDownItem: function( e ) {
         // 81 87 69 65 83 68 90 88 67
