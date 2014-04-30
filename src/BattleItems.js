@@ -10,12 +10,16 @@ var BattleItems = cc.Sprite.extend({
     controller: function( key ) {
         if( key==BattleItems.KEYS.INK )
             this.runInkItem();
-        if( key==BattleItems.KEYS.INVERSE )
+        else if( key==BattleItems.KEYS.INVERSE )
             this.runInverseItem();
-        if( key==BattleItems.KEYS.RANDOM_TURN )
+        else if( key==BattleItems.KEYS.RANDOM_TURN )
             this.runRandomTurnItem();
-        if( key==BattleItems.KEYS.INVISIBILITY )
+        else if( key==BattleItems.KEYS.INVISIBILITY )
             this.runInvisibilityItem();
+        else if( key==BattleItems.KEYS.TAUNT )
+            this.runTauntItem();
+        else if( key==BattleItems.KEYS.MUSIC_ANNOY )
+            this.runMusicAnnoyItem();
     },
     runInkItem: function() {
         var src = "images/BI0.png";
@@ -71,19 +75,36 @@ var BattleItems = cc.Sprite.extend({
         this.layer.invisibleMode=false;
         this.layer.removeChild( this );
     },
+    runTauntItem: function() {
+
+    },
+    runMusicAnnoyItem: function() {
+        this.layer.addChild( this );
+        this.layer.musicAnnoy.setMute( false );
+        this.layer.music.setMute( true );
+        this.schedule( this.updateMusicAnnoyTimer,BattleItems.MUSIC_ANNOY_DURATION,0,0 );
+    },
+    updateMusicAnnoyTimer: function() {
+        this.layer.music.setMute( false );
+        this.layer.musicAnnoy.setMute( true );
+        this.layer.removeChild( this );
+    },
 
     update: function( dt ) {
     },
 });
 
 BattleItems.KEYS = {
+    RANDOM_TURN: 0,
+    INVERSE: 1,
+    INVISIBILITY: 2,
     INK: 3,
-    INVERSE: 0,
-    RANDOM_TURN: 1,
-    INVISIBILITY: 2
+    TAUNT: 4,
+    MUSIC_ANNOY: 5
 };
-BattleItems.POWER_COST = [900,1200,750,900];
+BattleItems.POWER_COST = [750,1200,900,900,0,600];
 BattleItems.INK_OPAC = {
     UP: 17,
     DOWN: 1
 };
+BattleItems.MUSIC_ANNOY_DURATION = 6.5;

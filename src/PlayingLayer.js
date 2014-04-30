@@ -38,6 +38,7 @@ var PlayingLayer = cc.LayerColor.extend({
         this.schedule( this.instructionHideAnimate,0,Infinity,0 );
     },
     instructionShowAnimate: function() {
+        this.units = [];
         this.instructionShow.setOpacity( this.instructionShow.getOpacity()+17/2 );
         if( this.instructionShow.getOpacity()>=255 ) {
             this.instructionShow.setOpacity( 255 );
@@ -54,7 +55,6 @@ var PlayingLayer = cc.LayerColor.extend({
         }
     } ,
     startGame: function() {
-        this.units = [];
         this.hideInstruction();
         this.player=new Player();
         this.player.setScale( gameScale*GameLayer.PLAYER_SCALE );
@@ -83,7 +83,10 @@ var PlayingLayer = cc.LayerColor.extend({
         this.addChild( this.powerGrid,31 );
     },
     startSongByBeat: function( songKey ) {
+        this.songKey=songKey;
         this.music = createjs.Sound.play( songKey );
+        this.schedule( this.runMusicAnnoy,BattleItems.MUSIC_ANNOY_DURATION,0,0 );
+        
         //this.music.on("complete",this.showStatus);
         var BPM=100;
         if( songKey=="music1" ) //roar
@@ -94,6 +97,10 @@ var PlayingLayer = cc.LayerColor.extend({
             BPM=106;
         var beat=60/BPM*1000*2;
         this.startGameBeat( 2*beat,beat );
+    },
+    runMusicAnnoy: function() {
+        this.musicAnnoy = createjs.Sound.play( this.songKey );
+        this.musicAnnoy.setMute( true );
     },
     showStatus: function() {
         console.log("Score: "+this.score);
@@ -278,7 +285,7 @@ var PlayingLayer = cc.LayerColor.extend({
     },
     onKeyDownItem: function( e ) {
         // 81 87 69 65 83 68 90 88 67
-        var keyList=[81,87,69,65];
+        var keyList=[81,87,69,65,83,68];
         for( var i=0;i<keyList.length;i++ )
             if( e==keyList[i] )
                 this.useBattleItem( i );
@@ -297,10 +304,11 @@ var PlayingLayer = cc.LayerColor.extend({
         if( this.isEnoughPower( key ) ) {
             this.power-=BattleItems.POWER_COST[key];
             var battleItem = new BattleItems( this,key );
+            console.log("use item: "+key);
         }
     },
     isEnoughPower: function( key ) {
-        if( key>=0 && key<=3 )
+        if( key>=0 && key<=5 )
             return this.power>=BattleItems.POWER_COST[key];
     },
 
