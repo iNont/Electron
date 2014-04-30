@@ -54,6 +54,7 @@
             {src: 'images/powerGrid.png'},
             {src: 'images/powerBar.png'},
             {src: 'images/BI0.png'},
+            {src: 'images/instruction.png'},
         ]
     };
 
