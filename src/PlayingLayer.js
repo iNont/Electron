@@ -11,6 +11,7 @@ var PlayingLayer = cc.LayerColor.extend({
         this.invisibleMode=false;
         this.spacePressed=false;
         this.turnPressed=false;
+        this.altPressed=false;
         this.turn
         this.score=0;
         this.scoreBak=0;
@@ -199,7 +200,7 @@ var PlayingLayer = cc.LayerColor.extend({
             this.combo=0;
             this.miss++;
         }
-        this.power+=Math.round( scoreGet/4 );
+        this.power+=Math.round( scoreGet/6 );
         if( this.power>PlayingLayer.MAX_POWER )
             this.power=PlayingLayer.MAX_POWER;
         this.score+=scoreGet;
@@ -239,18 +240,30 @@ var PlayingLayer = cc.LayerColor.extend({
             this.turnLeft( true );
         if( e==39 && !this.turnPressed )
             this.turnRight( true );
-        if( e==32 && !this.spacePressed )
+        if( e==38 && !this.spacePressed )
             this.clickEvent();
-        if( e>=49 && e<=52 )
-            this.useBattleItem( e-49 );
+        if( this.altPressed )
+            this.onKeyDownItem( e );
+        if( e==18 )
+            this.altPressed=true;
+        console.log(e);
+    },
+    onKeyDownItem: function( e ) {
+        // 81 87 69 65 83 68 90 88 67
+        var keyList=[81,87,69,65];
+        for( var i=0;i<keyList.length;i++ )
+            if( e==keyList[i] )
+                this.useBattleItem( i );
     },
     onKeyUp: function( e ) {
         if( e==37 )
             this.turnLeft( false );
         if( e==39 )
             this.turnRight( false );
-        if( e==32 ) 
+        if( e==38 ) 
             this.spacePressed=false;
+        if( e==18 )
+            this.altPressed=false;
     },
     useBattleItem: function( key ) {
         if( this.isEnoughPower( key ) ) {
