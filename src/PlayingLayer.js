@@ -273,14 +273,12 @@ var PlayingLayer = cc.LayerColor.extend({
     turnLeft: function( bool ) {
         for( var i = 0; i < this.units.length; i++)
             this.units[i].keyLeft = bool;
-        if( this.layer.isSingleTurn )
-            this.turnPressed = bool;
+        this.turnPressed = bool;
     },
     turnRight: function( bool ) {
         for( var i = 0; i < this.units.length; i++)
             this.units[i].keyRight = bool;
-        if( this.layer.isSingleTurn )
-            this.turnPressed = bool;
+        this.turnPressed = bool;
     },
     onKeyDown: function( e ) {
         if( ( e == 37 ) && ( !this.turnPressed ) )
@@ -347,34 +345,6 @@ var PlayingLayer = cc.LayerColor.extend({
             this.units[i].runAction( moveAction );
         }
     },
-    startSongByNote: function( songKey , notes) {
-        this.music = createjs.Sound.play( songKey );
-        this.notes = notes;
-        this.noteRunner=0;
-        this.schedule( this.updateNotes,0,Infinity,0 );
-    },
-    updateNotes: function() {
-        var pos=this.music.getPosition()-GameLayer.UNIT_VELOCITY*500;
-        var time=this.notes[this.noteRunner].clickPos-GameLayer.UNIT_VELOCITY*500;
-        if( pos>=time ) {
-            var unit = new Unit( this );
-            this.units.push( unit );
-            if(this.noteRunner!=0)
-                this.units[this.units.length-1].startNewUnit(this.units[this.units.length-2].alreadyTurned+this.notes[this.noteRunner].angle*45);
-            else
-                this.units[this.units.length-1].startNewUnit(this.notes[this.noteRunner].angle*45);
-            this.addChild( this.units[this.units.length-1] );
-            if(this.noteRunner<this.notes.length-1)
-                this.noteRunner++;
-            else
-                this.unschedule(this.updateNotes);
-        }
-    },
-    getNotes: function() {
-        var notes=[new Note(3950,0),new Note(5322,0),new Note(6694,0),new Note(8080,0),new Note(8799,-1),new Note(9501,0),new Note(10822,0),new Note(12212,0),new Note(13565,0),new Note(14971,1),new Note(16357,-1),new Note(17778,1),new Note(19132,-1),new Note(20488,1),new Note(21857,2),new Note(23279,-1),new Note(24667,-1),new Note(26071,-1),new Note(26724,0),new Note(27375,0),new Note(28781,0),new Note(30185,1),new Note(31556,-1),new Note(32944,-2),new Note(34298,-1),new Note(35702,0),new Note(37124,0),new Note(38462,1),new Note(39766,-1),new Note(41923,-1),new Note(42609,0),new Note(43963,0),new Note(44699,0),new Note(45384,0),new Note(46072,0),new Note(46755,0),new Note(47424,0),new Note(48110,0),new Note(48795,0),new Note(49515,0),new Note(50869,-1),new Note(52223,1),new Note(53628,-1),new Note(53961,0),new Note(54647,-1),new Note(55032,0),new Note(56387,-1),new Note(57791,1),new Note(59196,-1),new Note(60533,-1),new Note(61955,-1),new Note(63310,1),new Note(64680,1),new Note(66068,-1),new Note(67406,-1),new Note(68810,1),new Note(70198,-2),new Note(71536,-1),new Note(72924,1),new Note(74278,-1),new Note(75716,1),new Note(77054,-1),new Note(78426,1),new Note(79813,-1),new Note(81200,1),new Note(82587,-1),new Note(83960,1),new Note(85347,-1),new Note(86684,-1),new Note(88056,1),new Note(89479,-1),new Note(90814,1),new Note(92269,-1),new Note(93658,1),new Note(94997,-1),new Note(96366,1),new Note(97788,-1),new Note(99125,1),new Note(100580,-1),new Note(101901,1),new Note(103290,-1),new Note(104075,0),new Note(105312,-1),new Note(106717,-1),new Note(108121,1),new Note(109458,1),new Note(110830,-1),new Note(112217,-1),new Note(113638,1),new Note(115027,-1),new Note(115695,0),new Note(117085,1),new Note(118471,-1),new Note(119875,-1),new Note(120544,0),new Note(121214,0),new Note(121881,0),new Note(123286,1),new Note(124022,0),new Note(124708,0),new Note(126029,-1),new Note(126748,0),new Note(128121,-2),new Note(129506,-2),new Note(130880,-2),new Note(131632,0),new Note(132349,0),new Note(133638,1),new Note(134991,1),new Note(136397,-1),new Note(137767,-1),new Note(139171,-1),new Note(140526,-1),new Note(141863,-1),new Note(143301,2),new Note(144639,1),new Note(145442,1),new Note(146027,1),new Note(146713,1),new Note(147433,1),new Note(148117,-1),new Note(148853,-1),new Note(150192,-1),new Note(150876,0),new Note(152264,-1),new Note(153635,-1),new Note(154388,0),new Note(155039,0),new Note(156393,-1),new Note(157781,-1),new Note(159152,-1),new Note(160544,-1),new Note(161896,1),new Note(163300,0),new Note(164687,1),new Note(166075,1),new Note(167346,-1),new Note(168784,-1),new Note(170222,-1),new Note(171559,-1),new Note(172228,0),new Note(172596,0),new Note(172931,0),new Note(173633,1),new Note(173968,0),new Note(174335,0),new Note(174686,0),new Note(175022,0),new Note(175355,0),new Note(175690,0),new Note(176007,0),new Note(176391,0),new Note(176710,0),new Note(177428,-1),new Note(177814,0),new Note(178081,0),new Note(178465,0),new Note(178817,0),new Note(179869,-1),new Note(181224,-1),new Note(182845,1),new Note(184819,0),new Note(187061,0),new Note(188531,-1),new Note(190236,-1),new Note(191675,1),new Note(192979,-1),new Note(194335,1),new Note(195755,-2),new Note(197093,1),new Note(198546,1),new Note(199985,1),new Note(202024,-1),new Note(203312,-1),new Note(204667,0),new Note(206055,1),new Note(207493,-1),new Note(208814,1),new Note(210184,-1),new Note(211506,1),new Note(212895,-1),new Note(213596,0),new Note(213980,0),new Note(214650,-1),new Note(215034,0),new Note(216371,0),new Note(217826,0),new Note(219131,-1),new Note(221220,1),new Note(222624,-1),new Note(223996,-1),new Note(225384,1),new Note(226755,-1),new Note(228093,0),new Note(230066,-1),new Note(231587,1),new Note(232976,-1),new Note(234363,1),new Note(235684,-1),new Note(237490,0),new Note(239814,0),new Note(242306,0)] 
-        return notes;
-    },
-
     /**/
 });
 
