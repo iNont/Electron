@@ -5,33 +5,45 @@ var PlayingLayer = cc.LayerColor.extend({
         this.initProperties();
     },
     initProperties: function() {
-        this.stat="miss";
-        this.isInverse = false;
-        this.isWink = true;
-        this.invisibleMode=false;
-        this.spacePressed=false;
-        this.turnPressed=false;
-        this.altPressed=false;
+        this.initPlayerStatus();
+        this.initKeyPressStatus();
+        this.initInGameValue();
+    },
+    initPlayerStatus: function() {
         this.score=0;
-        this.scoreBak=0;
-        this.maxCombo=0;
-        this.combo=0;
-        this.comboBak=0;
         this.perfect=0;
         this.great=0;
         this.cool=0;
         this.miss=0;
+        this.maxCombo=0;
+        this.combo=0;
         this.power=0;
+    },
+    initKeyPressStatus: function() {
+        this.spacePressed=false;
+        this.turnPressed=false;
+        this.altPressed=false;
+    },
+    initInGameValue: function() {
+        this.stat="miss";
+        this.isInverse = false;
+        this.isWink = true;
+        this.invisibleMode=false;
+        this.scoreBak=0;
+        this.comboBak=0;
     },
     startInstruction: function() {
         this.layer.state=GameLayer.STATES.STARTED;
         this.layer.mainMenuLayer.hideButtonIntro();
+        this.initInstructionShow();
+        this.schedule( this.instructionShowAnimate,0,Infinity,0 );
+    },
+    initInstructionShow: function() {
         this.instructionShow=new ImageShow( "instruction.png" );
         this.instructionShow.setScale( gameScale );
         this.instructionShow.setPosition( new cc.Point(screenWidth/2,screenHeight/2) );
         this.instructionShow.setOpacity( 0 );
         this.addChild( this.instructionShow,51 );
-        this.schedule( this.instructionShowAnimate,0,Infinity,0 );
     },
     hideInstruction: function() {
         this.isInstruction=false;
@@ -56,38 +68,46 @@ var PlayingLayer = cc.LayerColor.extend({
     } ,
     startGame: function() {
         this.hideInstruction();
+        this.initBlueCircle();
+        this.addPowerShow();
+        this.startSongByBeat( "music3" );
+        this.addEffectToLayer();
+        this.addLabelToLayer();
+        this.schedule(this.updateStarted,0,Infinity,0);
+    },
+    initBlueCircle: function() {
         this.player=new Player();
         this.player.setScale( gameScale*GameLayer.PLAYER_SCALE );
         this.player.setPosition( GameLayer.PLAYER_POS );
         this.addChild( this.player );
-
-        this.addPowerShow();
-
-        //this.startSongByNote( "music2" ,this.getNotes());
-        this.startSongByBeat( "music3" );
-        this.addEffectToLayer();
-        this.addLabelToLayer();
-        
-        this.schedule(this.updateStarted,0,Infinity,0);
     },
     addPowerShow: function() {
+        this.initPowerGrid();
+        this.initPowerBar();
+    },
+    initPowerGrid: function() {
         this.powerGrid=new ImageShow( "powerGrid.png" );
         this.powerGrid.setPosition( new cc.Point( screenWidth-30*gameScale,screenHeight/2 ) );
         this.powerGrid.setScale( gameScale );
+        this.addChild( this.powerGrid,31 );
+    },
+    initPowerBar: function() {
         this.powerBar=new ImageShow( "powerBar.png" );
         this.powerBar.setAnchorPoint( new cc.Point( 0.5,0 ) );
         this.powerBar.setPosition( new cc.Point( screenWidth-30*gameScale,screenHeight/2-750*gameScale ) );
         this.powerBar.setScaleX( gameScale );
         this.powerBar.setScaleY( 0 );
         this.addChild( this.powerBar,30 );
-        this.addChild( this.powerGrid,31 );
     },
     startSongByBeat: function( songKey ) {
         this.songKey=songKey;
         this.music = createjs.Sound.play( songKey );
         this.schedule( this.runMusicAnnoy,BattleItems.MUSIC_ANNOY_DURATION,0,0 );
-        
         //this.music.on("complete",this.showStatus);
+        var beat=this.genBeat( songKey );
+        this.startGameBeat( 2*beat,beat );
+    },
+    genBeat: function( songKey ) {
         var BPM=100;
         if( songKey=="music1" ) //roar
             BPM=92.5;
@@ -95,21 +115,20 @@ var PlayingLayer = cc.LayerColor.extend({
             BPM=87;
         else if( songKey=="music3" ) //if i never see your face again
             BPM=106;
-        var beat=60/BPM*1000*2;
-        this.startGameBeat( 2*beat,beat );
+        return beat=60/BPM*1000*2;
     },
     runMusicAnnoy: function() {
         this.musicAnnoy = createjs.Sound.play( this.songKey );
         this.musicAnnoy.setMute( true );
     },
-    showStatus: function() {
-        console.log("Score: "+this.score);
-        console.log("Max Combo: "+this.maxCombo);
-        console.log("Perfect: "+this.perfect);
-        console.log("Great: "+this.great);
-        console.log("Cool: "+this.cool);
-        console.log("Miss: "+this.miss);
-    },
+    // showStatus: function() {
+    //     console.log("Score: "+this.score);
+    //     console.log("Max Combo: "+this.maxCombo);
+    //     console.log("Perfect: "+this.perfect);
+    //     console.log("Great: "+this.great);
+    //     console.log("Cool: "+this.cool);
+    //     console.log("Miss: "+this.miss);
+    // },
     startGameBeat: function( startTime,beat ) {
         this.startTime=startTime;
         this.beatTime=beat;
@@ -128,7 +147,6 @@ var PlayingLayer = cc.LayerColor.extend({
     },
     addEffectToLayer: function() {
         this.layer.bg.startGameAnimation();
-
         this.crashEffect=new CrashEffect( this );
         this.addChild( this.crashEffect );
         this.crashText=new CrashText( this );
@@ -209,35 +227,30 @@ var PlayingLayer = cc.LayerColor.extend({
         this.runCrashAnimation( type );
     },
     scoreUpdate: function( type ) {
-        var scorePerUnit = GameLayer.SCORE_PER_UNIT;
-        var bonusScore = GameLayer.SCORE_PER_COMBO*this.combo;
+        var scorePerUnit=GameLayer.SCORE_PER_UNIT;
+        var bonusScore=GameLayer.SCORE_PER_COMBO*this.combo;
         var scoreGet=0;
-        if( type=="perfect" ) {
-            scoreGet=(scorePerUnit+bonusScore);
-            this.combo++;
-            this.perfect++;
-        }
-        else if( type=="great" ) {
-            scoreGet=(2*scorePerUnit/3+bonusScore);
-            this.combo++;
-            this.great++;
-        }
-        else if( type=="cool" ) {
-            scoreGet=(scorePerUnit/3+bonusScore);
-            this.combo++;
-            this.cool++;
-        }
-        else if( type=="miss" ) {
-            this.power-=(50+this.combo*20);
-            if(this.power<0)
-                this.power=0;
+        var array=["miss","cool","great","perfect"];
+        for( var i=0;i<array.length;i++ )
+            if( array[i]==type )
+                scoreGet=(i*scorePerUnit/3+bonusScore);
+        if( type=="miss" ) {
+            this.computePower( -(50+this.combo*20) );
             this.combo=0;
-            this.miss++;
         }
-        this.power+=Math.round( scoreGet/6 );
+        else {
+            this.computePower( Math.round( scoreGet/6 ) );
+            this.combo++;
+        }
+        this[type]++;
+        this.score+=scoreGet;
+    },
+    computePower: function( getPower ) {
+        this.power+=getPower;
         if( this.power>PlayingLayer.MAX_POWER )
             this.power=PlayingLayer.MAX_POWER;
-        this.score+=scoreGet;
+        else if(this.power<0)
+            this.power=0;
     },
     runCrashAnimation: function( type ) {
         this.crashEffect.reset( type );
@@ -314,7 +327,7 @@ var PlayingLayer = cc.LayerColor.extend({
 
 
 
-    /*//Additional Features*/
+    /*//Additional Features/
 
     startGameRandom: function() {
         var timePerGap=GameLayer.UNIT_GAP*GameLayer.timePerPixel;
