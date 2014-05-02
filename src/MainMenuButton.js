@@ -1,6 +1,6 @@
 var MainMenuButton = cc.Sprite.extend({
     ctor: function( layer,number ) {
-        this.layer=layer;
+        this.layer = layer;
         this._super();
         this.initButton( number );
         this.scheduleUpdate();

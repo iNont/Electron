@@ -1,7 +1,7 @@
 var PlayingLayer = cc.LayerColor.extend({
     ctor: function( gameLayer ) {
-        this._super();
         this.layer = gameLayer;
+        this._super();
         this.initProperties();
     },
     initProperties: function() {

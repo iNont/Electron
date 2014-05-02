@@ -1,7 +1,7 @@
 var MainMenuLayer = cc.LayerColor.extend({
     ctor: function( gameLayer ) {
-        this._super();
         this.layer = gameLayer;
+        this._super();
     },
     startMainMenu: function() {
         this.layer.frontLayer.hideIntro();
