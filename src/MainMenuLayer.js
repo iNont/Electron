@@ -1,36 +1,36 @@
 var MainMenuLayer = cc.LayerColor.extend({
     ctor: function( gameLayer ) {
         this._super();
-        this.layer=gameLayer;
+        this.layer = gameLayer;
     },
     startMainMenu: function() {
         this.layer.frontLayer.hideIntro();
-        this.selectButton=0;
-        this.buttonArr=[];
+        this.selectButton = 0;
+        this.buttonArr = [];
         this.addIntroButton();
         this.buttonArr[this.selectButton].select();
-        this.layer.state=GameLayer.STATES.MAINMENU;
+        this.layer.state = GameLayer.STATES.MAINMENU;
     },
     addIntroButton: function() {
-        for( var i=1; i<=GameLayer.BUTTON_NUMBER.MAINMENU; i++ ) {
+        for( var i = 1; i <= GameLayer.BUTTON_NUMBER.MAINMENU; i++ ) {
             var introButton = new MainMenuButton( this,i );
             this.addChild( introButton );
             this.buttonArr.push( introButton );
         }
     },    
     hideButtonIntro: function() {
-        for( var i=0; i<this.buttonArr.length; i++ )
+        for( var i = 0; i < this.buttonArr.length; i++ )
             this.buttonArr[i].hideThis();
     },
     selectButtonUp: function() {
-        if( this.selectButton>0 ) {
+        if( this.selectButton > 0 ) {
             this.buttonArr[this.selectButton].unselect();
             this.selectButton--;
             this.buttonArr[this.selectButton].select();
         }
     },
     selectButtonDown: function() {
-        if( this.selectButton<this.buttonArr.length-1 ) {
+        if( this.selectButton < this.buttonArr.length-1 ) {
             this.buttonArr[this.selectButton].unselect();
             this.selectButton++;
             this.buttonArr[this.selectButton].select();
@@ -39,9 +39,6 @@ var MainMenuLayer = cc.LayerColor.extend({
     onKeyDown: function( e ) {
         if( e==32 )
             if( this.selectButton==0 )
-                if(this.layer.noteRecorderMode)
-                    this.layer.startNoteRecorderMode("music2");
-                else
                     this.layer.playingLayer.startInstruction();
         if( e==38 )
             this.selectButtonUp();
