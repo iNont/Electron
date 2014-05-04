@@ -120,15 +120,15 @@ var Unit = cc.Sprite.extend({
             bool1 = ( ( theta >= check1 ) && ( theta <= check2) );
         return !( bool1 || bool2 );
     },
+    startNewRandomUnit: function() {
+        var newTheta = Math.floor( this.layer.randomNumber( 0,360 ) )%4*45;  //SingleTurn
+        this.startNewUnit( newTheta );
+    },
     startNewUnit: function( startTheta ) {
         var newPos = this.genStartPos();
         var theta = this.getThetaDegree( newPos,GameLayer.PLAYER_POS );
         var newTheta = theta+startTheta;
         this.makeNewUnit( newPos,newTheta );
-    },
-    startNewRandomUnit: function() {
-        var newTheta = Math.floor( this.layer.randomNumber( 0,360 ) )%4*45;  //SingleTurn
-        this.startNewUnit( newTheta );
     },
     makeNewUnit: function( newPos,newTheta ) {
         this.initProperties();

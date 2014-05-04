@@ -103,7 +103,6 @@ var PlayingLayer = cc.LayerColor.extend({
         this.songKey = songKey;
         this.music = createjs.Sound.play( songKey );
         this.schedule( this.runMusicAnnoy,BattleItems.MUSIC_ANNOY_DURATION,0,0 );
-        //this.music.on("complete",this.showStatus);
         var beat = this.genBeat( songKey );
         this.startGameBeat( 2*beat,beat );
     },
@@ -121,14 +120,6 @@ var PlayingLayer = cc.LayerColor.extend({
         this.musicAnnoy = createjs.Sound.play( this.songKey );
         this.musicAnnoy.setMute( true );
     },
-    // showStatus: function() {
-    //     console.log("Score: "+this.score);
-    //     console.log("Max Combo: "+this.maxCombo);
-    //     console.log("Perfect: "+this.perfect);
-    //     console.log("Great: "+this.great);
-    //     console.log("Cool: "+this.cool);
-    //     console.log("Miss: "+this.miss);
-    // },
     startGameBeat: function( startTime,beat ) {
         this.startTime = startTime;
         this.beatTime = beat;
@@ -321,31 +312,6 @@ var PlayingLayer = cc.LayerColor.extend({
         if( ( key >= 0 ) && ( key <= 5 ) )
             return this.power >= BattleItems.POWER_COST[key];
     },
-
-
-
-    /*//Additional Features/
-
-    startGameRandom: function() {
-        var timePerGap=GameLayer.UNIT_GAP*GameLayer.timePerPixel;
-        var gapForStart=GameLayer.UNIT_GAP-GameLayer.PLAYER_DIAMETER*gameScale;
-        var timeForStart=gapForStart*GameLayer.timePerPixel;
-        for( var i=0; i<GameLayer.UNIT_NUMBER; i++ )
-        {
-            var unit=new Unit( this );
-            this.units.push( unit );
-            this.units[i].setPosition( new cc.Point( -screenWidth/4-i*GameLayer.UNIT_GAP-gapForStart,screenHeight/2 ) );
-            this.addChild( this.units[i] );
-            var pos=this.units[i].getPosition();
-            var endPos=new cc.Point( 2*screenWidth,pos.y );
-            this.units[i].endPos = endPos;
-            if( i%2==0 )
-                this.units[i].setRotation( 90 );
-            var moveAction=cc.MoveTo.create( GameLayer.UNIT_VELOCITY+timePerGap*i+timeForStart,this.units[i].endPos );
-            this.units[i].runAction( moveAction );
-        }
-    },
-    /**/
 });
 
 PlayingLayer.MAX_POWER = 1500;
