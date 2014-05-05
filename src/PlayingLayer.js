@@ -34,12 +34,13 @@ var PlayingLayer = cc.LayerColor.extend({
         this.comboBak = 0;
     },
     socketIO: function() {
+        _this = this;
         this.socket = this.layer.waitingGameLayer.socket;
         this.IOupdate();
     },
     IOupdate: function() {
         this.socket.on('effectBattleItem', function( itemKey ) {
-            var battleItem = new BattleItems( _this,itemKey );
+            _this.effectBattleItem( itemKey );
         });
     },
     startGame: function() {
@@ -205,11 +206,11 @@ var PlayingLayer = cc.LayerColor.extend({
             if( array[i] == type )
                 scoreGet = i*scorePerUnit/3+bonusScore;
         if( type == "miss" ) {
-            this.computePower( -50-this.combo*20 );
+            this.computePower( -100-this.combo*40 );
             this.combo = 0;
         }
         else {
-            this.computePower( Math.round( scoreGet/6 ) );
+            this.computePower( Math.round( scoreGet/3 ) );
             this.combo++;
         }
         this[ type ]++;
@@ -285,6 +286,9 @@ var PlayingLayer = cc.LayerColor.extend({
             if( key<=5 )
                 this.socket.emit( 'sendBattleItem',key,this.enemy );
         }
+    },
+    effectBattleItem: function( key ) {
+        var battleItem = new BattleItems( this,key );
     },
     isEnoughPower: function( key ) {
         if( ( key >= 0 ) && ( key <= 5 ) )

@@ -28,7 +28,7 @@ var BattleItems = cc.Sprite.extend({
         this.setScale( gameScale );
         this.setOpacity( 0 );
         this.inkShown=false;
-        this.layer.addChild( this,50 );
+        this.layer.addChild( this,999 );
         this.schedule( this.updateInk,0,Infinity,0 );
     },
     updateInk: function() {
