@@ -1,4 +1,6 @@
-var io = require('socket.io').listen(8080);
+var io = require('socket.io').listen(8080, {
+    log: 0,
+});
 var colors = require('colors');
 
 var clients = [];
@@ -21,23 +23,33 @@ io.sockets.on('connection', function(socket) {
         //io.sockets.socket(clients[0]).emit('test');
     });
     socket.on('findMatch', function() {
+        console.log(string.message+'Player finding match'.bold);
+        console.log(string.info+'ID : '.bold+this.id);
     	if( waiting == null )
     		waiting = this.id;
     	else {
+            console.log(string.message+'Match start'.bold);
+            console.log(string.info+'ID : '.bold+waiting);
+            console.log(string.info+'ID : '.bold+this.id);
 	    	io.sockets.socket(this.id).emit('startGame' , waiting);
 	    	io.sockets.socket(waiting).emit('startGame' , this.id);
+            waiting = null;
     	}
     });
+    socket.on('stopFinding', function() {
+        if( waiting == this.id ) {
+            console.log(string.message+'Player stop finding match'.bold);
+            console.log(string.info+'ID : '.bold+this.id);
+            waiting = null;
+        }
+    });
     socket.on('disconnect', function() {
-        var IDdisconnect = null;
         for( var i=0;i<clients.length;i++){
-        	if(clients[i].sessionID == this.id){
-                console.log(string.info+"Disconnect ID : ".bold.red+clients[i].sessionID);
-                IDdisconnect = clients[i].sessionID;
+        	if(clients[i] == this.id){
+                console.log(string.info+"Disconnect ID : ".bold.red+clients[i]);
     			clients.splice(i, 1);
     			break;
     		}
         }
-        socket.broadcast.emit('disconnect',IDdisconnect);
     });
 });  

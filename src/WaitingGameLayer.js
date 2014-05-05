@@ -3,6 +3,7 @@ var WaitingGameLayer = cc.LayerColor.extend({
         _this = this;
         this.layer = gameLayer;
         this.isInstruction = false;
+        this.isFinding = false;
         this._super();
     },
     socketIO: function() {
@@ -10,13 +11,12 @@ var WaitingGameLayer = cc.LayerColor.extend({
         this.enemy=null;
         this.IOupdate();
         this.socket.emit( 'regis' );
-        this.socket.emit( 'findMatch' );
     },
     IOupdate: function() {
         this.socket.on('startGame', function( oppID ) {
             console.log("Opponent ID: "+oppID);
             _this.enemy = oppID;
-            _this.onKeyDown( 32 );
+            _this.startTheMatch();
         });
     },
 
@@ -56,8 +56,27 @@ var WaitingGameLayer = cc.LayerColor.extend({
             this.unschedule( this.instructionHideAnimate );
         }
     },
+    findTheMatch: function() {
+        this.isFinding = true;
+        this.instructionShow.reset( "findMatch.png" );
+        this.schedule( this.delayToFinding,3,0,0 );
+    },
+    stopFinding: function() {
+        this.unschedule( this.delayToFinding );
+        this.isFinding = false;
+        this.instructionShow.reset( "instruction.png" );
+        this.socket.emit( 'stopFinding' );
+    },
+    delayToFinding: function() {
+        this.socket.emit( 'findMatch' );
+    },
+    startTheMatch: function() {
+        this.layer.playingLayer.startGame();
+    },
     onKeyDown: function( e ) {
-        if( ( e == 32 ) && ( this.isInstruction ) )
-            this.layer.playingLayer.startGame();
+        if( ( e == 32 ) && ( this.isInstruction ) && ( !this.isFinding ) )
+            this.findTheMatch();
+        else if( this.isFinding && ( e == 32 ) )
+            this.stopFinding();
     },
 });
