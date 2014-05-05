@@ -43,6 +43,12 @@ io.sockets.on('connection', function(socket) {
             waiting = null;
         }
     });
+    socket.on('sendBattleItem', function( itemKey,enemy ) {
+        console.log(string.message+'Player use item '.bold+itemKey);
+        console.log(string.info+'Sender   ID : '.bold+this.id);
+        console.log(string.info+'Receiver ID : '.bold+enemy);
+        io.sockets.socket(enemy).emit('effectBattleItem' , itemKey);
+    });
     socket.on('disconnect', function() {
         for( var i=0;i<clients.length;i++){
         	if(clients[i] == this.id) {

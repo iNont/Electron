@@ -6,7 +6,6 @@ var GameLayer = cc.LayerColor.extend({
     
     init: function() {
         this._super( new cc.Color4B( 0,0,0,255 ) );
-
         this.setPosition( new cc.Point( 0,0 ) );
         this.bg = new BG();
         this.addChild( this.bg );

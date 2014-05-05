@@ -4,6 +4,10 @@ var WaitingGameLayer = cc.LayerColor.extend({
         this.layer = gameLayer;
         this.isInstruction = false;
         this.isFinding = false;
+        this.loading = new ImageShow( "loading.png" );
+        this.loading.setScale( gameScale );
+        this.loading.setPosition( new cc.Point( screenWidth/2,screenHeight/2 ) );
+        this.schedule( this.loadingAnimate,0,Infinity,0 );
         this._super();
     },
     socketIO: function() {
@@ -60,10 +64,6 @@ var WaitingGameLayer = cc.LayerColor.extend({
     findTheMatch: function() {
         this.isFinding = true;
         this.instructionShow.reset( "findMatch.png" );
-        this.loading = new ImageShow( "loading.png" );
-        this.loading.setScale( gameScale );
-        this.loading.setPosition( new cc.Point( screenWidth/2,screenHeight/2 ) );
-        this.schedule( this.loadingAnimate,0,Infinity,0 );
         this.addChild( this.loading,52 );
         this.schedule( this.delayToFinding,3,0,0 );
     },

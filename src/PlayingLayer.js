@@ -33,9 +33,20 @@ var PlayingLayer = cc.LayerColor.extend({
         this.scoreBak = 0;
         this.comboBak = 0;
     },
+    socketIO: function() {
+        this.socket = this.layer.waitingGameLayer.socket;
+        this.IOupdate();
+    },
+    IOupdate: function() {
+        this.socket.on('effectBattleItem', function( itemKey ) {
+            var battleItem = new BattleItems( _this,itemKey );
+        });
+    },
     startGame: function() {
         this.layer.state = GameLayer.STATES.STARTED;
         this.layer.waitingGameLayer.hideInstruction();
+        this.enemy = this.layer.waitingGameLayer.enemy;
+        this.socketIO();
         this.initBlueCircle();
         this.addPowerShow();
         this.startSongByBeat( "music3" );
@@ -271,7 +282,8 @@ var PlayingLayer = cc.LayerColor.extend({
     useBattleItem: function( key ) {
         if( this.isEnoughPower( key ) ) {
             this.power -= BattleItems.POWER_COST[key];
-            var battleItem = new BattleItems( this,key );
+            if( key<=5 )
+                this.socket.emit( 'sendBattleItem',key,this.enemy );
         }
     },
     isEnoughPower: function( key ) {
