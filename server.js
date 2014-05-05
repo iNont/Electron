@@ -13,7 +13,7 @@ var string = {
 var datetime = new Date().toISOString();
 
 console.log('Date: '.underline.bold.red+datetime.bold.yellow);
-console.log('>>>>>>>>>> ELECTRON <<<<<<<<<<'.bold.yellow);
+console.log('>>>>>>>>>>|| ELECTRON ||<<<<<<<<<<'.bold.yellow);
 
 io.sockets.on('connection', function(socket) {
     socket.on('regis', function() {
@@ -45,7 +45,9 @@ io.sockets.on('connection', function(socket) {
     });
     socket.on('disconnect', function() {
         for( var i=0;i<clients.length;i++){
-        	if(clients[i] == this.id){
+        	if(clients[i] == this.id) {
+                if( waiting == this.id )
+                    waiting = null;
                 console.log(string.info+"Disconnect ID : ".bold.red+clients[i]);
     			clients.splice(i, 1);
     			break;
