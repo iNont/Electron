@@ -18,14 +18,15 @@
             'src/CrashEffect.js',
             'src/CrashText.js',
             'src/Player.js',
-            'src/Note.js',
             'src/Unit.js',
             'src/FrontLayer.js',
             'src/MainMenuLayer.js',
             'src/PlayingLayer.js',
+            'src/WaitingGameLayer.js',
             'src/BattleItems.js',
             'src/ImageShow.js',
-            'src/GameLayer.js'     //add your own files in order here
+            'src/GameLayer.js',     //add your own files in order here
+            'src/socket.io.js'
         ],
         resourceFiles: [
             {src: 'images/ingameBG.png'},

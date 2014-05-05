@@ -39,7 +39,7 @@ var MainMenuLayer = cc.LayerColor.extend({
     onKeyDown: function( e ) {
         if( e==32 )
             if( this.selectButton==0 )
-                    this.layer.playingLayer.startInstruction();
+                this.layer.waitingGameLayer.startInstruction();
         if( e==38 )
             this.selectButtonUp();
         if( e==40 )

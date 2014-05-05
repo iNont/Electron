@@ -6,6 +6,7 @@ var GameLayer = cc.LayerColor.extend({
     
     init: function() {
         this._super( new cc.Color4B( 0,0,0,255 ) );
+
         this.setPosition( new cc.Point( 0,0 ) );
         this.bg = new BG();
         this.addChild( this.bg );
@@ -23,6 +24,9 @@ var GameLayer = cc.LayerColor.extend({
         this.mainMenuLayer = new MainMenuLayer( this );
         this.addChild( this.mainMenuLayer );
 
+        this.waitingGameLayer = new WaitingGameLayer( this );
+        this.addChild( this.waitingGameLayer );
+
         this.playingLayer = new PlayingLayer( this );
         this.addChild( this.playingLayer );
     },
@@ -34,6 +38,8 @@ var GameLayer = cc.LayerColor.extend({
             this.mainMenuLayer.onKeyDown( e );
         else if( this.state==GameLayer.STATES.FRONT )
             this.frontLayer.onKeyDown( e );
+        else if( this.state==GameLayer.STATES.WAITING )
+            this.waitingGameLayer.onKeyDown( e );
     },
     onKeyUp: function( e ) {
         //37 = Left , 39 = Right , 32 = Space , 27 = Escape
@@ -55,7 +61,8 @@ var StartScene = cc.Scene.extend({
 GameLayer.STATES = {
     FRONT: 1,
     STARTED: 2,
-    MAINMENU: 3
+    MAINMENU: 3,
+    WAITING: 4
 };
 GameLayer.PLAYER_POS = new cc.Point( 3*screenWidth/4, screenHeight/2 );
 GameLayer.UNIT_NUMBER = 6;

@@ -25,6 +25,7 @@ var PlayingLayer = cc.LayerColor.extend({
         this.altPressed = false;
     },
     initInGameValue: function() {
+        this.units=[];
         this.stat = "miss";
         this.isInverse = false;
         this.isWink = true;
@@ -32,42 +33,9 @@ var PlayingLayer = cc.LayerColor.extend({
         this.scoreBak = 0;
         this.comboBak = 0;
     },
-    startInstruction: function() {
-        this.layer.state = GameLayer.STATES.STARTED;
-        this.layer.mainMenuLayer.hideButtonIntro();
-        this.initInstructionShow();
-        this.schedule( this.instructionShowAnimate,0,Infinity,0 );
-    },
-    initInstructionShow: function() {
-        this.instructionShow = new ImageShow( "instruction.png" );
-        this.instructionShow.setScale( gameScale );
-        this.instructionShow.setPosition( new cc.Point( screenWidth/2,screenHeight/2 ) );
-        this.instructionShow.setOpacity( 0 );
-        this.addChild( this.instructionShow,51 );
-    },
-    hideInstruction: function() {
-        this.isInstruction = false;
-        this.schedule( this.instructionHideAnimate,0,Infinity,0 );
-    },
-    instructionShowAnimate: function() {
-        this.units = [];
-        this.instructionShow.setOpacity( this.instructionShow.getOpacity()+17/2 );
-        if( this.instructionShow.getOpacity() >= 255 ) {
-            this.instructionShow.setOpacity( 255 );
-            this.isInstruction = true;
-            this.unschedule( this.instructionShowAnimate );
-        }
-    },
-    instructionHideAnimate: function() {
-        this.instructionShow.setOpacity( this.instructionShow.getOpacity()-17/2 );
-        if( this.instructionShow.getOpacity() <= 0 ) {
-            this.instructionShow.setOpacity( 0 );
-            this.removeChild( this.instructionShow );
-            this.unschedule( this.instructionHideAnimate );
-        }
-    } ,
     startGame: function() {
-        this.hideInstruction();
+        this.layer.state = GameLayer.STATES.STARTED;
+        this.layer.waitingGameLayer.hideInstruction();
         this.initBlueCircle();
         this.addPowerShow();
         this.startSongByBeat( "music3" );
@@ -276,8 +244,6 @@ var PlayingLayer = cc.LayerColor.extend({
             this.turnLeft( true );
         if( ( e == 39 ) && ( !this.turnPressed ) )
             this.turnRight( true );
-        if( ( e == 32 ) && ( this.isInstruction ) )
-            this.startGame();
         if( ( ( e == 38 ) || ( e == 32 ) ) && ( !this.spacePressed ) )
             this.clickEvent();
         if( this.altPressed )
