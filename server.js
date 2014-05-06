@@ -49,14 +49,19 @@ io.sockets.on('connection', function(socket) {
         console.log(string.info+'Receiver ID : '.bold+enemy);
         io.sockets.socket(enemy).emit('effectBattleItem' , itemKey);
     });
-    socket.on('endGame', function( enemy,enemyStatus,name,score,maxCombo,perfect,great,cool,miss ) {
-        io.sockets.socket(enemy).emit( 'enemyEnd',name,score,maxCombo,perfect,great,cool,miss );
-        if( enemyStatus != null ) {
+    socket.on('endGame', function( enemy,name,score,maxCombo,perfect,great,cool,miss ) {
+        socket.endStatus = ['enemyEnd', name,score,maxCombo,perfect,great,cool,miss];
+        var enemy = io.sockets.socket(enemy);
+        if( enemy.endStatus ) {
             console.log(string.message+'Match end'.bold);
             console.log(string.info+'ID : '.bold+enemy);
             console.log(string.info+'ID : '.bold+this.id);
-            io.sockets.socket(enemy).emit( 'showEnemyScore' );
-            io.sockets.socket(this.id).emit( 'showEnemyScore' );
+
+            socket.emit.apply(socket, enemy.endStatus);
+            enemy.emit.apply(enemy, socket.endStatus);
+
+            enemy.emit( 'showEnemyScore' );
+            socket.emit( 'showEnemyScore' );
         }
     });
     socket.on('disconnect', function() {

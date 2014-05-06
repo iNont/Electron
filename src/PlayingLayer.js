@@ -101,7 +101,7 @@ var PlayingLayer = cc.LayerColor.extend({
         this.songKey = songKey;
         this.music = createjs.Sound.play( songKey );
         this.music.on("complete", function() {
-            _this.schedule( _this.musicEnd,5,0,0 );
+            _this.schedule( _this.musicEnd,5,0,0 ); 
         });
         this.schedule( this.runMusicAnnoy,BattleItems.MUSIC_ANNOY_DURATION,0,0 );
         var beat = this.genBeat( songKey );
@@ -110,7 +110,7 @@ var PlayingLayer = cc.LayerColor.extend({
     musicEnd: function() {
         this.showScore( "Your",this.score,this.maxCombo,this.perfect,this.great,this.cool,this.miss );
         this.messageLog( "Waiting for opponent..." );
-        this.socket.emit( 'endGame',this.enemy,this.isEnemyEnd,"Opponent",this.score,this.maxCombo,this.perfect,this.great,this.cool,this.miss );
+        this.socket.emit( 'endGame',this.enemy,"Opponent",this.score,this.maxCombo,this.perfect,this.great,this.cool,this.miss );
     },
     messageLog: function( message ) {
         console.log("---------------------------");
