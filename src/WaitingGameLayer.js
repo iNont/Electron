@@ -11,7 +11,9 @@ var WaitingGameLayer = cc.LayerColor.extend({
         this._super();
     },
     socketIO: function() {
-        this.socket = io.connect('158.108.225.42:8080');
+        var serverPath = "127.0.0.1";
+        var serverPort = "8080";
+        this.socket = io.connect( serverPath+":"+serverPort );
         this.enemy = null;
         this.IOupdate();
         this.socket.emit( 'regis' );
