@@ -42,11 +42,29 @@ var PlayingLayer = cc.LayerColor.extend({
         this.socket.on('effectBattleItem', function( itemKey ) {
             _this.effectBattleItem( itemKey );
         });
+        this.socket.on('showEnemyScore', function() {
+            var e = _this.isEnemyEnd;
+            _this.showScore( e.name,e.score,e.maxCombo,e.perfect,e.great,e.cool,e.miss );
+            _this.isEnemyEnd = null;
+            _this.enemy = null;
+        });
+        this.socket.on('enemyEnd', function( name,score,maxCombo,perfect,great,cool,miss ) {
+            _this.isEnemyEnd = {
+                name: name,
+                score: score,
+                maxCombo: maxCombo,
+                perfect: perfect,
+                great: great,
+                cool: cool,
+                miss: miss
+            };
+        });
     },
     startGame: function() {
         this.layer.state = GameLayer.STATES.STARTED;
         this.layer.waitingGameLayer.hideInstruction();
         this.enemy = this.layer.waitingGameLayer.enemy;
+        this.isEnemyEnd = null;
         this.socketIO();
         this.initBlueCircle();
         this.addPowerShow();
@@ -82,9 +100,31 @@ var PlayingLayer = cc.LayerColor.extend({
     startSongByBeat: function( songKey ) {
         this.songKey = songKey;
         this.music = createjs.Sound.play( songKey );
+        this.music.on("complete", function() {
+            _this.schedule( _this.musicEnd,5,0,0 );
+        });
         this.schedule( this.runMusicAnnoy,BattleItems.MUSIC_ANNOY_DURATION,0,0 );
         var beat = this.genBeat( songKey );
         this.startGameBeat( 2*beat,beat );
+    },
+    musicEnd: function() {
+        this.showScore( "Your",this.score,this.maxCombo,this.perfect,this.great,this.cool,this.miss );
+        this.messageLog( "Waiting for opponent..." );
+        this.socket.emit( 'endGame',this.enemy,this.isEnemyEnd,"Opponent",this.score,this.maxCombo,this.perfect,this.great,this.cool,this.miss );
+    },
+    messageLog: function( message ) {
+        console.log("---------------------------");
+        console.log("Message: "+message);
+    },
+    showScore: function( name,score,maxCombo,perfect,great,cool,miss ) {
+        console.log("---------------------------");
+        console.log(name+" Score");
+        console.log("   Score     : "+score);
+        console.log("   Max Combo : "+maxCombo);
+        console.log("   Perfect   : "+perfect);
+        console.log("   Great     : "+great);
+        console.log("   Cool      : "+cool);
+        console.log("   Miss      : "+miss);
     },
     genBeat: function( songKey ) {
         var BPM = 100;

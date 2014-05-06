@@ -57,6 +57,8 @@
             {src: 'images/BI0.png'},
             {src: 'images/instruction.png'},
             {src: 'images/findMatch.png'},
+            {src: 'images/loading.png'},
+            {src: 'musics/ifineverseeyourfaceagain-maroon5.mp3'},
         ]
     };
 
