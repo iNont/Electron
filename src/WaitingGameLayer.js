@@ -11,12 +11,9 @@ var WaitingGameLayer = cc.LayerColor.extend({
         this._super();
     },
     socketIO: function() {
-        var serverPath = "158.108.225.42"; // "XX.XX.XX.XX" <- IP
-        var serverPort = "8080";
-        this.socket = io.connect( serverPath+":"+serverPort );
+        this.socket = this.layer.socket;
         this.enemy = null;
         this.IOupdate();
-        this.socket.emit( 'regis' );
     },
     IOupdate: function() {
         this.socket.on('startGame', function( oppID ) {
@@ -25,7 +22,6 @@ var WaitingGameLayer = cc.LayerColor.extend({
             _this.startTheMatch();
         });
     },
-
     startInstruction: function() {
         this.layer.state = GameLayer.STATES.WAITING;
         this.layer.mainMenuLayer.hideButtonIntro();

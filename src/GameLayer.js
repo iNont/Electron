@@ -9,12 +9,27 @@ var GameLayer = cc.LayerColor.extend({
         this.setPosition( new cc.Point( 0,0 ) );
         this.bg = new BG();
         this.addChild( this.bg );
+        this.connectSocket();
         this.addAllLayers();
         this.frontLayer.startIntro();
         this.state = GameLayer.STATES.FRONT;
         this.setKeyboardEnabled( true );
         this.scheduleUpdate();
         return true;
+    },
+    connectSocket: function() {
+        var serverPath = "192.168.1.68"; // "XX.XX.XX.XX" <- IP
+        var serverPort = "8080";
+        this.socket = io.connect( serverPath+":"+serverPort );
+        this.socket.emit( 'regis' );
+    },
+    startMainMenu: function() {
+        this.removeChild( this.frontLayer );
+        this.removeChild( this.mainMenuLayer );
+        this.removeChild( this.waitingGameLayer );
+        this.removeChild( this.playingLayer );
+        this.addAllLayers();
+        this.mainMenuLayer.startMainMenu();
     },
     addAllLayers: function() {
         this.frontLayer = new FrontLayer( this );

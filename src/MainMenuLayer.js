@@ -4,7 +4,6 @@ var MainMenuLayer = cc.LayerColor.extend({
         this._super();
     },
     startMainMenu: function() {
-        this.layer.frontLayer.hideIntro();
         this.selectButton = 0;
         this.buttonArr = [];
         this.addIntroButton();

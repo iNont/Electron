@@ -39,6 +39,7 @@ var FrontLayer = cc.LayerColor.extend({
             this.introArr[i].hideThis();
     },
     onKeyDown: function( e ) {
+        this.hideIntro();
         this.layer.mainMenuLayer.startMainMenu();
     }
 });

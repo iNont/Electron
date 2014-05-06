@@ -35,7 +35,7 @@ var PlayingLayer = cc.LayerColor.extend({
     },
     socketIO: function() {
         _this = this;
-        this.socket = this.layer.waitingGameLayer.socket;
+        this.socket = this.layer.socket;
         this.IOupdate();
     },
     IOupdate: function() {
@@ -47,6 +47,7 @@ var PlayingLayer = cc.LayerColor.extend({
             _this.showScore( e.name,e.score,e.maxCombo,e.perfect,e.great,e.cool,e.miss );
             _this.isEnemyEnd = null;
             _this.enemy = null;
+            _this.backToMenu();
         });
         this.socket.on('enemyEnd', function( name,score,maxCombo,perfect,great,cool,miss ) {
             _this.isEnemyEnd = {
@@ -107,8 +108,14 @@ var PlayingLayer = cc.LayerColor.extend({
         var beat = this.genBeat( songKey );
         this.startGameBeat( 2*beat,beat );
     },
-    musicEnd: function() {
+    backToMenu: function() {
+        this.hidePlaying();
+        this.layer.startMainMenu();
+    },
+    hidePlaying: function() {
         this.layer.bg.endGameAnimation();
+    },
+    musicEnd: function() {
         this.showScore( "Your",this.score,this.maxCombo,this.perfect,this.great,this.cool,this.miss );
         this.messageLog( "Waiting for opponent..." );
         this.socket.emit( 'endGame',this.enemy,"Opponent",this.score,this.maxCombo,this.perfect,this.great,this.cool,this.miss );
