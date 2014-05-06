@@ -108,6 +108,7 @@ var PlayingLayer = cc.LayerColor.extend({
         this.startGameBeat( 2*beat,beat );
     },
     musicEnd: function() {
+        this.layer.bg.endGameAnimation();
         this.showScore( "Your",this.score,this.maxCombo,this.perfect,this.great,this.cool,this.miss );
         this.messageLog( "Waiting for opponent..." );
         this.socket.emit( 'endGame',this.enemy,"Opponent",this.score,this.maxCombo,this.perfect,this.great,this.cool,this.miss );

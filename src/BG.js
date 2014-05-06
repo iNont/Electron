@@ -23,7 +23,15 @@ var BG = cc.Sprite.extend({
     		this.opaDif=0;
         	this.schedule( this.updateWink,0,Infinity,0 );
     	}
+        else if( pos.y<screenHeight/2 ) {
+            this.setPosition( new cc.Point( pos.x,screenHeight/2 ) );
+            this.vy=0;
+            this.opaDif=0;
+            this.schedule( this.updateWink,0,Infinity,0 );
+        }
     	this.setOpacity( this.getOpacity()-this.opaDif );
+        if( this.getOpacity()>255 )
+            this.setOpacity( 255 );
     	this.setPosition( new cc.Point( pos.x+this.vx,pos.y+this.vy ) )
     },
     updateWink: function() {
@@ -33,10 +41,14 @@ var BG = cc.Sprite.extend({
         if( opacity<BG.WINK_OPACITY_MIN || opacity>BG.WINK_OPACITY_MAX )
             this.winkSpeed*=-1;
     },
-
     startGameAnimation: function() {
     	this.opaDif=BG.DIFF_SPEED;
         this.vy=BG.VELOCITY_Y*gameScale;
+    },
+    endGameAnimation: function() {
+        this.unschedule( this.updateWink );
+        this.opaDif=-BG.DIFF_SPEED;
+        this.vy=-BG.VELOCITY_Y*gameScale;
     }
 });
 
