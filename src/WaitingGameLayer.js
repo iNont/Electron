@@ -17,7 +17,7 @@ var WaitingGameLayer = cc.LayerColor.extend({
     IOupdate: function() {
         var _this = this;
         this.socket.on('startGame', function( oppID,oppName ) {
-            _this.messageLog("Opponent ID: "+oppName);
+            _this.messageLog("Opponent : "+oppName);
             _this.enemy = oppID;
             _this.startTheMatch();
             _this.offWaitingSocket();
