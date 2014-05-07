@@ -20,11 +20,11 @@ var TextField = cc.LayerColor.extend({
     },
     startTextField: function( maxLength,message ) {
         this.maxLength = maxLength;
-        this.addSprites();
+        this.addSprites( message );
         this.setToFirstPriority();
         this.scheduleUpdate();
     },
-    addSprites: function() {
+    addSprites: function( message ) {
         this.addChild( this.bgTextBox );
         this.createTypingTextLabel();
         this.createMessageLabel( message );
@@ -48,7 +48,7 @@ var TextField = cc.LayerColor.extend({
     doFunctionAfterEnd: function() {
         this.returnText = this.typingText;
         this.layer.state = this.backupState;
-        if( this.layer.state == GameLayer.STATES.frontLayer )
+        if( this.layer.state == GameLayer.STATES.FRONT )
             this.regisName();
     },
     regisName: function() {
@@ -63,7 +63,7 @@ var TextField = cc.LayerColor.extend({
         this.addChild( this.typingLabel,10 );
     },
     createMessageLabel: function( message ) {
-        this.message = cc.LabelTTF.create( message,GameLayer.FONT,FONT_SIZE.MESSAGE*gameScale );
+        this.message = cc.LabelTTF.create( message,GameLayer.FONT,TextField.FONT_SIZE.MESSAGE*gameScale );
         this.message.setAnchorPoint( 0,0 );
         this.message.setPosition( new cc.Point( screenWidth/2-TextField.TEXTBOX_SIZE.WIDTH*gameScale/2-20*gameScale,screenHeight/2+TextField.TEXTBOX_SIZE.HEIGHT*gameScale+20*gameScale ) );
         this.addChild( this.message,10 );
