@@ -50,18 +50,17 @@ io.sockets.on('connection', function(socket) {
         io.sockets.socket(enemy).emit('effectBattleItem' , itemKey);
     });
     socket.on('endGame', function( enemyID,name,score,maxCombo,perfect,great,cool,miss ) {
-        socket.endStatus = ['enemyEnd', name,score,maxCombo,perfect,great,cool,miss];
+        socket.endStatus = ['showEnemyScore', name,score,maxCombo,perfect,great,cool,miss];
         var enemy = io.sockets.socket(enemyID);
-        if( enemy.endStatus ) {
+        if( enemy.endStatus != null ) {
             console.log(string.message+'Match end'.bold);
             console.log(string.info+'ID : '.bold+enemyID);
             console.log(string.info+'ID : '.bold+this.id);
 
             socket.emit.apply(socket, enemy.endStatus);
             enemy.emit.apply(enemy, socket.endStatus);
-
-            enemy.emit( 'showEnemyScore' );
-            socket.emit( 'showEnemyScore' );
+            enemy.endStatus = null;
+            socket.endStatus = null;
         }
     });
     socket.on('disconnect', function() {

@@ -34,23 +34,16 @@ var PlayingLayer = cc.LayerColor.extend({
         this.comboBak = 0;
     },
     socketIO: function() {
-        _this = this;
         this.socket = this.layer.socket;
         this.IOupdate();
     },
     IOupdate: function() {
+        var _this = this;
         this.socket.on('effectBattleItem', function( itemKey ) {
             _this.effectBattleItem( itemKey );
         });
-        this.socket.on('showEnemyScore', function() {
-            var e = _this.isEnemyEnd;
-            _this.showScore( e.name,e.score,e.maxCombo,e.perfect,e.great,e.cool,e.miss );
-            _this.isEnemyEnd = null;
-            _this.enemy = null;
-            _this.backToMenu();
-        });
-        this.socket.on('enemyEnd', function( name,score,maxCombo,perfect,great,cool,miss ) {
-            _this.isEnemyEnd = {
+        this.socket.on('showEnemyScore', function( name,score,maxCombo,perfect,great,cool,miss ) {
+            var e = {
                 name: name,
                 score: score,
                 maxCombo: maxCombo,
@@ -59,7 +52,15 @@ var PlayingLayer = cc.LayerColor.extend({
                 cool: cool,
                 miss: miss
             };
+            _this.showScore( e.name,e.score,e.maxCombo,e.perfect,e.great,e.cool,e.miss );
+            _this.enemy = null;
+            _this.backToMenu();
         });
+    },
+    offPlayingSocket: function() {
+        this.socket.removeAllListeners( 'effectBattleItem' );
+        this.socket.removeAllListeners( 'showEnemyScore' );
+        this.socket.removeAllListeners( 'enemyEnd' );
     },
     startGame: function() {
         this.layer.state = GameLayer.STATES.STARTED;
@@ -99,6 +100,7 @@ var PlayingLayer = cc.LayerColor.extend({
         this.addChild( this.powerBar,30 );
     },
     startSongByBeat: function( songKey ) {
+        var _this = this;
         this.songKey = songKey;
         this.music = createjs.Sound.play( songKey );
         this.music.on("complete", function() {
@@ -109,10 +111,13 @@ var PlayingLayer = cc.LayerColor.extend({
         this.startGameBeat( 2*beat,beat );
     },
     backToMenu: function() {
+        this.offPlayingSocket();
         this.hidePlaying();
         this.layer.startMainMenu();
     },
     hidePlaying: function() {
+        this.music.stop();
+        this.musicAnnoy.stop();
         this.layer.bg.endGameAnimation();
     },
     musicEnd: function() {

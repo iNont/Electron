@@ -1,6 +1,5 @@
 var WaitingGameLayer = cc.LayerColor.extend({
     ctor: function( gameLayer ) {
-        _this = this;
         this.layer = gameLayer;
         this.isInstruction = false;
         this.isFinding = false;
@@ -16,11 +15,20 @@ var WaitingGameLayer = cc.LayerColor.extend({
         this.IOupdate();
     },
     IOupdate: function() {
+        var _this = this;
         this.socket.on('startGame', function( oppID ) {
-            console.log("Opponent ID: "+oppID);
+            _this.messageLog("Opponent ID: "+oppID);
             _this.enemy = oppID;
             _this.startTheMatch();
+            _this.offWaitingSocket();
         });
+    },
+    offWaitingSocket: function() {
+        this.socket.removeAllListeners( 'startGame' );
+    },
+    messageLog: function( message ) {
+        console.log("---------------------------");
+        console.log("Message: "+message);
     },
     startInstruction: function() {
         this.layer.state = GameLayer.STATES.WAITING;
@@ -39,7 +47,6 @@ var WaitingGameLayer = cc.LayerColor.extend({
         this.isInstruction = false;
         this.removeChild( this.loading );
         this.schedule( this.instructionHideAnimate,0,Infinity,0 );
-        this.unscheduleUpdate();
     },
     instructionShowAnimate: function() {
         this.units = [];
