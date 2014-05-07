@@ -60,7 +60,7 @@ var TextField = cc.LayerColor.extend({
     },
     removeLastChar: function() {
         if( this.typingText.length>0 )
-        this.typingText[this.typingText.length-1] = ""; 
+            this.typingText = this.typingText.substring( 0,this.typingText.length-1 ); 
     },
     update: function( dt ) {
         this.typingLabel.setString( this.typingText );
