@@ -25,6 +25,7 @@
             'src/WaitingGameLayer.js',
             'src/BattleItems.js',
             'src/ImageShow.js',
+            'src/TextField.js',
             'src/GameLayer.js',     //add your own files in order here
             'src/socket.io.js'
         ],
@@ -58,6 +59,7 @@
             {src: 'images/instruction.png'},
             {src: 'images/findMatch.png'},
             {src: 'images/loading.png'},
+            {src: 'images/textBox.png'},
             {src: 'musics/ifineverseeyourfaceagain-maroon5.mp3'},
         ]
     };

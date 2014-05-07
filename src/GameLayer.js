@@ -9,19 +9,20 @@ var GameLayer = cc.LayerColor.extend({
         this.setPosition( new cc.Point( 0,0 ) );
         this.bg = new BG();
         this.addChild( this.bg );
-        this.connectSocket();
+        this.textField = new TextField( this );
+        this.name = "";
         this.addAllLayers();
-        this.frontLayer.startIntro();
         this.state = GameLayer.STATES.FRONT;
+        this.textField.startTextField( 20,"Enter your name:" );
         this.setKeyboardEnabled( true );
         this.scheduleUpdate();
         return true;
     },
     connectSocket: function() {
-        var serverPath = "127.0.0.1"; // "XX.XX.XX.XX" <- IP
+        var serverPath = "158.108.225.42"; // "XX.XX.XX.XX" <- IP
         var serverPort = "8080";
         this.socket = io.connect( serverPath+":"+serverPort );
-        this.socket.emit( 'regis' );
+        this.socket.emit( 'regis' ,this.name);
     },
     startMainMenu: function() {
         this.removeChild( this.frontLayer );
@@ -54,11 +55,15 @@ var GameLayer = cc.LayerColor.extend({
             this.frontLayer.onKeyDown( e );
         else if( this.state==GameLayer.STATES.WAITING )
             this.waitingGameLayer.onKeyDown( e );
+        else if( this.state==GameLayer.STATES.TEXTFIELD )
+            this.textField.onKeyDown( e );
     },
     onKeyUp: function( e ) {
         //37 = Left , 39 = Right , 32 = Space , 27 = Escape
         if( this.state==GameLayer.STATES.STARTED ) 
             this.playingLayer.onKeyUp( e );
+        else if( this.state==GameLayer.STATES.TEXTFIELD )
+            this.textField.onKeyUp( e );
     }
 });
 
@@ -76,7 +81,8 @@ GameLayer.STATES = {
     FRONT: 1,
     STARTED: 2,
     MAINMENU: 3,
-    WAITING: 4
+    WAITING: 4,
+    TEXTFIELD: 999
 };
 GameLayer.PLAYER_POS = new cc.Point( 3*screenWidth/4, screenHeight/2 );
 GameLayer.UNIT_NUMBER = 6;

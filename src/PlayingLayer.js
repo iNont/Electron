@@ -123,7 +123,7 @@ var PlayingLayer = cc.LayerColor.extend({
     musicEnd: function() {
         this.showScore( "Your",this.score,this.maxCombo,this.perfect,this.great,this.cool,this.miss );
         this.messageLog( "Waiting for opponent..." );
-        this.socket.emit( 'endGame',this.enemy,"Opponent",this.score,this.maxCombo,this.perfect,this.great,this.cool,this.miss );
+        this.socket.emit( 'endGame',this.enemy,this.layer.name,this.score,this.maxCombo,this.perfect,this.great,this.cool,this.miss );
     },
     messageLog: function( message ) {
         console.log("---------------------------");
