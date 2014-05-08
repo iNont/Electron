@@ -8,6 +8,7 @@ var PlayingLayer = cc.LayerColor.extend({
         this.initPlayerStatus();
         this.initKeyPressStatus();
         this.initInGameValue();
+        this.initItemStatus();
     },
     initPlayerStatus: function() {
         this.score = 0;
@@ -27,12 +28,15 @@ var PlayingLayer = cc.LayerColor.extend({
     initInGameValue: function() {
         this.units=[];
         this.stat = "miss";
-        this.isInverse = false;
-        this.invisibleMode = false;
-        this.illusionStack = 0;
         this.isWink = true;
         this.scoreBak = 0;
         this.comboBak = 0;
+    },
+    initItemStatus: function() {
+        this.isInverse = false;
+        this.invisibleMode = false;
+        this.illusionStack = 0;
+        this.isFixNote = false;
     },
     socketIO: function() {
         this.socket = this.layer.socket;

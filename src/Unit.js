@@ -14,6 +14,7 @@ var Unit = cc.Sprite.extend({
     },
     initUnitStatus: function() {
         this.isFake = false;
+        this.fixedNote = false;
         this.keyLeft = false;
         this.keyRight = false;
         this.crashed = false;
@@ -69,6 +70,8 @@ var Unit = cc.Sprite.extend({
             turnSpeed += GameLayer.UNIT_TURN_SPEED;
         if( this.layer.isInverse ) 
             turnSpeed *= -1;
+        if( this.fixedNote )
+            turnSpeed = 0;
         this.setRotation( theta+turnSpeed );
         this.resetTurn();
     },
@@ -125,7 +128,12 @@ var Unit = cc.Sprite.extend({
         return !( bool1 || bool2 );
     },
     startNewRandomUnit: function() {
+        this.initProperties();
         var newTheta = Math.floor( this.layer.randomNumber( 0,360 ) )%4*45;  //SingleTurn
+        if( this.layer.isFixNote ) {
+            this.fixedNote = true;
+            newTheta = 0;
+        }
         this.startNewUnit( newTheta );
     },
     startNewUnit: function( startTheta ) {
@@ -135,7 +143,6 @@ var Unit = cc.Sprite.extend({
         this.makeNewUnit( newPos,newTheta );
     },
     makeNewUnit: function( newPos,newTheta ) {
-        this.initProperties();
         this.endPos = this.genEndPos( newPos );
         this.setPosition( newPos );
         this.setRotation( newTheta );

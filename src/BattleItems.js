@@ -19,6 +19,8 @@ var BattleItems = cc.Sprite.extend({
             this.runFourComboItem();
         else if( key==BattleItems.KEYS.ILLUSION )
             this.runIllusionItem();
+        else if( key==BattleItems.KEYS.FIX_NOTE )
+            this.runFixNoteItem();
     },
     runInkItem: function() {
         var src = "images/BI0.png";
@@ -58,8 +60,11 @@ var BattleItems = cc.Sprite.extend({
         var speed=45;
         if( random==0 )
             speed*=-1;
-        for( var i=0; i<this.layer.units.length; i++)
+        for( var i=0; i<this.layer.units.length; i++) {
             this.layer.units[i].setRotation( this.layer.units[i].getRotation()-speed );
+            if( this.layer.unit[i].fixedNote )
+                this.layer.unit[i].fixedNote = false;
+        }
     },
     changeInverseControl: function() {
         this.layer.isInverse=!this.layer.isInverse;
@@ -68,7 +73,19 @@ var BattleItems = cc.Sprite.extend({
         this.changeInverseControl();
         this.layer.removeChild( this );
     },
-    runInvisibilityItem: function() {
+    runFixNoteItem: function() {
+        this.layer.addChild( this );
+        this.changeFixNote();
+        this.schedule( this.updateFixNoteTimer,3,0,0 );
+    },
+    changeFixNote: function() {
+        this.layer.isFixNote = true;
+    },
+    updateFixNoteTimer: function() {
+        this.layer.isFixNote = false;
+        this.layer.removeChild( this );
+    },
+    runInvisibleItem: function() {
         this.layer.addChild( this );
         this.changeInvisibleMode();
         this.schedule( this.updateInvisibleTimer,10,0,0 );
