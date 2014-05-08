@@ -318,7 +318,7 @@ var PlayingLayer = cc.LayerColor.extend({
     },
     onKeyDownItem: function( e ) {
         // 81 87 69 65 83 68 90 88 67
-        var keyList = [81,87,69,65,83,68];
+        var keyList = [81,87,69,65,83,68,90,88,67];
         for( var i = 0; i < keyList.length; i++ )
             if( e == keyList[i] )
                 this.useBattleItem( i );
@@ -338,13 +338,15 @@ var PlayingLayer = cc.LayerColor.extend({
             this.power -= BattleItems.POWER_COST[key];
             if( key<=5 )
                 this.socket.emit( 'sendBattleItem',key,this.enemy );
+            else
+                this.effectBattleItem( key );
         }
     },
     effectBattleItem: function( key ) {
         var battleItem = new BattleItems( this,key );
     },
     isEnoughPower: function( key ) {
-        if( ( key >= 0 ) && ( key <= 5 ) )
+        if( ( key >= 0 ) && ( key <= 8 ) )
             return this.power >= BattleItems.POWER_COST[key];
     },
 });

@@ -45,7 +45,7 @@ io.sockets.on('connection', function(socket) {
     });
     socket.on('sendBattleItem', function( itemKey,enemy ) {
         var enemy = io.sockets.socket(enemy);
-        console.log(string.message+'Player use item '.bold+itemKey);
+        console.log(string.message+'Player use item Key : '.bold+itemKey);
         console.log(string.info+'Sender   : '.bold+socket.name+" ("+this.id+")");
         console.log(string.info+'Receiver : '.bold+enemy.name+" ("+enemy.id+")");
         enemy.emit('effectBattleItem' , itemKey);

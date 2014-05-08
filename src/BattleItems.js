@@ -2,10 +2,7 @@ var BattleItems = cc.Sprite.extend({
     ctor: function( layer,key ) {
     	this.layer = layer;
         this._super();
-        this.initProperties();
         this.controller(key);
-    },
-    initProperties: function() {
     },
     controller: function( key ) {
         if( key==BattleItems.KEYS.INK )
@@ -16,10 +13,10 @@ var BattleItems = cc.Sprite.extend({
             this.runRandomTurnItem();
         else if( key==BattleItems.KEYS.INVISIBILITY )
             this.runInvisibilityItem();
-        else if( key==BattleItems.KEYS.TAUNT )
-            this.runTauntItem();
         else if( key==BattleItems.KEYS.MUSIC_ANNOY )
             this.runMusicAnnoyItem();
+        else if( key==BattleItems.KEYS.FOUR_COMBO )
+            this.runFourComboItem();
     },
     runInkItem: function() {
         var src = "images/BI0.png";
@@ -42,6 +39,9 @@ var BattleItems = cc.Sprite.extend({
         }
         else
             this.layer.removeChild( this );
+    },
+    runFourComboItem: function() {
+        this.layer.combo+=4;
     },
     runInverseItem: function() {
         this.layer.addChild( this );
@@ -75,9 +75,6 @@ var BattleItems = cc.Sprite.extend({
         this.layer.invisibleMode=false;
         this.layer.removeChild( this );
     },
-    runTauntItem: function() {
-
-    },
     runMusicAnnoyItem: function() {
         this.layer.addChild( this );
         this.layer.musicAnnoy.setMute( false );
@@ -95,14 +92,18 @@ var BattleItems = cc.Sprite.extend({
 });
 
 BattleItems.KEYS = {
-    RANDOM_TURN: 0,
-    INVERSE: 1,
-    INVISIBILITY: 2,
-    INK: 3,
-    TAUNT: 4,
-    MUSIC_ANNOY: 5
+    RANDOM_TURN: 1,
+    INVERSE: 5,
+    INVISIBILITY: 3,
+    ILLUSION: 4,
+    INK: 0,
+    MUSIC_ANNOY: 2,
+    FOUR_COMBO: 6,
+    FIX_NOTE: 7,
+    DOUBLE: 8
 };
-BattleItems.POWER_COST = [750,1200,900,900,0,600];
+BattleItems.NAME = ["Ink","Random Turn","Music Move","Invisibility","Illusion","Inverse","Four Combo","Fix Note","Double Boost"];
+BattleItems.POWER_COST = [900,750,300,900,900,1500,600,1050,1500];
 BattleItems.INK_OPAC = {
     UP: 17,
     DOWN: 1
