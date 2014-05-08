@@ -17,6 +17,8 @@ var BattleItems = cc.Sprite.extend({
             this.runMusicAnnoyItem();
         else if( key==BattleItems.KEYS.FOUR_COMBO )
             this.runFourComboItem();
+        else if( key==BattleItems.KEYS.ILLUSION )
+            this.runIllusionItem();
     },
     runInkItem: function() {
         var src = "images/BI0.png";
@@ -39,6 +41,9 @@ var BattleItems = cc.Sprite.extend({
         }
         else
             this.layer.removeChild( this );
+    },
+    runIllusionItem: function() {
+        this.layer.illusionStack++;
     },
     runFourComboItem: function() {
         this.layer.combo+=4;

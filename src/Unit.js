@@ -13,6 +13,7 @@ var Unit = cc.Sprite.extend({
         this.initAnimationValue();
     },
     initUnitStatus: function() {
+        this.isFake = false;
         this.keyLeft = false;
         this.keyRight = false;
         this.crashed = false;
@@ -31,7 +32,7 @@ var Unit = cc.Sprite.extend({
             this.updateEnabled();
         else 
             this.updateDisabled();
-        if( this.distance( pos,this.endPos ) < 1 ) 
+        if( this.distance( pos,this.endPos ) < 1 )
             this.removeThis();
     },
     updateEnabled: function() {
@@ -42,7 +43,8 @@ var Unit = cc.Sprite.extend({
         if( pos.x > screenWidth-GameLayer.UNIT_DIAMETER/2 ) {
             this.passPlayer = true;
             this.crashOpacity = this.getOpacity();
-            this.crashPlay( "miss" );
+            if( !this.isFake )
+                this.crashPlay( "miss" );
         }
         this.detection();
     },
@@ -54,7 +56,8 @@ var Unit = cc.Sprite.extend({
             this.doneUnit();
     },
     removeThis: function() {
-        this.layer.units.shift();
+        if( !this.isFake )
+            this.layer.units.shift();
         this.layer.removeChild( this );
     },
     turnThis: function() {
@@ -85,7 +88,8 @@ var Unit = cc.Sprite.extend({
             if( this.detectAngleCheck() ) {
                 this.crashed = true;
                 this.crashOpacity = this.getOpacity();
-                this.crashPlay( "miss" );
+                if( !this.isFake )
+                    this.crashPlay( "miss" );
             }
         }
     },

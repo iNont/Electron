@@ -28,8 +28,9 @@ var PlayingLayer = cc.LayerColor.extend({
         this.units=[];
         this.stat = "miss";
         this.isInverse = false;
-        this.isWink = true;
         this.invisibleMode = false;
+        this.illusionStack = 0;
+        this.isWink = true;
         this.scoreBak = 0;
         this.comboBak = 0;
     },
@@ -167,6 +168,17 @@ var PlayingLayer = cc.LayerColor.extend({
             this.units.push( unit );
             this.units[this.units.length-1].startNewRandomUnit();
             this.addChild( this.units[this.units.length-1] );
+            if( this.illusionStack>0 )
+                this.createIllusion( 2 );
+        }
+    },
+    createIllusion: function( num ) {
+        this.illusionStack--;
+        for( var i=0;i<num;i++ ) {
+            var fakeUnit = new Unit( this );
+            fakeUnit.startNewRandomUnit();
+            fakeUnit.isFake = true;
+            this.addChild( fakeUnit );
         }
     },
     addEffectToLayer: function() {
