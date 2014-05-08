@@ -456,12 +456,12 @@ cc.LoaderScene = cc.Scene.extend(/** @lends cc.LoaderScene# */{
 
         this._loadingGauge2 = new ImageShow( "loadingGauge.png" );
         this._loadingGauge2.setAnchorPoint( 0.5,1 );
-        this._loadingGauge2.setPosition(cc.pAdd(centerPos, cc.p(0,-55)));
+        this._loadingGauge2.setPosition(cc.pAdd(centerPos, cc.p(0,-45)));
         this._bgLayer.addChild(this._loadingGauge2,2);
         this.waterGaugeRunAnimate();
     },
     waterGaugeRunAnimate: function() {
-        this.gauge1Speed = 3;
+        this.gauge1Speed = 1;
         this.gauge2Speed = -this.gauge1Speed;
         this.schedule( this.updateGauge,0 );
     },
@@ -469,13 +469,13 @@ cc.LoaderScene = cc.Scene.extend(/** @lends cc.LoaderScene# */{
         this._loadingGauge1.setPositionX( this._loadingGauge1.getPositionX()+this.gauge1Speed );
         this._loadingGauge2.setPositionX( this._loadingGauge2.getPositionX()+this.gauge2Speed );
         if( this._loadingGauge1.getPositionX() > this._winSize.width/2+10 )
-            this.gauge1Speed = -3;
+            this.gauge1Speed = -1;
         else if( this._loadingGauge1.getPositionX() < this._winSize.width/2-10 )
-            this.gauge1Speed = 3;
+            this.gauge1Speed = 1;
         if( this._loadingGauge2.getPositionX() > this._winSize.width/2+10 )
-            this.gauge2Speed = -3;
+            this.gauge2Speed = -1;
         else if( this._loadingGauge2.getPositionX() < this._winSize.width/2-10 )
-            this.gauge2Speed = 3;
+            this.gauge2Speed = 1;
     },
 
     _initStage: function (centerPos) {
@@ -515,7 +515,7 @@ cc.LoaderScene = cc.Scene.extend(/** @lends cc.LoaderScene# */{
         this.unschedule(this._startLoading);
         cc.Loader.preload(this.resources, this.selector, this.target);
         _fakePercent = 0;
-        this.schedule(this._updatePercent,0.017);
+        this.schedule(this._updatePercent,0.01);
     },
 
     _updatePercent: function () {
@@ -526,7 +526,7 @@ cc.LoaderScene = cc.Scene.extend(/** @lends cc.LoaderScene# */{
         this._label.setString(tmpStr);
         var startYwaterGauge = this._winSize.height/2-60;
         this._loadingGauge1.setPositionY( startYwaterGauge+1.8*_fakePercent );
-        this._loadingGauge2.setPositionY( 5+startYwaterGauge+1.8*_fakePercent );
+        this._loadingGauge2.setPositionY( 15+startYwaterGauge+1.8*_fakePercent );
         if ( _fakePercent >= 100) {
             this.unschedule( this.updateGauge );
             this.unschedule(this._updatePercent);

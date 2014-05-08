@@ -41,9 +41,10 @@ var TextField = cc.LayerColor.extend({
         this.initProperties();
     },
     removeSprites: function() {
-        this.removeChild( this.typingLabel );
-        this.removeChild( this.message );
-        this.removeChild( this.bgTextBox );
+        while( this.getChildren().length>0 ) {
+            var child = this.getChildren()[0];
+            this.removeChild( child );        
+        }
     },
     doFunctionAfterEnd: function() {
         this.returnText = this.typingText;

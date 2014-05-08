@@ -89,9 +89,17 @@ var WaitingGameLayer = cc.LayerColor.extend({
         this.layer.playingLayer.startGame();
     },
     onKeyDown: function( e ) {
-        if( ( e == 32 ) && ( this.isInstruction ) && ( !this.isFinding ) )
-            this.findTheMatch();
-        else if( this.isFinding && ( e == 32 ) )
-            this.stopFinding();
+        if( e == 32 ) {
+            if( this.isFinding )
+                this.stopFinding();
+            else if( this.isInstruction )
+                this.findTheMatch();
+        }
+        else if( e == 27 ) {
+            if( this.isFinding )
+                this.stopFinding();
+            this.layer.startMainMenu();
+        }
+
     },
 });

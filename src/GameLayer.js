@@ -19,7 +19,7 @@ var GameLayer = cc.LayerColor.extend({
         return true;
     },
     connectSocket: function() {
-        var serverPath = "192.168.1.68"; // "XX.XX.XX.XX" <- IP
+        var serverPath = "158.108.225.42"; // "XX.XX.XX.XX" <- IP
         var serverPort = "8080";
         this.socket = io.connect( serverPath+":"+serverPort );
         this.socket.emit( 'regis' ,this.name);
