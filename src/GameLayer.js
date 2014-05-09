@@ -64,6 +64,8 @@ var GameLayer = cc.LayerColor.extend({
             this.playingLayer.onKeyUp( e );
         else if( this.state==GameLayer.STATES.TEXTFIELD )
             this.textField.onKeyUp( e );
+        else if( this.state==GameLayer.STATES.WAITING )
+            this.waitingGameLayer.onKeyUp( e );
     }
 });
 

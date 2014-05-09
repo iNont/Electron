@@ -138,6 +138,17 @@ BattleItems.KEYS = {
     FIX_NOTE: 7,
     DOUBLE: 8
 };
+BattleItems.DETAIL = [
+    "make enemy hard to see the notes",
+    "turn all enemy's notes one time with the random direction",
+    "revert the enemy's music for a few second and then back to current",
+    "enemy's notes will appear when the notes is close to blue circle for a few duration",
+    "make three fake notes to the enemy for one time",
+    "inverse the enemy's control",
+    "plus four to your combo",
+    "in a few duration the notes will create with no need to turn",
+    "in a few duration, the score you get will be double\nif you 'miss' in this duration score will reduce 70% of the score you get"
+];
 BattleItems.NAME = ["Ink","Random Turn","Music Move","Invisibility","Illusion","Inverse","Four Combo","Fix Note","Double Boost"];
 BattleItems.POWER_COST = [900,750,300,900,900,1500,600,1050,1500];
 BattleItems.INK_OPAC = {
