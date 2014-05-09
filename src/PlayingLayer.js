@@ -37,6 +37,8 @@ var PlayingLayer = cc.LayerColor.extend({
         this.invisibleMode = false;
         this.illusionStack = 0;
         this.isFixNote = false;
+        this.isBoost = false;
+        this.scoreBakBoost = 0;
     },
     socketIO: function() {
         this.socket = this.layer.socket;
@@ -82,6 +84,7 @@ var PlayingLayer = cc.LayerColor.extend({
         this.addEffectToLayer();
         this.addLabelToLayer();
         this.schedule( this.updateStarted,0,Infinity,0 );
+        this.logMessage( "Game Started" );
     },
     initBlueCircle: function() {
         this.player = new Player();
@@ -112,6 +115,7 @@ var PlayingLayer = cc.LayerColor.extend({
         this.songKey = songKey;
         this.music = createjs.Sound.play( songKey );
         this.music.on("complete", function() {
+            _this.logMessage( "Game Ended" );
             _this.schedule( _this.musicEnd,5,0,0 ); 
         });
         this.schedule( this.runMusicAnnoy,BattleItems.MUSIC_ANNOY_DURATION,0,0 );
@@ -267,6 +271,12 @@ var PlayingLayer = cc.LayerColor.extend({
                 this.scoreBak = this.score;
             this.scoreLabel.setString( this.printf_to06d( this.scoreBak ) );
         }
+        else if( this.scoreBak > this.score ) {
+            this.scoreBak -= GameLayer.SCORE_UPDATE_SPEED;
+            if( this.scoreBak < this.score )
+                this.scoreBak = this.score;
+            this.scoreLabel.setString( this.printf_to06d( this.scoreBak ) );
+        }
     },
     updateStartedCombo: function() {
         if( this.combo != 0 )
@@ -305,9 +315,18 @@ var PlayingLayer = cc.LayerColor.extend({
         for( var i = 0; i < array.length; i++ )
             if( array[i] == type )
                 scoreGet = i*scorePerUnit/3+bonusScore;
+        if( this.isBoost ) {
+            scoreGet *= 2;
+            this.scoreBakBoost += scoreGet;
+        }
         if( type == "miss" ) {
             this.computePower( -100-this.combo*40 );
             this.combo = 0;
+            if( this.isBoost ) {
+                this.score -= this.scoreBakBoost*0.7;
+                this.isBoost = false;
+                this.scoreBakBoost = 0;
+            }
         }
         else {
             this.computePower( Math.round( scoreGet/3 ) );

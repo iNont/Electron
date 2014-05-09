@@ -21,6 +21,8 @@ var BattleItems = cc.Sprite.extend({
             this.runIllusionItem();
         else if( key==BattleItems.KEYS.FIX_NOTE )
             this.runFixNoteItem();
+        else if( key==BattleItems.KEYS.DOUBLE )
+            this.runDoubleBoostItem();
     },
     runInkItem: function() {
         var src = "images/BI0.png";
@@ -43,6 +45,18 @@ var BattleItems = cc.Sprite.extend({
         }
         else
             this.layer.removeChild( this );
+    },
+    runDoubleBoostItem: function() {
+        this.layer.addChild( this );
+        this.changeBoost();
+        this.schedule( this.updateBoostTimer,7,0,0 );
+    },
+    changeBoost: function() {
+        this.layer.isBoost=true;
+    },
+    updateBoostTimer: function() {
+        this.layer.isBoost=false;
+        this.layer.removeChild( this );
     },
     runIllusionItem: function() {
         this.layer.illusionStack++;
