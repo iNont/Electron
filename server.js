@@ -46,9 +46,14 @@ io.sockets.on('connection', function(socket) {
     socket.on('sendBattleItem', function( itemKey,enemy ) {
         var enemy = io.sockets.socket(enemy);
         console.log(string.message+'Player use item Key : '.bold+itemKey);
-        console.log(string.info+'Sender   : '.bold+socket.name+" ("+this.id+")");
-        console.log(string.info+'Receiver : '.bold+enemy.name+" ("+enemy.id+")");
+        console.log(string.info+'Player : '.bold+socket.name+" ("+this.id+")");
         enemy.emit('effectBattleItem' , itemKey);
+    });
+    socket.on('sendLog', function( message,enemy ) {
+        console.log(string.update+message);
+        var enemy = io.sockets.socket(enemy);
+        socket.emit('logMessage' , message);
+        enemy.emit('logMessage' , message);
     });
     socket.on('endGame', function( enemyID,name,score,maxCombo,perfect,great,cool,miss ) {
         socket.endStatus = ['showEnemyScore', name,score,maxCombo,perfect,great,cool,miss];

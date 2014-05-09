@@ -44,6 +44,9 @@ var PlayingLayer = cc.LayerColor.extend({
     },
     IOupdate: function() {
         var _this = this;
+        this.socket.on('logMessage', function( message ) {
+            _this.logMessage( message );
+        });
         this.socket.on('effectBattleItem', function( itemKey ) {
             _this.effectBattleItem( itemKey );
         });
@@ -65,7 +68,7 @@ var PlayingLayer = cc.LayerColor.extend({
     offPlayingSocket: function() {
         this.socket.removeAllListeners( 'effectBattleItem' );
         this.socket.removeAllListeners( 'showEnemyScore' );
-        this.socket.removeAllListeners( 'enemyEnd' );
+        this.socket.removeAllListeners( 'logMessage' );
     },
     startGame: function() {
         this.layer.state = GameLayer.STATES.STARTED;
@@ -193,9 +196,19 @@ var PlayingLayer = cc.LayerColor.extend({
         this.addChild( this.crashText );
     },
     addLabelToLayer: function() {
+        this.createLog();
         this.createScore();
         this.createMaxCombo();
         this.createCurrentCombo();
+    },
+    createLog: function() {
+        var fontSize = GameLayer.FONT_SIZE.LOG;
+        this.logs = [];
+        this.logLabel = cc.LabelTTF.create( "",GameLayer.FONT,fontSize );
+        this.logLabel.setAnchorPoint( 0,0 );
+        this.logLabel.setPosition( 50*gameScale, 50*gameScale );
+        this.logLabel.setFontFillColor( new cc.Color3B( 255,255,255 ) );
+        this.addChild( this.logLabel,10 );
     },
     createScore: function() {
         var fontSize = GameLayer.FONT_SIZE.SCORE;
@@ -220,6 +233,17 @@ var PlayingLayer = cc.LayerColor.extend({
         this.comboLabel.setFontFillColor( new cc.Color3B( 255,255,255 ) );
         this.addChild( this.comboLabel,10 );
     },
+    logMessage: function( message ) {
+        this.unschedule( this.logTimer );
+        if( this.logs.length >= PlayingLayer.LOGS_MAX )
+            this.logs.shift();
+        this.logs.push( message );
+        this.schedule( this.logTimer,5 );
+    },
+    logTimer: function() {
+        if( this.logs.length > 0 )
+            this.logs.shift();
+    },
     printf_to06d: function( int ) {
         var string = int.toString();
         while( string.length < 6 )
@@ -234,6 +258,7 @@ var PlayingLayer = cc.LayerColor.extend({
         this.maxComboLabel.setString( "Max Combo: "+this.maxCombo );
         this.updateStartedCombo();
         this.updateStartedPower();
+        this.updateLogMessage();
     },
     updateStartedScore: function() {
         if( this.scoreBak < this.score ) {
@@ -258,6 +283,12 @@ var PlayingLayer = cc.LayerColor.extend({
     updateStartedPower: function() {
         var scale = this.power/1500;
         this.powerBar.setScaleY( scale*gameScale );
+    },
+    updateLogMessage: function() {
+        var allLogs = "";
+        for( var i = 0; i < this.logs.length;i++ )
+            allLogs += ( "\n"+this.logs[i] );
+        this.logLabel.setString( allLogs );
     },
     crashEffectPlay: function( type ) {
         this.scoreUpdate( type );
@@ -356,6 +387,8 @@ var PlayingLayer = cc.LayerColor.extend({
                 this.socket.emit( 'sendBattleItem',key,this.enemy );
             else
                 this.effectBattleItem( key );
+            var string = this.layer.name+": Activate "+BattleItems.NAME[key];
+            this.socket.emit( 'sendLog',string,this.enemy );
         }
     },
     effectBattleItem: function( key ) {
@@ -367,4 +400,5 @@ var PlayingLayer = cc.LayerColor.extend({
     },
 });
 
+PlayingLayer.LOGS_MAX = 5;
 PlayingLayer.MAX_POWER = 1500;

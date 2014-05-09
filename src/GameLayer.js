@@ -104,6 +104,7 @@ GameLayer.BUTTON_NUMBER = {
 GameLayer.FONT_SIZE = {
     SCORE: 90*gameScale,
     MAX_COMBO: 30*gameScale,
-    CURRENT_COMBO: 100*gameScale
+    CURRENT_COMBO: 100*gameScale,
+    LOG: 24*gameScale
 };
 GameLayer.FONT = "Lucida Grande";
